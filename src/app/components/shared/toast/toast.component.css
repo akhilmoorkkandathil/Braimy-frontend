@@ -1,0 +1,11 @@
+.alert {
+    /* bottom: 0; */
+    /* left: 25%; */
+    opacity: .9;
+    position: fixed;
+    width: 20%;
+    z-index: 999;
+    margin-top: 10px;
+    margin-left: 78%;
+
+  }

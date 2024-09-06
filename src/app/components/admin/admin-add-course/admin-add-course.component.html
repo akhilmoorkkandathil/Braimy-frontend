@@ -1,0 +1,51 @@
+<div class="course-form-container">    
+    <h2>{{title}}</h2>
+    
+    <form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Course Name</mat-label>
+            <input matInput formControlName="courseName">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Subject</mat-label>
+            <input matInput formControlName="subject">
+          </mat-form-field>
+        </div>
+
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Class</mat-label>
+            <input matInput formControlName="class">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Topic</mat-label>
+            <input matInput formControlName="topic">
+          </mat-form-field>
+        </div>
+      </div>
+       <mat-form-field >
+            <mat-label>Course Description</mat-label>
+            <textarea matInput formControlName="description" rows="4"></textarea>
+          </mat-form-field>
+          <div class="form-row">
+            <div class="form-column">
+              <div class="form-column">
+                <button type="button" mat-stroked-button (click)="filePicker.click()">Select Image</button>
+                <input hidden type="file" #filePicker (change)="onImagePick($event)" accept=".png,.jpg,.jpeg">
+              </div>
+            </div>
+            <div class="form-column" style="height: 100px;">
+              <div class="image-preview" *ngIf="imagePreview">
+                <img [src]="imagePreview" alt="Course Image">
+              </div>
+            </div>
+          </div>
+
+          
+       <button mat-raised-button color="primary" type="submit">{{button}}</button>
+    </form>
+</div>

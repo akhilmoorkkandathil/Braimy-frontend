@@ -1,0 +1,19 @@
+<div class="recharge-section recharge">
+  <p class="time-remaining">
+      <span class="time-label">Total time remaining:</span> 
+      <span class="time-value"> 22 hours</span>
+  </p>
+  <button class="recharge-button" routerLink="/user/payment">Recharge</button>
+</div>
+
+  <div class="content">
+    <h1>Today's Classes</h1>
+    <div class="card-container">
+      <div class="class-box" *ngFor="let class of upcomingClasses">
+        <h2>{{ class.course.courseName }}</h2>
+        <p>Tutor: {{ class.tutor.username }}</p>
+        <p>Start Time: {{ class.preferredTime }}</p>
+        <p>Duration: {{ class.classDuration }}</p>
+      </div>
+    </div>
+  </div>

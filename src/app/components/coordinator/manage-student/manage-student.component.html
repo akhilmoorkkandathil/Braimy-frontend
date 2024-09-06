@@ -1,0 +1,70 @@
+<div class="course-form-container">    
+    <h2>{{title}}</h2>
+    
+    <form [formGroup]="manageForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Student Name</mat-label>
+            <input matInput formControlName="studentName">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Assign Tutor</mat-label>
+            <mat-select formControlName="tutor">
+              @for (tutor of tutors; track tutor) {
+                <mat-option [value]="tutor._id">{{tutor.username}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field appearance="fill">
+            <mat-label>Select Time</mat-label>
+            <input matInput [ngxMatTimepicker]="picker" formControlName="preferredTime"/>
+            <ngx-mat-timepicker #picker></ngx-mat-timepicker>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Class duration</mat-label>
+            <mat-select formControlName="duration">
+              @for (duration of durations; track duration) {
+                <mat-option [value]="duration">{{duration}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Class</mat-label>
+            <input matInput formControlName="studentClass">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Assign Course</mat-label>
+            <mat-select formControlName="course">
+              @for (course of courses; track course) {
+                <mat-option [value]="course._id">{{course.courseName}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Select Days</mat-label>
+            <mat-select formControlName="selectedDays" multiple>
+              @for (day of dayList; track day) {
+                <mat-option [value]="day">{{day}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          
+        </div>
+      </div>
+       <button mat-raised-button color="primary" type="submit">{{button}}</button>
+    </form>
+</div>

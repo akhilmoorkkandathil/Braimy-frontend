@@ -1,0 +1,26 @@
+.content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  .dashboard-box {
+    display: inline-block;
+    margin: 20px;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    width: 150px;
+  }
+  
+  .dashboard-box h3 {
+    margin-top: 0;
+  }
+  
+  .dashboard-box p {
+    font-size: 24px;
+    margin: 10px 0 0;
+  }
+  

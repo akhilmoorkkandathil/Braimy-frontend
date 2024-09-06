@@ -1,0 +1,267 @@
+
+<app-toast #toast></app-toast>
+<div class="container-fluid login-container">
+  <div class="background-image"></div>
+  <div class="row w-100">
+    <div class="col-lg-6 login-left d-none d-lg-flex">
+      <img src="../../../../../../../../assets/images/login.jpeg" alt="E-Learning" class="login-image">
+    </div>
+    <div class="col-lg-6 login-right">
+      <div class="login-form">
+        <ul class="nav nav-tabs nav-justified mb-4" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="student-tab" data-toggle="tab" href="#student" role="tab" aria-controls="student" aria-selected="true">Student</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="tutor-tab" data-toggle="tab" href="#tutor" role="tab" aria-controls="tutor" aria-selected="false">Tutor</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="coordinator-tab" data-toggle="tab" href="#coordinator" role="tab" aria-controls="coordinator" aria-selected="false">Coordinator</a>
+          </li>
+        </ul>
+        
+        <div class="tab-content" id="myTabContent">
+          <!-- Student Registration Form -->
+          <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
+            <h2 class="mb-4 text-center">Student Registration <span>🎓</span></h2>
+            <form [formGroup]="signupForm" (ngSubmit)="onStudentSubmit()">
+              <!-- Your form fields here -->
+              <div class="form-group">
+                <label for="name">User Name</label>
+                <input formControlName="fullName" type="text" class="form-control" id="name" placeholder="Enter Name">
+                <p>
+                  <span *ngIf="signupForm.get('fullName')?.hasError('whitespace') && signupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name cannot be empty or spaces only.</span>
+                  <span *ngIf="signupForm.get('fullName')?.hasError('minlength') && signupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name should be at least 3 characters long.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input formControlName="email" type="email" class="form-control" id="email" placeholder="Enter Email">
+                <p>
+                  <span *ngIf="signupForm.get('email')?.hasError('whitespace') && signupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email cannot be empty or spaces only.</span>
+                  <span *ngIf="signupForm.get('email')?.hasError('email') && signupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email is invalid.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input formControlName="phone" type="tel" class="form-control" id="phone" placeholder="Enter Phone">
+                <p>
+                  <span *ngIf="signupForm.get('phone')?.hasError('whitespace') && signupForm.get('phone')?.touched" class="text-xs italic text-red-500"><br>*Phone cannot be empty or spaces only.</span>
+                  <span *ngIf="signupForm.get('phone')?.hasError('invalidPhoneNumber') && signupForm.get('phone')?.dirty" class="text-xs italic text-red-500"><br>*Phone number must be 10 digits long.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input formControlName="password" type="password" class="form-control" id="password" placeholder="Enter Password">
+                <p>
+                  <span *ngIf="signupForm.get('password')?.hasError('whitespace') && signupForm.get('password')?.touched" class="text-xs italic text-red-500">*Password cannot be empty or spaces only.</span>
+                  <span *ngIf="signupForm.get('password')?.hasError('minlength') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Min Length 8 character</span>
+                  <span *ngIf="signupForm.get('password')?.hasError('uppercase') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Uppercase [A-Z]</span>
+                  <span *ngIf="signupForm.get('password')?.hasError('lowercase') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Lowercase [a-z]</span>
+                  <span *ngIf="signupForm.get('password')?.hasError('specialCharacter') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*specialCharacter [&#64; # $]</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                <p>
+                  <span *ngIf="signupForm.hasError('required', 'confirmPassword') && signupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500">*Confirm Password is required.</span>
+                  <span *ngIf="signupForm.hasError('confirmPasswordValidator', 'confirmPassword') && signupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500"><br>*Passwords don't match.</span>
+                </p>
+              </div>
+              <button type="submit" class="btn btn-dark btn-block" [disabled]="signupForm.invalid">Sign up</button>
+              <p class="text-center mt-3">Already have an account? <a [routerLink]="['/login']" routerLinkActive="router-link-active"><span class="signin">Sign in</span></a></p>
+            </form>
+          </div>
+          
+          <!-- Tutor Registration Form -->
+          <div class="tab-pane fade" id="tutor" role="tabpanel" aria-labelledby="tutor-tab">
+            <h2 class="mb-4 text-center">Tutor Registration <span>📚</span></h2>
+            <form [formGroup]="tutorSignupForm" (ngSubmit)="onTutorSubmit()">
+              <!-- Your form fields for Tutor here -->
+              <div class="form-group">
+                <label for="name">Tutor Name</label>
+                <input formControlName="fullName" type="text" class="form-control" id="name" placeholder="Enter Name" autofocus>
+                <p>
+                  <span *ngIf="tutorSignupForm.get('fullName')?.hasError('whitespace') && tutorSignupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name cannot be empty or spaces only.</span>
+                  <span *ngIf="tutorSignupForm.get('fullName')?.hasError('minlength') && tutorSignupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name should be at least 3 characters long.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input formControlName="email" type="email" class="form-control" id="email" placeholder="Enter Email">
+                <p>
+                  <span *ngIf="tutorSignupForm.get('email')?.hasError('whitespace') && tutorSignupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email cannot be empty or spaces only.</span>
+                  <span *ngIf="tutorSignupForm.get('email')?.hasError('email') && tutorSignupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email is invalid.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input formControlName="phone" type="tel" class="form-control" id="phone" placeholder="Enter Phone">
+                <p>
+                  <span *ngIf="tutorSignupForm.get('phone')?.hasError('whitespace') && tutorSignupForm.get('phone')?.touched" class="text-xs italic text-red-500"><br>*Phone cannot be empty or spaces only.</span>
+                  <span *ngIf="tutorSignupForm.get('phone')?.hasError('invalidPhoneNumber') && tutorSignupForm.get('phone')?.dirty" class="text-xs italic text-red-500"><br>*Phone number must be 10 digits long.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input formControlName="password" type="password" class="form-control" id="password" placeholder="Enter Password">
+                <p>
+                  <span *ngIf="tutorSignupForm.get('password')?.hasError('whitespace') && tutorSignupForm.get('password')?.touched" class="text-xs italic text-red-500">*Password cannot be empty or spaces only.</span>
+                  <span *ngIf="tutorSignupForm.get('password')?.hasError('minlength') && tutorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Min Length 8 character</span>
+                  <span *ngIf="tutorSignupForm.get('password')?.hasError('uppercase') && tutorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Uppercase [A-Z]</span>
+                  <span *ngIf="tutorSignupForm.get('password')?.hasError('lowercase') && tutorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Lowercase [a-z]</span>
+                  <span *ngIf="tutorSignupForm.get('password')?.hasError('specialCharacter') && tutorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*specialCharacter [&#64; # $]</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                <p>
+                  <span *ngIf="tutorSignupForm.hasError('required', 'confirmPassword') && tutorSignupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500">*Confirm Password is required.</span>
+                  <span *ngIf="tutorSignupForm.hasError('confirmPasswordValidator', 'confirmPassword') && tutorSignupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500"><br>*Passwords don't match.</span>
+                </p>
+              </div>
+              <button type="submit" class="btn btn-dark btn-block" [disabled]="tutorSignupForm.invalid">Sign up</button>
+              <p class="text-center mt-3">Already have an account? <a [routerLink]="['/login']" routerLinkActive="router-link-active"><span class="signin">Sign in</span></a></p>
+            </form>
+          </div>
+
+          <!-- Coordinator Registration Form -->
+          <div class="tab-pane fade" id="coordinator" role="tabpanel" aria-labelledby="coordinator-tab">
+            <h2 class="mb-4 text-center">Coordinator Registration <span>👩‍🏫</span></h2>
+            <form [formGroup]="coordinatorSignupForm" (ngSubmit)="onCoordinatorSubmit()">
+              <!-- Your form fields for Coordinator here -->
+              <div class="form-group">
+                <label for="name">Coordinator Name</label>
+                <input formControlName="fullName" type="text" class="form-control" id="name" placeholder="Enter Name" autofocus>
+                <p>
+                  <span *ngIf="coordinatorSignupForm.get('fullName')?.hasError('whitespace') && coordinatorSignupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name cannot be empty or spaces only.</span>
+                  <span *ngIf="coordinatorSignupForm.get('fullName')?.hasError('minlength') && coordinatorSignupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name should be at least 3 characters long.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input formControlName="email" type="email" class="form-control" id="email" placeholder="Enter Email">
+                <p>
+                  <span *ngIf="coordinatorSignupForm.get('email')?.hasError('whitespace') && coordinatorSignupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email cannot be empty or spaces only.</span>
+                  <span *ngIf="coordinatorSignupForm.get('email')?.hasError('email') && coordinatorSignupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email is invalid.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone</label>
+                <input formControlName="phone" type="tel" class="form-control" id="phone" placeholder="Enter Phone">
+                <p>
+                  <span *ngIf="coordinatorSignupForm.get('phone')?.hasError('whitespace') && coordinatorSignupForm.get('phone')?.touched" class="text-xs italic text-red-500"><br>*Phone cannot be empty or spaces only.</span>
+                  <span *ngIf="coordinatorSignupForm.get('phone')?.hasError('invalidPhoneNumber') && coordinatorSignupForm.get('phone')?.dirty" class="text-xs italic text-red-500"><br>*Phone number must be 10 digits long.</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input formControlName="password" type="password" class="form-control" id="password" placeholder="Enter Password">
+                <p>
+                  <span *ngIf="coordinatorSignupForm.get('password')?.hasError('whitespace') && coordinatorSignupForm.get('password')?.touched" class="text-xs italic text-red-500">*Password cannot be empty or spaces only.</span>
+                  <span *ngIf="coordinatorSignupForm.get('password')?.hasError('minlength') && coordinatorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Min Length 8 character</span>
+                  <span *ngIf="coordinatorSignupForm.get('password')?.hasError('uppercase') && coordinatorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Uppercase [A-Z]</span>
+                  <span *ngIf="coordinatorSignupForm.get('password')?.hasError('lowercase') && coordinatorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Lowercase [a-z]</span>
+                  <span *ngIf="coordinatorSignupForm.get('password')?.hasError('specialCharacter') && coordinatorSignupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*specialCharacter [&#64; # $]</span>
+                </p>
+              </div>
+              <div class="form-group">
+                <label for="confirmPassword">Confirm Password</label>
+                <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                <p>
+                  <span *ngIf="coordinatorSignupForm.hasError('required', 'confirmPassword') && coordinatorSignupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500">*Confirm Password is required.</span>
+                  <span *ngIf="coordinatorSignupForm.hasError('confirmPasswordValidator', 'confirmPassword') && coordinatorSignupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500"><br>*Passwords don't match.</span>
+                </p>
+              </div>
+              <button type="submit" class="btn btn-dark btn-block" [disabled]="coordinatorSignupForm.invalid">Sign up</button>
+              <p class="text-center mt-3">Already have an account? <a [routerLink]="['/login']" routerLinkActive="router-link-active"><span class="signin">Sign in</span></a></p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <app-toast #toast></app-toast>
+<div class="container-fluid login-container">
+    <div class="background-image"></div>
+    <div class="row w-100">
+        <div class="col-lg-6 login-left d-none d-lg-flex">
+            <img src="../../../../../../assets/images/login.jpeg" alt="E-Learning" class="login-image">
+        </div>
+        <div class="col-lg-6 login-right">
+            <div class="login-form">
+              <ul class="nav nav-tabs nav-justified mb-4" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link nav1" id="home-tab" data-toggle="tab" data-target="#home" role="tab" aria-controls="home" aria-selected="true">Student</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link nav2" id="profile-tab" data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false">Tutor</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link nav2" id="profile-tab" data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false">Co-ordinator</a>
+              </li>
+            </ul>
+            
+               
+                <div id="home" role="tabpanel" aria-labelledby="home-tab">
+                  <h2 class="mb-4 text-center">Register Now <span>🎓</span></h2>
+                  <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                    <div class="form-group">
+                      <label for="name">Full Name</label>
+                      <input formControlName="fullName" type="text" class="form-control" id="name" placeholder="Enter Name" autofocus>
+                      <p>
+                        <span *ngIf="signupForm.get('fullName')?.hasError('whitespace') && signupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name cannot be empty or spaces only.</span>
+                        <span *ngIf="signupForm.get('fullName')?.hasError('minlength') && signupForm.get('fullName')?.touched" class="text-xs italic text-red-500">*Full Name should be at least 3 characters long.</span>
+                      </p>
+                    </div>
+                    <div class="form-group">
+                      <label for="email">Email</label>
+                      <input formControlName="email" type="email" class="form-control" id="email" placeholder="Enter Email">
+                      <p>
+                        <span *ngIf="signupForm.get('email')?.hasError('whitespace') && signupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email cannot be empty or spaces only.</span>
+                        <span *ngIf="signupForm.get('email')?.hasError('email') && signupForm.get('email')?.touched" class="text-xs italic text-red-500">*Email is invalid.</span>
+                      </p>
+                    </div>
+                    <div class="form-group">
+                      <label for="phone">Phone</label>
+                      <input formControlName="phone" type="tel" class="form-control" id="phone" placeholder="Enter Phone">
+                      <p>
+                        <span *ngIf="signupForm.get('phone')?.hasError('whitespace') && signupForm.get('phone')?.touched" class="text-xs italic text-red-500"><br>*Phone cannot be empty or spaces only.</span>
+                        <span *ngIf="signupForm.get('phone')?.hasError('invalidPhoneNumber') && signupForm.get('phone')?.dirty" class="text-xs italic text-red-500"><br>*Phone number must be 10 digits long.</span>
+                      </p>
+                    </div>
+                    <div class="form-group">
+                      <label for="password">Password</label>
+                      <input formControlName="password" type="password" class="form-control" id="password" placeholder="Enter Password">
+                      <p>
+                        <span *ngIf="signupForm.get('password')?.hasError('whitespace') && signupForm.get('password')?.touched" class="text-xs italic text-red-500">*Password cannot be empty or spaces only.</span>
+                        <span *ngIf="signupForm.get('password')?.hasError('minlength') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Min Length 8 character</span>
+                        <span *ngIf="signupForm.get('password')?.hasError('uppercase') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Uppercase [A-Z]</span>
+                        <span *ngIf="signupForm.get('password')?.hasError('lowercase') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*Lowercase [a-z]</span>
+                        <span *ngIf="signupForm.get('password')?.hasError('specialCharacter') && signupForm.get('password')?.dirty" class="text-xs italic text-red-500"><br>*specialCharacter [&#64; # $]</span>
+                      </p>
+                    </div>
+                    <div class="form-group">
+                      <label for="confirmPassword">Confirm Password</label>
+                      <input formControlName="confirmPassword" type="password" class="form-control" id="confirmPassword" placeholder="Confirm Password">
+                      <p>
+                        <span *ngIf="signupForm.hasError('required', 'confirmPassword') && signupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500">*Confirm Password is required.</span>
+                        <span *ngIf="signupForm.hasError('confirmPasswordValidator', 'confirmPassword') && signupForm.controls['confirmPassword'].dirty" class="text-xs italic text-red-500"><br>*Passwords don't match.</span>
+                      </p>
+                    </div>
+                    <button type="submit" class="btn btn-dark btn-block" [disabled]="signupForm.invalid">Sign up</button>
+                    <p class="text-center mt-3">Already have an account? <a [routerLink]="['/login']" routerLinkActive="router-link-active"><span class="signin">Sign in</span></a></p>
+                  </form>   
+                </div>         
+            </div>
+        </div>
+    </div>
+</div>
+
+
+ -->

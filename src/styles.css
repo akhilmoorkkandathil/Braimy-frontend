@@ -1,0 +1,38 @@
+
+
+@import '../node_modules/ngx-toastr/toastr.css';
+
+/* Custom styles */
+.toast-success {
+  background-color: #4caf50 !important;
+}
+
+.toast-error {
+  background-color: #f44336 !important;
+}
+
+.toast-info {
+  background-color: #2196f3 !important;
+}
+
+.toast-warning {
+  background-color: #ff9800 !important;
+}
+
+/* Import Tailwind CSS */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Import PrimeNG theme */
+
+/* Import PrimeNG core CSS */
+
+/* Import PrimeIcons */
+
+/* Import ngx-toastr CSS */
+
+
+/* Global styles */
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

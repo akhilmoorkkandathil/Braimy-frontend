@@ -1,0 +1,74 @@
+.content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+ .recharge{
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  margin: 10px 0px 10px 0px;
+ }
+
+ .time-remaining {
+  margin: 0;
+}
+
+.time-label {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #49a1ff; /* Darker blue for the label */
+}
+
+.time-value {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #1a73e8; /* Bright blue for the time value */
+}
+
+.recharge-button {
+  padding: 10px 20px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: black; /* Bright blue background for the button */
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 1s ease;
+}
+
+.recharge-button:hover {
+  background-color:  black; /* Darker blue on hover */
+  transform: scale(1.05);
+}
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px; /* Adjust the gap between cards */
+  }
+  
+  .class-box {
+    background-color: #fff; /* White background for cards */
+    border: 1px solid #ccc; /* Light grey border */
+    border-radius: 8px; /* Rounded corners */
+    padding: 20px; /* Padding inside the card */
+    width: calc(50% - 20px); /* Width of each card (adjust for gaps) */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Light shadow for depth */
+  }
+  
+  .class-box h2 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 1.5em;
+  }
+  
+  .class-box p {
+    margin: 5px 0;
+  }

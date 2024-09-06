@@ -1,0 +1,45 @@
+<div class="container-fluid login-container">
+    <div class="background-image"></div>
+    <div class="row w-100">
+        <div class="col-lg-6 login-left d-none d-lg-flex">
+            <img src="../../../../assets/images/login.jpeg" alt="E-Learning" class="login-image">
+        </div>
+        <div class="col-lg-6 login-right">
+            <div class="login-form">
+                <h2 class="mb-4 text-center">Verify OTP <span>👋</span></h2>
+
+                <form>
+                    <div class="flex justify-center gap-2 mb-6">
+                        <input name="otp1" [(ngModel)]="otp1" (input)="onInputChange($event, 'otp1')" class="w-12 h-12 text-center border rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500" type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="one-time-code" required>
+                        <input name="otp2" [(ngModel)]="otp2" (input)="onInputChange($event, 'otp2')" class="w-12 h-12 text-center border rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500" type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="one-time-code" required>
+                        <input name="otp3" [(ngModel)]="otp3" (input)="onInputChange($event, 'otp3')" class="w-12 h-12 text-center border rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500" type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="one-time-code" required>
+                        <input name="otp4" [(ngModel)]="otp4" (input)="onInputChange($event, 'otp4')" class="w-12 h-12 text-center border rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500" type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="one-time-code" required>
+                        <input name="otp5" [(ngModel)]="otp5" (input)="onInputChange($event, 'otp5')" class="w-12 h-12 text-center border rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500" type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="one-time-code" required>
+                        <input name="otp6" [(ngModel)]="otp6" (input)="onInputChange($event, 'otp6')" class="w-12 h-12 text-center border rounded-md shadow-sm focus:border-teal-500 focus:ring-teal-500" type="text" maxlength="1" pattern="[0-9]" inputmode="numeric" autocomplete="one-time-code" required>
+                      </div>
+                      
+
+                    <button type="button" class="btn btn-dark btn-block" (click)="verifyOTP()">Verify OTP</button>
+                    
+                </form>
+                <div *ngIf="remainingTime > 0" class=" text-center p-2 text-teal-500 pb-1">
+                    Resend OTP in 00:{{ remainingTime | number:'2.0-0' }} s
+                </div>
+                @if (remainingTime<=0) {
+                    <div (click)="remainingTime === 0 && resendOTP()" class="text-center align-baseline font-bold text-sm text-teal-500 hover:text-teal-800  cursor-pointer p-3">
+                        Resend OTP
+                   </div>
+                }
+                <p *ngIf="successMessage" class="text-center text-green-500 mt-2">
+                    {{ successMessage }}
+                </p>
+                <p *ngIf="errorMessage" class="text-center text-red-800 mt-2">
+                    {{ errorMessage }}
+                </p>
+                
+                
+            </div>
+        </div>
+    </div>
+    
+</div>

@@ -1,0 +1,40 @@
+<div class="course-form-container">
+    
+    <h2>{{title}}</h2>
+    
+    <form [formGroup]="expenseForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Payed to</mat-label>
+            <input matInput formControlName="payedTo">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Payment Methode</mat-label>
+            <input matInput formControlName="paymentMethode">
+          </mat-form-field>
+        </div>
+
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Amount</mat-label>
+            <input matInput formControlName="amount">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Reason</mat-label>
+            <input matInput formControlName="reason">
+          </mat-form-field>
+        </div>
+      </div>
+       <mat-form-field >
+            <mat-label>Payment Description</mat-label>
+            <textarea matInput formControlName="description" rows="4"></textarea>
+          </mat-form-field>
+
+      <div class="form-column">
+      </div>
+       <button mat-raised-button color="primary" type="submit">{{button}}</button>
+    </form>
+</div>

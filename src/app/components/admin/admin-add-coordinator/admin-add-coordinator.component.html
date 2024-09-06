@@ -1,0 +1,43 @@
+<div class="course-form-container">
+    
+    <h2>{{title}}</h2>
+    
+    <form [formGroup]="coordinatorForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Coordinator Name</mat-label>
+            <input matInput formControlName="coordinatorName">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+        </div>
+
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Password</mat-label>
+            <input matInput type="password" formControlName="password">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-column">
+        <div class="image-upload">
+            <label for="file-input">
+              <mat-icon>cloud_upload</mat-icon>
+              <span>Click to upload</span>
+            </label>
+            <input id="file-input" type="file" (change)="onFileSelected($event)" accept="image/*">
+          </div>
+      </div>
+       <button mat-raised-button color="primary" type="submit">{{button}}</button>
+    </form>
+</div>

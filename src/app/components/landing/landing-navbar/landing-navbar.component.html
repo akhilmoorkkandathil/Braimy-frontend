@@ -1,0 +1,21 @@
+<div class="navbar-container" (click)="closeNavbar()">
+  <div class="navbar" (click)="$event.stopPropagation()">
+    <div class="logo" routerLink="/">Braimy.</div>
+
+    <nav id="navbarNav" [ngClass]="{ 'open': isNavbarOpen }">
+      <ul>
+        <li class="text-center"><a routerLink="/" (click)="closeNavbar()">Home</a></li>
+        <li class="text-center"><a routerLink="/courses" (click)="closeNavbar()">Courses</a></li>
+        <li class="text-center"><a routerLink="/tutors" (click)="closeNavbar()">Tutors</a></li>
+        <li class="text-center"><a routerLink="/login" (click)="closeNavbar()">Login</a></li>
+      </ul>
+    </nav>
+    <button class="navbar-toggle" (click)="toggleNavbar()">☰</button>
+  </div>
+</div>
+
+<!-- 
+  <div class="user-actions">
+      <button class="user-btn">👤</button>
+    </div>
+ -->

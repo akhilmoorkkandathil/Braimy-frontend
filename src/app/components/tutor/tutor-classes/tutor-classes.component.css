@@ -1,0 +1,12 @@
+.header {
+    display: flex;
+    justify-content: space-between; /* Aligns items to the start and end */
+    align-items: center; /* Centers items vertically */
+    margin-bottom: 10px; /* Optional margin for spacing */
+  }
+  
+  /* Adjust button style */
+  button {
+    margin-left: auto; /* Pushes the button to the right */
+  }
+  

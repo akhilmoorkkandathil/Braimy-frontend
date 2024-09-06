@@ -1,0 +1,78 @@
+
+
+.chat-sidebar {
+    height: 100vh;
+    overflow-y: auto;
+    border-right: 1px solid #ddd;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+.chat-heading{
+    background-color: rgb(125, 125, 255);
+    display: flex;
+    justify-content: center;
+    font-size: larger;
+}
+
+.chat-body {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background-color: #f8f9fa; /* Optional background color */
+    border-bottom: 1px solid #ddd; /* Optional border */
+}
+
+.chat-header img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+}
+.profile-img {
+    width: 40px;  /* Set width to your preferred size */
+    height: 40px; /* Set height to match width for a square */
+    object-fit: cover; /* Ensures the image covers the container */
+}
+.chat-header button {
+    margin-left: auto; /* Pushes the button to the far right */
+}
+
+.chat-content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background-color: #f1f1f1;
+}
+
+.user-list-item {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    display: flex;
+}
+
+.user-list-item:hover {
+    background-color: #f8f9fa;
+}
+
+.tutor-select{
+    margin: 0 ;
+    margin-top: 40%;
+    text-align: center;
+    color: #878787;
+}
+
+.last-seen{
+    color: #878787;
+}
+
+.search{
+    text-decoration: none;
+    box-shadow: none;
+}
+
+.online-status{
+    margin-left: auto; 
+}

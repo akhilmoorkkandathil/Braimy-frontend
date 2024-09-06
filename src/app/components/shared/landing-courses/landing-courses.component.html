@@ -1,0 +1,19 @@
+
+<div class="search-bar">
+    <h1>Finding course made easy</h1>
+    <p>Search. Explore. Learn</p>
+    <input type="text" placeholder="Search" [(ngModel)]="searchTerm" (input)="searchCourses()">
+</div>
+<section class="featured-courses">
+  <h2>Featured Courses</h2>
+  <div class="courses">
+   @if (courses.length==0) {
+    <h3>No course available</h3>
+   }@else {
+    <div class="course" (click)="navigateToCourse(course._id)"  *ngFor="let course of courses">
+      <img [src]="course.imageUrl" alt="Course Image" />
+      <h3>{{ course.courseName }}</h3>
+      <!-- <p>{{ course.instructor }}</p> -->
+    </div>
+   }
+</div>

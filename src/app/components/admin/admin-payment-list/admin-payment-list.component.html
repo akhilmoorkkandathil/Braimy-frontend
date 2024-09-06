@@ -1,0 +1,11 @@
+<div class="header">
+  <h1>Payments</h1>
+  <button mat-raised-button color="primary" routerLink="/admin/addPayment">Add Payment</button>
+</div>
+
+<app-table
+  [tableColumns]="tableColumns"
+  [tableData]="tableData"
+  [actions]="actions"
+  (actionClicked)="onActionClicked($event)">
+</app-table>

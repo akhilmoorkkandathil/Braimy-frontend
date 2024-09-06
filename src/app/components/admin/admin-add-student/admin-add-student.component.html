@@ -1,0 +1,74 @@
+<div class="course-form-container">    
+    <h2>{{title}}</h2>
+    
+    <form [formGroup]="studentForm" (ngSubmit)="onSubmit()">
+      <div class="form-row">
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Student Name</mat-label>
+            <input matInput formControlName="studentName">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Phone</mat-label>
+            <input matInput formControlName="phone">
+          </mat-form-field>
+          <mat-form-field >
+            <mat-label>Password</mat-label>
+            <input matInput formControlName="password">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Assign Tutor</mat-label>
+            <mat-select formControlName="tutor">
+              @for (tutor of tutors; track tutor) {
+                <mat-option [value]="tutor._id">{{tutor.username}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="form-column">
+          <mat-form-field >
+            <mat-label>Class</mat-label>
+            <input matInput formControlName="studentClass">
+          </mat-form-field>
+          
+          <mat-form-field >
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email">
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Assign Coordinator</mat-label>
+            <mat-select formControlName="coordinator">
+              @for (coordinator of coordinators; track coordinator) {
+                <mat-option [value]="coordinator._id">{{coordinator.name}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field>
+            <mat-label>Assign Course</mat-label>
+            <mat-select formControlName="course">
+              @for (course of courses; track course) {
+                <mat-option [value]="course._id">{{course.courseName}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-column">
+          <div class="form-column">
+            <button type="button" mat-stroked-button (click)="filePicker.click()">Select Image</button>
+            <input hidden type="file" #filePicker (change)="onImagePick($event)" accept=".png,.jpg,.jpeg">
+          </div>
+        </div>
+        <div class="form-column" style="height: 100px;">
+          <div class="image-preview" *ngIf="imagePreview">
+            <img [src]="imagePreview" alt="Course Image">
+          </div>
+        </div>
+      </div>
+       <button mat-raised-button color="primary" type="submit">{{button}}</button>
+    </form>
+</div>

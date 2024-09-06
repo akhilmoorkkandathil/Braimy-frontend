@@ -1,0 +1,47 @@
+<div class="scroll-container">
+  <mat-grid-list cols="2" rowHeight="300px" gutterSize="16px">
+    <mat-grid-tile *ngFor="let course of courses" (click)="navigateToCourse(course._id)">
+      <mat-card class="course-card">
+        <div class="image-container">
+          <img mat-card-image [src]="course.imageUrl" alt="{{ course.courseName }}" class="course-image">
+        </div>
+        <mat-card-header>
+          <mat-card-title>{{ course.courseName }}</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </mat-grid-tile>
+  </mat-grid-list>
+</div>
+
+  <!-- <div *ngFor="let course of courses">
+    <div class="sample-column card-wrapper">
+        <igx-card elevated>
+            <igx-card-media height="180px">
+                <img [src]="course.imageUrl">
+            </igx-card-media>
+    
+            <igx-card-header>
+                <h3 igxCardHeaderTitle>{{ course.courseName }}</h3>
+                <h5 igxCardHeaderSubtitle>{{ card.subtitle }}</h5>
+            </igx-card-header>
+    
+            <igx-card-content>
+                <p>{{ course.description }}</p>
+            </igx-card-content>
+    
+            <igx-card-actions>
+                <button igxButton igxRipple igxStart>Read more</button>
+                <button igxIconButton="flat"
+                    igxRipple
+                    [igxRippleCentered]="true"
+                    *ngFor="let icon of card.icons" igxEnd>
+                    <igx-icon>{{icon}}</igx-icon>
+                </button>
+            </igx-card-actions>
+    
+        </igx-card>
+    </div>
+  </div> -->
+
+
+  

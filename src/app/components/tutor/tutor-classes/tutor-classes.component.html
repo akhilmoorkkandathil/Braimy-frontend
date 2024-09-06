@@ -1,0 +1,10 @@
+<div class="header">
+    <h1>Assigned classes</h1>
+  </div>
+  
+  <app-table
+    [tableColumns]="tableColumns"
+    [tableData]="tableData"
+    [actions]="actions"
+    (actionClicked)="onActionClicked($event)">
+  </app-table>

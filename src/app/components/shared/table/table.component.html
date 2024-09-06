@@ -1,0 +1,32 @@
+<table mat-table [dataSource]="dataSource" matSort class="mat-elevation-z8 table table-hover">
+  <ng-container *ngFor="let disCol of tableColumns" [matColumnDef]="disCol.columnDef">
+    <th mat-header-cell *matHeaderCellDef mat-sort-header style="background-color: rgb(209, 209, 255);" class="text-black">{{ disCol.header }}</th>
+    <td mat-cell *matCellDef="let element">{{ disCol.cell(element) }}</td>
+  </ng-container>
+  <!-- Actions column -->
+  <ng-container matColumnDef="actions">
+    <th mat-header-cell *matHeaderCellDef style="background-color: rgb(209, 209, 255);">Actions</th>
+    <td mat-cell *matCellDef="let element">
+      <mat-menu #actionsMenu="matMenu">
+        <button mat-menu-item *ngFor="let action of actions" (click)="performAction(action, element)">
+          <mat-icon>{{ getActionIcon(action) }}</mat-icon>
+          {{ action | titlecase }}
+        </button>
+      </mat-menu>
+  
+      <button mat-icon-button [matMenuTriggerFor]="actionsMenu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+    </td>
+  </ng-container>
+  
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row"></tr>
+</table>
+
+<mat-paginator [length]="dataSource.data.length"
+               [pageSize]="10"
+               [pageSizeOptions]="[5, 10, 25, 100]"
+               aria-label="Select page">
+</mat-paginator>

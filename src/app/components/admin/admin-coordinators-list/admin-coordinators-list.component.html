@@ -1,0 +1,10 @@
+<div class="header">
+  <h1>Coordinator List</h1>
+  <button mat-raised-button color="primary" routerLink="/admin/addCoordinator">Add Coordinator</button>
+</div>
+<app-table
+  [tableColumns]="tableColumns"
+  [tableData]="tableData"
+  [actions]="actions"
+  (actionClicked)="onActionClicked($event)">
+</app-table>

@@ -1,0 +1,17 @@
+<div class="content">
+    <!-- Your main content goes here -->
+    <h1>Hii tutor how are you doing today</h1>
+  </div>
+
+  <br>
+  <div class="content">
+    <h1>Coming Classes</h1>
+    <div class="card-container">
+      <div class="class-box" *ngFor="let class of upcomingClasses">
+        <h2>{{ class.username }}</h2>
+        <p>Course: {{ class.course.courseName }}</p>
+        <p>Start Time: {{ class.preferredTime }}</p>
+        <p>Duration: {{ class.classDuration }}</p>
+      </div>
+    </div>
+  </div>

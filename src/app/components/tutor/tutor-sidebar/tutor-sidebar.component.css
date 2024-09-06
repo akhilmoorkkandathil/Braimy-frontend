@@ -1,0 +1,110 @@
+.sidebar {
+  width: 250px;
+  background-color: #e0e7ff;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.image{
+  margin: 0 auto;
+  padding: 40px;
+}
+.sidebar-navigation {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+.sidebar-navigation li {
+  background-color: transparent;
+  display: inline-block;
+  width: 100%;
+  font-size: medium;
+  line-height: 15px;
+  padding: 20px 15px 13px 30px;
+  display: block;
+  color: #030303;
+  transition: transform .2s;
+  -webkit-transition: background-color 1s ease-out;
+-moz-transition: background-color 1s ease-out;
+-o-transition: background-color 1s ease-out;
+transition: background-color 1s ease-out;
+}
+.sidebar-navigation li:hover{
+  background-color: #bacafd;
+  transform: scale(1);
+  cursor: pointer;
+}
+
+.sidebar-navigation li .fa {
+  margin-right: 10px;
+}
+
+.sidebar-navigation li a:active,
+.sidebar-navigation li a:hover,
+.sidebar-navigation li a:focus {
+  text-decoration: none;
+  outline: none;
+}
+
+.sidebar-navigation li::before {
+  background-color: #13584f;
+  
+  content: '';
+  height: 100%;
+  left: 0;
+  top: 0;
+  -webkit-transition: width 0.2s ease-in;
+  transition: width 0.2s ease-in;
+  width: 3px;
+  z-index: -1;
+}
+
+.sidebar-navigation li:hover::before {
+  width: 100%;
+}
+.sidebar-navigation ul{
+  padding-left: 0px;
+}
+
+.sidebar-navigation .header {
+  font-size: 12px;
+  text-transform: uppercase;
+  background-color: #151515;
+  padding: 10px 15px 10px 30px;
+}
+
+.sidebar-navigation .header::before {
+  background-color: transparent;
+}
+
+.content-container {
+  padding-left: 220px;
+}
+
+.profile-img-container {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  border-radius: 50%; /* Makes the image circular */
+  margin-bottom: 15px;
+  margin-left: 15px;
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures the image covers the container */
+}
+
+.profile-name {
+  text-align: center;
+}
+
+.profile-username {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #333;
+  text-align: center;
+  width: 120px;
+}
+

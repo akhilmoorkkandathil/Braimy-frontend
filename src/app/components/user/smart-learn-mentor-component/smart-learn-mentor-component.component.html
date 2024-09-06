@@ -1,0 +1,68 @@
+<div class="chat-container">
+    <div class="heading">
+      <h1>SmartLearn Mentor</h1>
+      <p>Hello, How can I help today?</p>
+    </div>
+  
+    <div class="chat-body">
+      <!-- Sample Questions -->
+      <div class="sample-questions">
+        <div class="questions-boxes">
+          <button
+            *ngFor="let question of gQuestions; trackBy: trackByFn"
+            (click)="sendMessage(question); userMessage = ''"
+            class="question-box"
+          >
+            {{ question }}
+          </button>
+        </div>
+      </div>
+  
+      <!-- Messages Container -->
+      <div #messagesContainer class="messages">
+        <div *ngFor="let message of messagesHistory; trackBy: trackByFn" class="messages-content">
+          <span
+            [ngClass]="{ gemini: message.role === 'model', user: message.role === 'user' }"
+          >
+            <i
+              class="fa"
+              [ngClass]="{
+                'fa-commenting-o': message.role === 'model',
+                'fa-user-circle-o': message.role === 'user'
+              }"
+              aria-hidden="true"
+            ></i>
+            &nbsp; {{ message.role === "model" ? "AI" : "User" }}:&nbsp;
+          </span>
+          <span class="text" [innerHTML]="message.parts | textToHtml"></span>
+        </div>
+  
+        <!-- Loading Indicator -->
+        <div class="loading-container" *ngIf="loading">
+          <div class="loading">
+            <ngx-loading [show]="loading" [config]="loadingConfig"></ngx-loading>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Message Input Box -->
+    <div class="message-input-box">
+      <textarea
+        [(ngModel)]="userMessage"
+        (keydown.enter)="sendMessage(userMessage!); userMessage = null"
+        class="message-input"
+        [placeholder]="'Ask ' + chatForm.value.bot.value"
+        rows="2"
+      ></textarea>
+      <button
+        (click)="sendMessage(userMessage!); userMessage = null"
+        [disabled]="!userMessage || loading"
+        type="button"
+        class="message-submit"
+      >
+        Send
+      </button>
+    </div>
+  </div>
+  

@@ -1,0 +1,15 @@
+.footer {
+    background-color: #e9efff; /* Set the desired color */
+  }
+  .footer h3 {
+    color: black; /* Set the desired heading color */
+  }
+  .footer a {
+    color: rgb(123, 123, 255); /* Set the desired link color */
+    text-decoration: none; /* Removes underline from links */
+  }
+  
+  .footer a:hover {
+    text-decoration: underline; /* Adds underline on hover */
+  }
+    

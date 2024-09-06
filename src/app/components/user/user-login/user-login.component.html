@@ -1,0 +1,187 @@
+<app-toast #toast></app-toast>
+<div class="container-fluid login-container">
+    <div class="background-image"></div>
+    <div class="row w-100">
+        <div class="col-lg-6 login-left d-none d-lg-flex">
+            <img src="../../../assets/images/login.jpeg" alt="E-Learning" class="login-image">
+        </div>
+        <div class="col-lg-6 login-right">
+            <div class="login-form">
+                <div class="container-fluid">
+                    <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                      <li class="nav-item">
+                        <a class="nav-link active" id="student-tab" data-toggle="tab" href="#student" role="tab" aria-controls="student" aria-selected="true">Student</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="tutor-tab" data-toggle="tab" href="#tutor" role="tab" aria-controls="tutor" aria-selected="false">Tutor</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="coordinator-tab" data-toggle="tab" href="#coordinator" role="tab" aria-controls="coordinator" aria-selected="false">Coordinator</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" id="admin-tab" data-toggle="tab" href="#admin" role="tab" aria-controls="admin" aria-selected="false">Admin</a>
+                      </li>
+                    </ul>
+                  </div>
+                  
+                <div class="tab-content" id="myTabContent">
+                    <!-- Student Login Form -->
+                    <div class="tab-pane fade show active" id="student" role="tabpanel" aria-labelledby="student-tab">
+                        <h2 class="text-center mt-3">Student Login <span>🎓</span></h2>
+                        <p class="mb-4 text-center">Sign in to start learning.</p>
+                        <form [formGroup]="studentLoginForm">
+                            <!-- Form fields here -->
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input formControlName="email" type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                                <span *ngIf="studentLoginForm.hasError('required', 'email') && studentLoginForm.controls['email'].dirty" class="text-red-500">*Email is required!</span>
+                                <span *ngIf="studentLoginForm.hasError('email', 'email')" class="text-red-500">*Email is invalid</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input formControlName="password" autocomplete="off" id="password" name="password" type="password" class="form-control" placeholder="Enter Password">
+                                <span *ngIf="studentLoginForm.hasError('required', 'password') && studentLoginForm.controls['password'].dirty" class="text-red-500">*Password is required!</span>
+                            </div>
+                            <button [disabled]="studentLoginForm.invalid" (click)="onStudentLogin()" class="btn btn-dark btn-block">Sign in</button>
+                            <div class="text-center my-3">Or</div>
+                            <div class="social-login-buttons d-flex justify-center">
+                                <asl-google-signin-button type="standard" size="medium"></asl-google-signin-button>
+                                <button class="btn facebook-btn d-flex align-items-center justify-content-center" (click)="signInWithFB()">
+                                  <img class="facebook-icon" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtfbcYeYgf0wQJ-LSPm3CPbyB7T1p0f5bnaA&s" alt="Facebook"> 
+                                  <span>Sign in with Facebook</span>
+                                </button>
+                              </div>
+                              
+                    <p class="text-center mt-3">You don't have an account? <a [routerLink]="['/register']" routerLinkActive="router-link-active" ><span class="signup">Sign up</span></a></p>
+                        </form>
+                    </div>
+                    
+                    <!-- Tutor Login Form -->
+                    <div class="tab-pane fade" id="tutor" role="tabpanel" aria-labelledby="tutor-tab">
+                        <h2 class="text-center mt-3">Tutor Login <span>📚</span></h2>
+                        <p class="mb-4 text-center">Sign in to start teaching.</p>
+                        <form [formGroup]="tutorLoginForm">
+                            <!-- Form fields here -->
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input formControlName="email" type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                                <span *ngIf="tutorLoginForm.hasError('required', 'email') && tutorLoginForm.controls['email'].dirty" class="text-red-500">*Email is required!</span>
+                                <span *ngIf="tutorLoginForm.hasError('email', 'email')" class="text-red-500">*Email is invalid</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input formControlName="password" autocomplete="off" id="password" name="password" type="password" class="form-control" placeholder="Enter Password">
+                                <span *ngIf="tutorLoginForm.hasError('required', 'password') && tutorLoginForm.controls['password'].dirty" class="text-red-500">*Password is required!</span>
+                            </div>
+                            <button [disabled]="tutorLoginForm.invalid" (click)="onTutorLogin()" class="btn btn-dark btn-block">Sign in</button>
+                            <p class="text-center mt-3">You don't have an account? <a [routerLink]="['/register']" routerLinkActive="router-link-active" ><span class="signup">Sign up</span></a></p>
+                        </form>
+                    </div>
+
+                    <!-- Coordinator Login Form -->
+                    <div class="tab-pane fade" id="coordinator" role="tabpanel" aria-labelledby="coordinator-tab">
+                        <h2 class=" text-center mt-3">Coordinator Login <span>👩‍🏫</span></h2>
+                        <p class="mb-4 text-center">Sign in to manage courses.</p>
+                        <form [formGroup]="coordinatorLoginForm">
+                            <!-- Form fields here -->
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input formControlName="email" type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                                <span *ngIf="coordinatorLoginForm.hasError('required', 'email') && coordinatorLoginForm.controls['email'].dirty" class="text-red-500">*Email is required!</span>
+                                <span *ngIf="coordinatorLoginForm.hasError('email', 'email')" class="text-red-500">*Email is invalid</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input formControlName="password" autocomplete="off" id="password" name="password" type="password" class="form-control" placeholder="Enter Password">
+                                <span *ngIf="coordinatorLoginForm.hasError('required', 'password') && coordinatorLoginForm.controls['password'].dirty" class="text-red-500">*Password is required!</span>
+                            </div>
+                            <button [disabled]="coordinatorLoginForm.invalid" (click)="onCoordinatorLogin()" class="btn btn-dark btn-block">Sign in</button>
+                            <p class="text-center mt-3">You don't have an account? <a [routerLink]="['/register']" routerLinkActive="router-link-active" ><span class="signup">Sign up</span></a></p>
+                        </form>
+                    </div>
+
+                    <!-- Admin Login Form -->
+                    <div class="tab-pane fade" id="admin" role="tabpanel" aria-labelledby="admin-tab">
+                        <h2 class=" text-center mt-3">Admin Login <span>🔑</span></h2>
+                        <p class="text-center mb-4">Sign in to manage the platform.</p>
+                        <form [formGroup]="adminLoginForm">
+                            <!-- Form fields here -->
+                            <div class="form-group">
+                                <label for="email">Email</label>
+                                <input formControlName="email" type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                                <span *ngIf="adminLoginForm.hasError('required', 'email') && adminLoginForm.controls['email'].dirty" class="text-red-500">*Email is required!</span>
+                                <span *ngIf="adminLoginForm.hasError('email', 'email')" class="text-red-500">*Email is invalid</span>
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Password</label>
+                                <input formControlName="password" autocomplete="off" id="password" name="password" type="password" class="form-control" placeholder="Enter Password">
+                                <span *ngIf="adminLoginForm.hasError('required', 'password') && adminLoginForm.controls['password'].dirty" class="text-red-500">*Password is required!</span>
+                            </div>
+                            <button [disabled]="adminLoginForm.invalid" (click)="onAdminLogin()" class="btn btn-dark btn-block">Sign in</button>
+                            <p class="text-center mt-3">You don't have an account? <a [routerLink]="['/register']" routerLinkActive="router-link-active" ><span class="signup">Sign up</span></a></p>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <app-toast #toast></app-toast>
+<div class="container-fluid login-container">
+    <div class="background-image"></div>
+    <div class="row w-100">
+        <div class="col-lg-6 login-left d-none d-lg-flex">
+            <img src="../../../../../../assets/images/login.jpeg" alt="E-Learning" class="login-image">
+        </div>
+        <div class="col-lg-6 login-right">
+            <div class="login-form">
+                <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link nav1" id="home-tab" data-toggle="tab" data-target="#home" role="tab" aria-controls="home" aria-selected="true">Student</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav2" id="profile-tab" data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false">Tutor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav1" id="home-tab" data-toggle="tab" data-target="#home" role="tab" aria-controls="home" aria-selected="true">Coordinator</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link nav2" id="profile-tab" data-toggle="tab" role="tab" aria-controls="profile" aria-selected="false">Admin</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                        <h2 class="mb-4">Welcome Back <span>👋</span></h2>
+                <p class="mb-4">Today is a new day. It's your day. You shape it. Sign in to start learning.</p>
+                <form [formGroup]="userLoginForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input formControlName="email" type="email" class="form-control" id="email" name="email" placeholder="Enter Email">
+                        <span *ngIf="userLoginForm.hasError('required', 'email') && userLoginForm.controls['email'].dirty" class="text-red-500">*Email is required!</span>
+                        <span *ngIf="userLoginForm.hasError('email', 'email')" class="text-red-500">*Email is invalid</span>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input formControlName="password" autocomplete="off" id="password" name="password" type="password" class="form-control" placeholder="Enter Password">
+                        <span *ngIf="userLoginForm.hasError('required', 'password') && userLoginForm.controls['password'].dirty" class="text-red-500">*Password is required!</span>
+                    </div>
+                    <div class="text-red-700" *ngIf="error">{{error}}</div>
+                    <button [disabled]="userLoginForm.invalid" [class.disabled]="userLoginForm.invalid" (click)="onLogin()"  class="btn btn-dark btn-block">Sign in</button>
+                    <div class="text-center my-3">Or</div>
+                    <div class="social-login-buttons d-flex justify-center">
+                        <asl-google-signin-button type='standard' size='medium'></asl-google-signin-button>
+                        <button class="btn d-flex justify-between" (click)="signInWithFB()"><img width="8%" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtfbcYeYgf0wQJ-LSPm3CPbyB7T1p0f5bnaA&s" alt="Facebook"> Sign in with Facebook</button>
+                    </div>
+                    <p class="text-center mt-3">You don't have an account? <a [routerLink]="['/register']" routerLinkActive="router-link-active" ><span class="signup">Sign up</span></a></p>
+                </form>
+                    </div>
+                </div>
+
+
+
+                
+            </div>
+        </div>
+    </div>
+</div> -->

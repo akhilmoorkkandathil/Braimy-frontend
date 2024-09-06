@@ -1,0 +1,20 @@
+
+<div class="search-bar">
+    <h1>Finding tutorse made easy</h1>
+    <p>Search. Explore. Learn</p>
+    <input type="text" placeholder="Search" [(ngModel)]="searchTerm" (input)="searchCourses()">
+</div>
+
+<div class="course-list">
+    <div class="course-item" *ngFor="let tutor of tutors">
+      <div class="course-image">
+        <img [src]="tutor.photoUrl" alt="{{ tutor.username }}">
+      </div>
+      <div class="course-info">
+        <div class="course-tag">{{ tutor.education }}</div>
+        <h2>{{ tutor.username }}</h2>
+        <p>{{ tutor.email }}</p>
+    </div>
+    <button class="view-course" routerLink="/courses">Courses</button>
+    </div>
+</div>

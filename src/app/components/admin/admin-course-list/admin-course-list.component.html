@@ -1,0 +1,12 @@
+<div class="header">
+  <h1>Course List</h1>
+  <button mat-raised-button color="primary" routerLink="/admin/addCourse">Add Course</button>
+</div>
+
+<app-table
+  [tableColumns]="tableColumns"
+  [tableData]="tableData"
+  [actions]="actions"
+  (actionClicked)="onActionClicked($event)">
+</app-table>
+

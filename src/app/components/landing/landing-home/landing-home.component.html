@@ -1,0 +1,84 @@
+<header>
+    <div class="hero-section">
+      <h1> <span>Discover best classes for the best learning</span></h1>
+      <p class="under-head">
+        Welcome to Braimy, where excellence meets personalized learning in an extraordinary way!<br>
+        As the pioneers of educational empowerment, we are dedicated to revolutionizing the tutoring experience.
+      </p>
+      <button class="view-courses-btn" routerLink="/courses">View Courses -></button>
+    </div>
+  </header>
+
+  <section class="why-choose-us">
+    <div class=" p-3">
+      
+      <div class="row">
+        <div class="col-md-4">
+          <div class="m-3 p-3">
+            <h2>Why choose us!</h2>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Minus, ipsam in! Quos earum ut magnam at beatae, sint unde voluptas?</p>
+        </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature">
+            <div class="triangle-right"></div><br>
+            <h3>Individual Attention</h3>
+            <p>Individual attention is the key that unlocks the full potential of every student.dshfalfjalsdf fdslhflasf dlshflsdaf fdsh </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature">
+            <div class="triangle-right"></div><br>
+            <h3>Personal Mentorship</h3>
+            <p>Personal mentorship is like having a trusted guide by your side. unlocks the full potential of every student</p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4">
+          <div class="feature">
+            <div class="triangle-right"></div><br>
+            <h3>Customized Timetable</h3>
+            <p>Unleash the true potential of your studies with a customized timetable designed exclusively for you.unlocks the full   </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature">
+            <div class="triangle-right"></div><br>
+            <h3>Instant Doubt Clearing</h3>
+            <p>Imagine having a lifeline that instantly connects you with expert guidance whenever you need it most.unlocks the full </p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="feature">
+            <div class="triangle-right"></div><br>
+            <h3>Test Preparation</h3>
+            <p>Maximize your test preparation and unleash your full potential. unlocks the full potential of every student</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured-courses">
+    <h2>Featured Courses</h2>
+    <div class="courses">
+      <div class="course" (click)="navigateToCourse(course._id)" *ngFor="let course of courses">
+        <img [src]="course.imageUrl" alt="Course Image" />
+        <h3>{{ course.courseName }}</h3>
+      </div>
+    </div>
+  </section>
+
+  <section class="faq">
+    <div class="col-md-10">
+      <h2>Frequently Asked Questions</h2>
+    <div class="faq-item" *ngFor="let faq of faqs">
+      <button (click)="toggleFaq(faq)">
+        {{ faq.question }}
+        <span>{{ faq.open ? '−' : '+' }}</span>
+      </button>
+      <p *ngIf="faq.open">{{ faq.answer }}</p>
+    </div>
+    </div>
+  </section>

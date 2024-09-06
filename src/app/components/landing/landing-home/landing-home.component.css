@@ -1,0 +1,278 @@
+/* Basic Reset */
+* { 
+    padding: 0;
+    box-sizing: border-box;
+    margin: 0;
+  }
+  
+  body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  
+  .landing-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+  }
+  
+  /* Header Styles */
+header {
+    width: 100%;
+    background-color: #e9efff;
+    padding: 130px 0;
+    text-align: center;
+
+  }
+  
+
+
+/* Hero style */
+  
+  .hero-section {
+    padding: 40px 20px;
+  }
+  
+  .hero-section h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  .hero-section h1 span {
+    color: #007bff;
+  }
+  
+  .hero-section p {
+    font-size: 15px;
+    color: #7c7c7c;
+    margin-bottom: 20px;
+  }
+  
+  .hero-section .view-courses-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: black;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .view-courses-btn:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.192);
+  }
+  
+  
+  .why-choose-section {
+    padding: 40px 20px;
+    background: #F8F9FA;
+    text-align: center;
+}
+
+.why-choose-section h2 {
+    font-size: 2em;
+    margin-bottom: 20px;
+}
+
+.why-choose-section p {
+    font-size: 1.1em;
+    color: #666;
+}
+
+.features {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+}
+
+.feature {
+  box-shadow: 0 0 10px rgba(160, 139, 255, 0.192);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 5px;
+    text-align: left;
+    transition: transform 0.3s ease, box-shadow 1s ease;
+}
+.feature:hover{
+  transform: scale(1.05);
+  box-shadow: 0 0 10px rgba(48, 2, 255, 0.192);
+}
+
+.feature-icon {
+    font-size: 2em;
+    color: #3A49F9;
+}
+
+.feature h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+    color: #007bff;
+}
+
+.feature p {
+    font-size: 1em;
+    color: #666;
+}
+
+
+/* Traingle */
+.triangle-right {
+  width: 0; 
+  height: 0; 
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 30px solid #3A49F9;
+  border-radius: 15%;
+}
+.why-choose-us h2{
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+  /* Featured Courses Styles */
+  .featured-courses {
+    padding: 40px 20px;
+    text-align: center;
+    width: 100%;
+    background-color: #e9efff;
+  }
+  
+  .featured-courses h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+  }
+
+  
+  .courses {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .course {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: calc(33.333% - 40px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.5s ease, box-shadow 1s ease;
+  }
+  .course:hover{
+    transform: scale(1.05);
+    box-shadow: 0 0 10px rgba(48, 2, 255, 0.192);
+  }
+  
+  .course img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .course h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  .course p {
+    font-size: 16px;
+  }
+  
+  /* FAQ Styles */
+  .faq {
+    padding: 40px 20px;
+    background-color: #f8f9fa;
+    width: 100%;
+    text-align: center;
+    display: flex;
+      justify-content: center;
+      align-items: center; /* This is optional, depending on the vertical alignment requirement */
+      flex-direction: column;
+  }
+  
+  .faq h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #3A49F9;
+  }
+  
+  .faq-item {
+    margin-bottom: 10px;
+  }
+  
+  .faq-item button {
+    width: 100%;
+    padding: 15px;
+    text-align: left;
+    font-size: 18px;
+    border: none;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .faq-item p {
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin: 0;
+  }
+  
+  /* Footer Styles */
+  footer {
+    width: 100%;
+    background-color: #0061c8;
+    color: #fff;
+    padding: 40px 20px;
+    text-align: center;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .features,
+    .courses,
+    .footer-links {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .feature,
+    .course {
+      width: 100%;
+    }
+  
+    .faq-item button {
+      font-size: 16px;
+    }
+  
+    .faq-item p {
+      font-size: 14px;
+    }
+  
+    .hero-section h1 {
+      font-size: 28px;
+    }
+  
+    .hero-section p {
+      font-size: 16px;
+    }
+  
+    .hero-section .view-courses-btn {
+      font-size: 14px;
+    }
+  
+    .navbar nav ul {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }
