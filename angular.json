@@ -26,6 +26,7 @@
             "outputPath": "dist/e-learning-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
+            "allowedCommonJsDependencies": ["sweetalert2", "crypto-js"],
             "polyfills": [
               "zone.js"
             ],
