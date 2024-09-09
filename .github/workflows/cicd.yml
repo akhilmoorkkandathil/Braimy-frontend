@@ -25,6 +25,6 @@ jobs:
       - name: Pull image from docker hub
         run: sudo docker pull akhilmoorkkandathil/braimy-frontend:latest
       - name: Delete old container
-        run: docker rm -f angular-app-container  
+        run: sudo docker rm -f angular-app-container  
       - name: Run docker container
-        run: docker run -d -p 4200:80 --name angular-app-container akhilmoorkkandathil/braimy-frontend
+        run: sudo docker run -d -p 4200:80 --name angular-app-container akhilmoorkkandathil/braimy-frontend
