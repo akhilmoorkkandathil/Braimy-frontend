@@ -14,17 +14,17 @@ jobs:
       - name: Login to docker hub
         run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}       
       - name: Build docker image
-        run: docker build -t akhilmoorkkandathil/Braimy-frontend .
+        run: docker build -t akhilmoorkkandathil/braimy-frontend .
       - name: Publish image to docker hub
-        run: docker push akhilmoorkkandathil/Braimy-frontend:latest
+        run: docker push akhilmoorkkandathil/braimy-frontend:latest
         
   deploy:
     needs: build
     runs-on: self-hosted
     steps:
       - name: Pull image from docker hub
-        run: docker pull akhilmoorkkandathil/Braimy-frontend:latest
+        run: docker pull akhilmoorkkandathil/braimy-frontend:latest
       - name: Delete old container
         run: docker rm -f angular-app-container  
       - name: Run docker container
-        run: docker run -d -p 4200:80 --name angular-app-container akhilmoorkkandathil/Braimy-frontend
+        run: docker run -d -p 4200:80 --name angular-app-container akhilmoorkkandathil/braimy-frontend
