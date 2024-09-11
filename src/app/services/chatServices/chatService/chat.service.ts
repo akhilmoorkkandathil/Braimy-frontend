@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import * as io from 'socket.io-client';
-import { Observable, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { Socket } from 'ngx-socket-io';
 import { ChatMessage } from '../../../interfaces/chatMessage';
 

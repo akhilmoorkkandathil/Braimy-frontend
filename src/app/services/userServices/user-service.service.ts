@@ -25,5 +25,8 @@ export class UserServiceService {
   getStudentClasses(){
     return this.http.get<ApiResponse>(`${apiUrls.usersApi}getStudentClasses`,{withCredentials:true});
   }
+  getTutorStudentWithLastMessage(){
+    return this.http.get<ApiResponse>(`${apiUrls.tutorsApi}studentWithMessage`,{withCredentials:true});
+  }
 
 }

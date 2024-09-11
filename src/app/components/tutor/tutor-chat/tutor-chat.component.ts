@@ -7,11 +7,13 @@ import { User } from '../../../interfaces/user';
 import { ChatMessage } from '../../../interfaces/chatMessage';
 import { TutorChatService } from '../../../services/chatServices/tutorChatService/tutor-chat.service';
 import { RouterModule } from '@angular/router';
+import { usesrWithLastMessage } from '../../../interfaces/userWithLastMessage';
+import { EmojiesComponent } from '../../shared/emojies/emojies.component';
 
 @Component({
   selector: 'app-tutor-chat',
   standalone: true,
-  imports: [CommonModule,FormsModule,RouterModule],
+  imports: [CommonModule,FormsModule,RouterModule,EmojiesComponent],
   templateUrl: './tutor-chat.component.html',
   styleUrl: './tutor-chat.component.css'
 })
@@ -19,15 +21,14 @@ export class TutorChatComponent {
 
   tutorInput=''
   userId = '';
-  studentList:User[];
+  studentListWithLastMessage:usesrWithLastMessage[];
   tutorId=''
   userType = "Tutor";
   messages: ChatMessage[] = [];
-  lastMessages: Map<string, string> = new Map();
-
+  isEmojiPickerVisible:boolean = false;
   constructor(
     private chatService:ChatService, 
-    private studentService:AdminServiceService,
+    private adminservice:AdminServiceService,
     private tutorChatService:TutorChatService
   ){}
 
@@ -36,20 +37,16 @@ export class TutorChatComponent {
       this.chatService.connect()
       this.tutorId = localStorage.getItem('tutorId');
       this.getMessages()
-      this.fetchStudents();
-      console.log(this.lastMessages);
+      this.fetchStudentwithLastMessag();
       
   }
 
 
-  fetchStudents() {
-    this.studentService.getTutorStudentList().subscribe(res => {
-      this.studentList = res.data;
-      // Ensure lastMessages is applied correctly to studentList
-      this.studentList.forEach(student => {
-        student.lastMessage = this.lastMessages.get(student.userId) || 'No messages yet';
-      });
-      console.log("StudentList: ", this.studentList);
+  fetchStudentwithLastMessag() {
+    this.adminservice.getTutorStudentWithLastMessage().subscribe(res => {
+      this.studentListWithLastMessage = res.data;
+      console.log("Student list....",res.data);
+      
     });
   }
   
@@ -63,7 +60,7 @@ export class TutorChatComponent {
     
     this.messages = []
     this.selected = true;
-    this.userId = student._id
+    this.userId = student.userId
     this.joinChat()
     this.selectedStudent = student;
     this.getOldChats(this.userId);
@@ -71,6 +68,10 @@ export class TutorChatComponent {
 
   joinChat(){
     this.chatService.joinChat(this.tutorId,this.userType);
+  }
+  onEmojiSelected(emoji: string) {
+    this.tutorInput += emoji;
+    this.isEmojiPickerVisible = false;
   }
   getOldChats(userId:string){
     this.tutorChatService.getOldChats(userId).subscribe({
@@ -86,27 +87,38 @@ export class TutorChatComponent {
   });
 }
   sendMessage(){
-    console.log("I am tutorsend message in the tutor component");
+    const newMessage: ChatMessage = {
+      userId: this.userId,
+      senderType: this.userType,
+      message: this.tutorInput,
+      createdAt: new Date(),
+    };
     console.log("usrId: ",this.userId,"tutorId: ",this.tutorId,"USer type",this.userType, this.tutorInput);
     
     this.chatService.sendMessage(this.userId,this.tutorId,this.userType, this.tutorInput);
-    this.messages.push({userId:this.userId, senderType:this.userType, message:this.tutorInput});
+    this.messages.push(newMessage);
+    this.updateStudentWithLastMessage(this.userId, newMessage);
     this.tutorInput = '';
   }
+
   getMessages() {
     this.chatService.getMessages().subscribe((message: ChatMessage) => {
       console.log('Received message:', message);
-      this.messages.push(message);
-      // Update the last message for the user or tutor
-      if (message.senderType === 'Tutor') {
-        this.lastMessages.set(message.userId, message.message);
-      } else {
-        this.lastMessages.set(message.userId, message.message);
+      if (message.userId === this.userId) {
+        this.messages.push(message);
       }
-      console.log("Last Messages: ", this.lastMessages);
-      // Update student list to reflect the last message
-      this.fetchStudents();
+      this.updateStudentWithLastMessage(message.userId, message);
     });
+  }
+
+  private updateStudentWithLastMessage(userId: string, message: ChatMessage) {
+    const studentIndex = this.studentListWithLastMessage.findIndex(
+      (student) => student.userId === userId
+    );
+    if (studentIndex !== -1) {
+      this.studentListWithLastMessage[studentIndex].lastMessage = message.message;
+      this.studentListWithLastMessage[studentIndex].lastMessageTime = message.createdAt.toString();
+    }
   }
   
 }

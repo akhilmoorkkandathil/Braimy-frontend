@@ -1,7 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { CallService } from '../../../services/videoServices/call/call.service';
-import { SignallingService } from '../../../services/videoServices/signalling/signalling.service';
-
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { WebRTCServiceService } from '../../../services/WebRTCService/web-rtcservice.service';
 
 @Component({
   selector: 'app-video-call',
@@ -10,39 +8,48 @@ import { SignallingService } from '../../../services/videoServices/signalling/si
 })
 export class VideoCallComponent implements OnInit {
 
-  @ViewChild('remoteVideo') remoteVideo: ElementRef;
+  @ViewChild('localVideo') localVideo!: ElementRef;
+  @ViewChild('remoteVideo') remoteVideo!: ElementRef;
+  isCallIncoming = false;
 
-  constructor(
-    private callService: CallService,
-    private signalingService: SignallingService
-  ) {}
+  constructor(private webRTCService: WebRTCServiceService) {}
 
-  ngOnInit(): void {
-    this.signalingService
-      .getMessages()
-      .subscribe((payload) => this._handleMessage(payload));
+  ngOnInit() {
+    this.webRTCService.remoteStream$.subscribe(stream => {
+      this.remoteVideo.nativeElement.srcObject = stream;
+    });
+
+    this.webRTCService.incomingCall$.subscribe(() => {
+      this.isCallIncoming = true;
+      alert('Incoming call! Click "Answer Call" to accept.');
+    });
   }
 
-  public async makeCall(): Promise<void> {
-    await this.callService.makeCall(this.remoteVideo);
+  async startLocalStream() {
+    const stream = await this.webRTCService.startLocalStream();
+    this.localVideo.nativeElement.srcObject = stream;
   }
 
-  private async _handleMessage(data): Promise<void> {
-    switch (data.type) {
-      case 'offer':
-        await this.callService.handleOffer(data.offer, this.remoteVideo);
-        break;
+  endLocalStream() {
+    this.webRTCService.endLocalStream();
+    this.localVideo.nativeElement.srcObject = null;
+  }
 
-      case 'answer':
-        await this.callService.handleAnswer(data.answer);
-        break;
+  startCall() {
+    this.webRTCService.startCall();
+  }
 
-      case 'candidate':
-        this.callService.handleCandidate(data.candidate);
-        break;
-
-      default:
-        break;
+  answerCall() {
+    if (this.isCallIncoming) {
+      this.webRTCService.answerCall();
+      this.isCallIncoming = false;
+    } else {
+      alert('No incoming call to answer.');
     }
+  }
+
+  endCall() {
+    this.webRTCService.endCall();
+    this.remoteVideo.nativeElement.srcObject = null;
   }
 }

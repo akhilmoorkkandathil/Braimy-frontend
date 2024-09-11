@@ -3,26 +3,24 @@
      <!-- Sidebar -->
 <div class="col-md-4 col-lg-3 chat-sidebar bg-light">
   <h3 class="chat-heading p-3">Chats</h3>
-  <div *ngIf="studentList">
-      <div *ngFor="let student of studentList; let i = index" class="user-list-item p-2 border-bottom" (click)="selectUser(student)">
+  <div *ngIf="studentListWithLastMessage">
+      <div *ngFor="let student of studentListWithLastMessage; let i = index" class="user-list-item p-2 border-bottom" (click)="selectUser(student)">
           <div class="d-flex align-items-center">
               <!-- Left side with profile image -->
               <img [src]="student.photoUrl" class="profile-img rounded-circle mr-2" alt="User Image">
               <!-- Center with name and message -->
               <div class="flex-grow-1">
                   <p class="mb-0 font-weight-bold">{{ student.username }}</p>
-                  <small class="text-muted">{{ lastMessages.get(student.userId) || 'No messages yet' }}</small>
+                  <small class="text-muted">{{student.lastMessage}}</small>
               </div>
               <!-- Right side with last seen or online status -->
           </div>
           <div class="online-status">
-              <small class="text-muted">Today</small>
+              <small class="text-muted">{{student.lastMessageTime | date : "shortTime"}}</small>
           </div>
       </div>
   </div>
 </div>
-
-
       <!-- Chat Body -->
       <div class="col-md-8 col-lg-9 chat-body">
           <!-- Chat Header -->
@@ -45,23 +43,46 @@
           <div class="chat-content">
             <div *ngFor="let message of messages">
                 <div class="flex" *ngIf="message.senderType==='User'">
-                    <div class="bg-[#26ABA3] text-white p-2 rounded-lg max-w-xs">
-                        {{message.message}}
+                    <div
+                    class="text-white p-2 m-1 rounded-lg max-w-xs relative tutor-message"
+                    style="background-color: rgb(174, 174, 174)"
+                  >
+                    <div>
+                      {{ message.message }}
                     </div>
+                    <div
+                      class="text-sm"
+                      style="font-size: x-small; color: rgb(51, 51, 51)"
+                    >
+                      {{ message.createdAt | date : "shortTime" }}
+                    </div>
+                  </div>
                 </div>
                 <div class="flex justify-end"*ngIf="message.senderType==='Tutor'">
-                    <div class="bg-[#FEF3DE] text-gray-800 p-2 rounded-lg max-w-xs">
-                        {{message.message}}
+                    <div
+                    class="bg-[#26ABA3] p-2 m-1 rounded-lg max-w-xs relative user-message"
+                    style="color: white"
+                  >
+                    <div>
+                      {{ message.message }}
                     </div>
+                    <div
+                      class="text-sm"
+                      style="font-size: x-small; display: flex; justify-content: end"
+                    >
+                      {{ message.createdAt | date : "shortTime" }}
+                    </div>
+                  </div>
                 </div>
             </div>
+            <app-emojies
+          *ngIf="isEmojiPickerVisible" 
+          (emojiSelected)="onEmojiSelected($event)"
+        ></app-emojies>
           </div>
           <div class="chat-footer d-flex align-items-center border-top p-2">
-              <button class="btn btn-outline-secondary m-2">
-                  <i class="fas fa-plus"></i>
-              </button>
               <input type="file" class="d-none" id="fileUpload">
-              <button class="btn btn-outline-secondary">
+              <button class="btn btn-outline-secondary" (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">
                   <i class="fas fa-smile"></i>
               </button>
               <input type="text" class="search form-control mx-2" placeholder="Type a message" [(ngModel)]="tutorInput" (keyup.enter)="sendMessage()">

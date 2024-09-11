@@ -74,3 +74,27 @@
 .online-status{
   margin-left: auto; 
 }
+
+.tutor-message::before,
+.user-message::after {
+  content: '';
+  width: 0;
+  height: 0;
+  border-style: solid;
+  position: absolute;
+  top: 20px; /* Adjusts arrow's vertical position */
+}
+
+/* Arrow for received messages (left side) */
+.tutor-message::before {
+  border-width: 10px 10px 10px 0;
+  border-color: transparent rgb(174, 174, 174) transparent transparent;
+  left: -10px;
+}
+
+/* Arrow for sent messages (right side) */
+.user-message::after {
+  border-width: 10px 0 10px 10px;
+  border-color: transparent transparent transparent #26ABA3;
+  right: -10px;
+}

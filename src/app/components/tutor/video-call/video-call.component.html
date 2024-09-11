@@ -1,8 +1,17 @@
-
-<div class="d-flex flex-column justify-content-center align-items-center h-100">
-    <div class="d-flex flex-column mb-3">
-      <video #remoteVideo controls autoplay></video>
-      <button class="btn btn-primary m-3" (click)="makeCall()">Init call</button>
-    </div>
-    <br>
+<div class="video-container">
+  <div class="video-wrapper">
+    <video #localVideo class="video" autoplay playsinline></video>
+    <p>Local Video</p>
   </div>
+  <div class="video-wrapper">
+    <video #remoteVideo class="video" autoplay playsinline></video>
+    <p>Remote Video</p>
+  </div>
+</div>
+<div class="button-container">
+  <button (click)="startLocalStream()">Start Local Stream</button>
+  <button (click)="endLocalStream()">End Local Stream</button>
+  <button (click)="startCall()">Start Call</button>
+  <button (click)="answerCall()">Answer Call</button>
+  <button (click)="endCall()">End Call</button>
+</div>

@@ -145,6 +145,9 @@ export class AdminServiceService {
   getTutorStudentList(){
     return this.http.get<ApiResponse>(`${apiUrls.tutorsApi}getTutorStudent`,{withCredentials:true});
   }
+  getTutorStudentWithLastMessage(){
+    return this.http.get<ApiResponse>(`${apiUrls.tutorsApi}getTutorStudentWithLastMessage`,{withCredentials:true});
+  }
   getTodaysClasses(){
     return this.http.get<ApiResponse>(`${apiUrls.coordinatorApi}todaysClasses`,{withCredentials:true});
   }

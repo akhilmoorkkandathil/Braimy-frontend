@@ -46,7 +46,7 @@ export class ErrorInterceptor implements HttpInterceptor {
           });
         break;
       default:
-        this.router.navigate(['/error'], { 
+        this.router.navigate(['/login'], { 
           queryParams: { statusCode: error.status, message: 'Oops! Something went wrong...' }
         });
     }

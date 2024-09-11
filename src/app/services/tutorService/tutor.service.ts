@@ -18,14 +18,14 @@ export class TutorService {
   getTutorData(){
     return this.http.get<ApiResponse>(`${apiUrls.tutorsApi}getTutuorData`,{withCredentials:true})
   }
-  getStudentTutor(){
-    return this.http.get<ApiResponse>(`${apiUrls.usersApi}getStudentTutor`,{withCredentials:true});
+  getStudentTutorsWithLastMessage(){
+    return this.http.get<ApiResponse>(`${apiUrls.usersApi}getStudentTutorsWithLastMessage`,{withCredentials:true});
   }
 
-searchTutor(term: string) {
-  return this.http.get<ApiResponse>(`${apiUrls.tutorsApi}searchTutor`, {
-    params: { term }
-  });
-}
+  searchTutor(term: string) {
+    return this.http.get<ApiResponse>(`${apiUrls.tutorsApi}searchTutor`, {
+      params: { term }
+    });
+  }
 
 }

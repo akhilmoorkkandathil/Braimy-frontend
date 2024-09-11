@@ -1,0 +1,17 @@
+.video-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  .video-wrapper {
+    width: 48%;
+    text-align: center;
+  }
+  .video {
+    width: 100%;
+    height: auto;
+  }
+  .button-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-around;
+  }
