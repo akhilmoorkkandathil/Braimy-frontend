@@ -1,17 +1,21 @@
-<div class="video-container">
-  <div class="video-wrapper">
+<div class="video-call-container">
+  <div class="video-wrapper local">
     <video #localVideo class="video" autoplay playsinline></video>
-    <p>Local Video</p>
+    <div class="video-overlay">
+      <p>Student</p>
+    </div>
   </div>
-  <div class="video-wrapper">
+  <div class="video-wrapper remote">
     <video #remoteVideo class="video" autoplay playsinline></video>
-    <p>Remote Video</p>
+    <div class="video-overlay">
+      <p>Tutor</p>
+    </div>
   </div>
-</div>
-<div class="button-container">
-  <button (click)="startLocalStream()">Start Local Stream</button>
-  <button (click)="endLocalStream()">End Local Stream</button>
-  <button (click)="startCall()">Start Call</button>
-  <button (click)="answerCall()">Answer Call</button>
-  <button (click)="endCall()">End Call</button>
+  <div class="button-container">
+    <button class="btn start-stream" (click)="startLocalStream()">Start Local Stream</button>
+    <button class="btn end-stream" (click)="endLocalStream()">End Local Stream</button>
+    <button class="btn start-call" (click)="startCall()">Start Call</button>
+    <button class="btn answer-call" (click)="answerCall()">Answer Call</button>
+    <button class="btn end-call" (click)="endCall()">End Call</button>
+  </div>
 </div>

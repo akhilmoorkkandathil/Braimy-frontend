@@ -1,17 +1,67 @@
-.video-container {
-    display: flex;
-    justify-content: space-between;
-  }
-  .video-wrapper {
-    width: 48%;
-    text-align: center;
-  }
-  .video {
-    width: 100%;
-    height: auto;
-  }
-  .button-container {
-    margin-top: 20px;
-    display: flex;
-    justify-content: space-around;
-  }
+.video-call-container {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+  width: 100vw;
+}
+
+.video-wrapper {
+  position: relative;
+  width: 50%;
+  height: calc(100% - 60px); 
+}
+
+.local,.remote {
+  background-color: #000;
+}
+
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.local .video {
+  filter: blur(3px);
+}
+
+.video-overlay {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  padding: 5px 10px;
+  border-radius: 5px;
+}
+
+.button-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.btn {
+  margin: 0 5px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.start-stream { background-color: #4CAF50; }
+.end-stream { background-color: #F44336; }
+.start-call { background-color: #2196F3; }
+.answer-call { background-color: #FF9800; }
+.end-call { background-color: #9C27B0; }
+
+.btn:hover {
+  opacity: 0.8;
+}
