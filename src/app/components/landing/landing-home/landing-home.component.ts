@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
 import { Course } from '../../../interfaces/course';
-import { CourseService } from '../../../services/corseService/course.service';
 import { Router } from '@angular/router';
 import { UserServiceService } from '../../../services/userServices/user-service.service';
 
@@ -13,7 +12,7 @@ export class LandingHomeComponent {
 
   courses: Course[] = []; // Array to store the fetched courses
 
-  constructor(private courseService: CourseService, private router:Router,private userService:UserServiceService) { }
+  constructor(private router:Router,private userService:UserServiceService) { }
   ngOnInit(): void {
     this.fetchCourses();
   }
