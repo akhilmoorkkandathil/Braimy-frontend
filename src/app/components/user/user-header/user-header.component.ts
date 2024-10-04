@@ -10,12 +10,15 @@ import { UserDataService } from '../../../services/userDataService/user-data.ser
 export class UserHeaderComponent {
   userData:User;
   greeting: string;
+  greetingMessage: string = "Lets learn something new today";
   constructor(private userDataService: UserDataService) {}
 
   ngOnInit() {
-    this.setGreeting();
     this.userDataService.userData$.subscribe(data => {
       this.userData = data;
+      if (this.userData) {
+        this.setGreeting(); // Call setGreeting only when userData is available
+      }
     });
   }
 
@@ -24,12 +27,15 @@ export class UserHeaderComponent {
     console.log(currentHour);
     
 
-    if (currentHour < 12) {
+    if (currentHour>5 && currentHour < 12) {
       this.greeting = 'Good Morning';
-    } else if (currentHour < 15) {
+    } else if (currentHour>=12 && currentHour < 15) {
       this.greeting = 'Good Afternoon';
-    } else {
+    } else if (currentHour>=15 && currentHour < 20){
       this.greeting = 'Good Evening';
+    }else{
+      this.greeting = 'Good Night';
+      this.greetingMessage = "Have a good sleep!!!";
     }
   }
 }

@@ -5,6 +5,10 @@ import { User } from '../../../interfaces/user';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../services/toastService/toast.service';
+import { ClassData } from '../../../interfaces/table/classTableData';
+import { TutorService } from '../../../services/tutorService/tutor.service';
+import { CompletedClass } from '../../../interfaces/completedCassResponse';
+import { courseBucket } from '../../../interfaces/courseBucket';
 
 @Component({
   selector: 'app-coordinator-classes',
@@ -13,40 +17,39 @@ import { ToastService } from '../../../services/toastService/toast.service';
 })
 export class CoordinatorClassesComponent {
   tableColumns: Array<Column> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'name', header: 'Name', cell: (element: Record<string, any>) => `${element['username']}` },
-    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, any>) => `${element['phone']}` },
-    { columnDef: 'class', header: 'Class', cell: (element: Record<string, any>) => `${element['class']}` },
-    { columnDef: 'tutor', header: 'Tutor', cell: (element: Record<string, any>) => `${element['tutor']?.username || 'N/A'}` },
-    { columnDef: 'course', header: 'Course', cell: (element: Record<string, any>) => `${element['course']?.courseName || 'N/A'}` },
-    { columnDef: 'preferredTime', header: 'Preferred Time', cell: (element: Record<string, any>) => `${element['preferredTime']}` },
-    { columnDef: 'selectedDays', header: 'Selected Days', cell: (element: Record<string, any>) => `${element['selectedDays'].join(', ')}` },
-    { columnDef: 'status', header: 'Class Status', cell: (element: Record<string, any>) => `${element['classStatus']}` },
-    { columnDef: 'approval', header: 'Approval Status', cell: (element: Record<string, any>) => `${element['approvalStatus']}` },
-    
+    { columnDef: 'index', header: 'Serial No.', cell: (element: CompletedClass) => `${element.index}` }, // Assuming index is available
+    { columnDef: 'date', header: 'Date', cell: (element: CompletedClass) => `${new Date(element.date).toLocaleDateString()}` }, // Format date
+    { columnDef: 'studentName', header: 'Student Name', cell: (element: CompletedClass) => `${element.studentId.username}` }, // Accessing username from studentId
+    { columnDef: 'courseName', header: 'Course Name', cell: (element: CompletedClass) => `${element.courseId.courseName}` }, // Accessing courseName from courseId
+    { columnDef: 'duration', header: 'Duration', cell: (element: CompletedClass) => `${element.duration}` }, // Accessing duration directly
+    { columnDef: 'status', header: 'Status', cell: (element: CompletedClass) => `${element.status}` } // Accessing status directly
 ];
 
 
-dataSource = new MatTableDataSource<User>();
-  tableData: Array<User> = [];
+
+dataSource = new MatTableDataSource<courseBucket>();
+  tableData: Array<courseBucket> = [];
 
   constructor(
-    private adminService: AdminServiceService, 
+    private tutorService: TutorService, 
     private cdr: ChangeDetectorRef,
     private router:Router, 
     private toast: ToastService,
+    private adminService:AdminServiceService
   ) { }
 
 
   ngOnInit(): void {
-    this.fetchUserData();
+    this.completedClass();
   }
 
-  fetchUserData(): void {
-    this.adminService.getTodaysClasses().subscribe({
+  completedClass(): void {
+    this.tutorService.getAllCoordinatorCompletedClass().subscribe({
       next: (response) => {
         this.tableData = response.data.map((item, index) => ({ ...item, index: index + 1 }));
         this.dataSource.data = this.tableData;
+        console.log(this.tableData);
+        
         this.cdr.detectChanges();
       },
       error: (error) => {
@@ -75,9 +78,10 @@ onActionClicked(event: { action: string, element: any }): void {
 onApproveClicked(id: string): void {
   this.adminService.approveClass(id).subscribe({
     next: (response) => {
-      //console.log("Student blocked successfully", response);
-      this.fetchUserData();
-      this.toast.showSuccess(response.message, 'Success');
+      const classToUpdate = this.tableData.find(item => item._id === id);
+      if (classToUpdate) {
+        classToUpdate.status = 'Approved'; // Change status to 'Approved'
+      }      this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
       this.toast.showError(error.message, 'Error');
@@ -88,14 +92,14 @@ onApproveClicked(id: string): void {
 onNotificationClicked(id: string): void {
   //console.log("Cliked to send notification");
   
-  this.adminService.sendNotification(id).subscribe({
-    next: (response) => {
-      //console.log("Student blocked successfully", response);
-    },
-    error: (error) => {
-      this.toast.showError(error.message, 'Error');
-    }
-  });
+  // this.adminService.sendNotification(id).subscribe({
+  //   next: (response) => {
+  //     //console.log("Student blocked successfully", response);
+  //   },
+  //   error: (error) => {
+  //     this.toast.showError(error.message, 'Error');
+  //   }
+  // });
 }
   
 }

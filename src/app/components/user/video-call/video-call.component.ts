@@ -1,55 +1,87 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { WebRTCServiceService } from '../../../services/WebRTCService/web-rtcservice.service';
+import { Subscription } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-video-call',
   templateUrl: './video-call.component.html',
   styleUrl: './video-call.component.css'
 })
-export class VideoCallComponent implements OnInit {
+export class VideoCallComponent{
 
-  @ViewChild('localVideo') localVideo!: ElementRef;
-  @ViewChild('remoteVideo') remoteVideo!: ElementRef;
-  isCallIncoming = false;
+  @ViewChild('localVideo') localVideo: ElementRef;
+  @ViewChild('remoteVideo') remoteVideo: ElementRef;
 
-  constructor(private webRTCService: WebRTCServiceService) {}
+  isInCall: boolean = false;
+  isCallIncoming: boolean = false;
+  userId: string;
+  tutorId: string;
+  private subscriptions: Subscription[] = [];
+  private incomingCallerId: string | null = null;
+
+  constructor(private webRTCService: WebRTCServiceService, private route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.webRTCService.remoteStream$.subscribe(stream => {
-      this.remoteVideo.nativeElement.srcObject = stream;
+    this.route.queryParams.subscribe(params => {
+      this.userId = params['userId'];
+      this.tutorId = params['tutorId'];
+      
+      // Now you can use these IDs to set up the call
+      this.webRTCService.setUser(this.userId, 'student');
+      console.log('User ID:', this.userId);
+      console.log('Tutor ID:', this.tutorId);
     });
+    this.webRTCService.setUser(this.userId, 'student');
 
-    this.webRTCService.incomingCall$.subscribe(() => {
-      this.isCallIncoming = true;
-      alert('Incoming call! Click "Answer Call" to accept.');
-    });
+    this.subscriptions.push(
+      this.webRTCService.callStatus$.subscribe(status => {
+        this.isInCall = status === 'ongoing';
+        this.isCallIncoming = status === 'incoming';
+        if (status === 'idle') {
+          this.remoteVideo.nativeElement.srcObject = null;
+          this.localVideo.nativeElement.srcObject = null;
+          this.incomingCallerId = null;
+        }
+      }),
+      this.webRTCService.remoteStream$.subscribe(stream => {
+        if (stream) {
+          this.remoteVideo.nativeElement.srcObject = stream;
+        }
+      }),
+      this.webRTCService.incomingCall$.subscribe(callerId => {
+        this.incomingCallerId = callerId;
+      })
+    );
   }
 
-  async startLocalStream() {
-    const stream = await this.webRTCService.startLocalStream();
-    this.localVideo.nativeElement.srcObject = stream;
+  ngOnDestroy() {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
-  endLocalStream() {
-    this.webRTCService.endLocalStream();
-    this.localVideo.nativeElement.srcObject = null;
-  }
-
-  startCall() {
-    this.webRTCService.startCall();
-  }
-
-  answerCall() {
-    if (this.isCallIncoming) {
-      this.webRTCService.answerCall();
-      this.isCallIncoming = false;
-    } else {
-      alert('No incoming call to answer.');
+  async initiateCall() {
+    try {
+      await this.webRTCService.startCall(this.tutorId);
+      this.localVideo.nativeElement.srcObject = this.webRTCService.getLocalStream();
+    } catch (error) {
+      console.error('Failed to start call:', error);
     }
   }
 
-  endCall() {
+  async answerIncomingCall() {
+    if (!this.incomingCallerId) {
+      console.error('No incoming call to answer');
+      return;
+    }
+    try {
+      await this.webRTCService.answerCall(this.incomingCallerId);
+      this.localVideo.nativeElement.srcObject = this.webRTCService.getLocalStream();
+    } catch (error) {
+      console.error('Failed to answer call:', error);
+    }
+  }
+
+  endCurrentCall() {
     this.webRTCService.endCall();
-    this.remoteVideo.nativeElement.srcObject = null;
   }
 }

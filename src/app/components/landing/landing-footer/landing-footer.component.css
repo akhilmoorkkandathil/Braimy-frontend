@@ -1,15 +1,20 @@
 .footer {
-    background-color: #e9efff; /* Set the desired color */
+    background-color: black; /* Set the desired color */
   }
   .footer h3 {
-    color: black; /* Set the desired heading color */
+    color: white; /* Set the desired heading color */
+    margin-bottom: 2px;
+    font-family: 'Times New Roman', Times, serif;
   }
   .footer a {
-    color: rgb(123, 123, 255); /* Set the desired link color */
+    color: white; /* Set the desired link color */
     text-decoration: none; /* Removes underline from links */
+    font-family:'Times New Roman', Times, serif
   }
   
   .footer a:hover {
     text-decoration: underline; /* Adds underline on hover */
   }
-    
+li{
+  margin-left: 0px;
+}

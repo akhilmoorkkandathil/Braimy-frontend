@@ -1,0 +1,37 @@
+
+<div class="content">
+    <div style="display: flex; justify-content: space-between; padding: 5px;">
+        <h1>Bucket courses</h1>
+        <a class="view-all-courses" (click)="viewAllCourse()">
+            view all courses
+        </a>
+    </div>
+    <div class="scrollcontainr">
+        <div class="card-container">
+            @if(bucketCourses.length){
+              <div class="class-box" *ngFor="let course of bucketCourses">
+                  <mat-card class="course-card">
+                      <div class="image-container">
+                          <img mat-card-image [src]="course.courseId.imageUrl" alt="{{ course.courseId.courseName }}" class="course-image">
+                      </div>
+                      <mat-card-header>
+                          <mat-card-title>{{ course.courseId.courseName }}</mat-card-title>
+                      </mat-card-header>
+                      <mat-card-content>
+                          <p><strong>Days:</strong> {{ course.selectedDays.join(', ') }}</p>
+                          <p><strong>Time:</strong> {{ course.preferredTime }}</p>
+                          <p><strong>Duration:</strong> {{ course.classDuration }}</p>
+                          <p *ngIf="course.assignedTutor"> <strong>Tutor:</strong> {{ course.assignedTutor.username }} </p> <!-- Assuming tutor data is available -->
+                      </mat-card-content>
+                      </mat-card>
+              </div>
+            }
+            @else {
+              <div>
+                <h3>No course in bucket!!!</h3>
+              </div>
+            }
+          </div>
+    </div>
+  </div>
+

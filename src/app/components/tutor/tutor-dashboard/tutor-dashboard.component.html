@@ -1,11 +1,27 @@
-<div class="content">
-    <!-- Your main content goes here -->
-    <h1>Hii tutor how are you doing today</h1>
+
+
+  <div class="content">
+    <h1>Today's Classes</h1>
+    <div class="card-container">
+      @if(bucketData.length){
+        <div class="class-box" *ngFor="let class of bucketData">
+          <h2>{{ class.courseId.courseName }}</h2>
+          <p>Student: {{ class.userId.username }}</p>
+          <p>Start Time: {{ class.preferredTime }}</p>
+          <p>Duration: {{ class.classDuration }}</p>
+        </div>
+      }
+      @else {
+        <div>
+          <h3>No classes assigned for Today!!!</h3>
+        </div>
+      }
+    </div>
   </div>
 
-  <br>
-  <div class="content">
-    <h1>Coming Classes</h1>
+
+  <!-- <div class="content">
+    <h1>Upcoming Classes</h1>
     <div class="card-container">
       <div class="class-box" *ngFor="let class of upcomingClasses">
         <h2>{{ class.username }}</h2>
@@ -14,4 +30,6 @@
         <p>Duration: {{ class.classDuration }}</p>
       </div>
     </div>
-  </div>
+  </div> -->
+
+  

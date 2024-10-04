@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { ToastService } from '../../../services/toastService/toast.service';
+import { CourseData } from '../../../interfaces/courseForm';
 
 
 @Component({
@@ -63,7 +64,7 @@ export class AdminAddCourseComponent {
       }
     });
   }
-  populateForm(data: any): void {
+  populateForm(data: CourseData): void {
     this.courseForm.patchValue({
       courseName: data.courseName,
       subject: data.subject,

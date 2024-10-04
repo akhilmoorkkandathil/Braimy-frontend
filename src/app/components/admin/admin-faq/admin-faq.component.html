@@ -1,0 +1,23 @@
+<div class="content">
+  <div class="faq">
+    <div class="col-md-10">
+      <h3>Manage Frequently Asked Questions</h3>
+      <div class="button-align">
+        <button mat-raised-button color="primary" (click)="openAddFaqDialog()">Add FAQ</button>
+      </div>
+      <div class="faq-item" *ngFor="let faq of faqs">
+        <button (click)="toggleFaq(faq)" class="faq-question">
+          {{ faq.question }}
+          <span>{{ faq.open ? '−' : '+' }}</span>
+        </button>
+        <div *ngIf="faq.open" class="faq-answer faq-item-div">
+          {{ faq.answer }}
+          <div class="button-container">
+            <button mat-button color="basic" class="small-button" (click)="editFaq(faq._id)">Edit</button>
+            <button mat-button color="accent" class="small-button" (click)="deleteFaq(faq._id)">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

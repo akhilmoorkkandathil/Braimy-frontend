@@ -1,0 +1,51 @@
+.edit-profile-dialog {
+    padding: 20px;
+    width: 400px;
+    
+    h2 {
+      margin-bottom: 20px;
+      font-size: 24px;
+      font-weight: 600;
+      color: #3f51b5; /* Primary color */
+    }
+  
+    mat-form-field {
+      width: 100%;
+  
+      mat-label {
+        font-weight: 500;
+        font-size: 14px;
+      }
+  
+      mat-icon {
+        color: #757575;
+      }
+  
+      input, textarea {
+        font-size: 14px;
+      }
+    }
+  
+    mat-dialog-content {
+      display: flex;
+      flex-direction: column;
+    }
+  
+    mat-dialog-actions {
+  
+      button {
+        min-width: 100px;
+      }
+  
+      button[mat-raised-button] {
+        background-color: #3f51b5;
+        color: white;
+        &:hover {
+          background-color: #303f9f;
+        }
+      }
+    }
+  
+  }
+  
+  

@@ -9,27 +9,18 @@ export const tutorGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   return of(authService.isTutorLoggedIn()).pipe(
-    switchMap(isLoggedIn => {
+    map(isLoggedIn => {
       if (isLoggedIn) {
-        return authService.isTutorBlocked().pipe(
-          map(isBlocked => {
-            if (isBlocked) {
-              authService.tutorLogout();
-              router.navigate(['/login']);
-              return false;
-            }
-            return true;
-          }),
-          catchError(() => {
-            authService.tutorLogout();
-            router.navigate(['/login']);
-            return of(false);
-          })
-        );
+        return true; // Allow access if logged in
       } else {
         router.navigate(['/login']);
-        return of(false);
+        return false; // Deny access if not logged in
       }
+    }),
+    catchError(() => {
+      authService.tutorLogout();
+      router.navigate(['/login']);
+      return of(false); // Handle error by denying access
     })
   );
 };

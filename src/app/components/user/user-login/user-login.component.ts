@@ -9,8 +9,6 @@ import { ToastService } from '../../../services/toastService/toast.service';
 import { UserSignupService } from '../../../services/userSignup/user-signup.service';
 import { SwPush } from '@angular/service-worker';
 import { apiUrls } from '../../../API';
-import { User } from '../../../interfaces/user';
-import { EncryptionService } from '../../../services/chatServices/encryptionService/encryption.service';
 
 
 @Component({
@@ -32,6 +30,7 @@ export class UserLoginComponent implements OnInit{
   coordinatorLoginForm!: FormGroup;
   adminLoginForm!: FormGroup;
   message:string='';
+  showPassword: boolean = false;
 
   user!: SocialUser;
   loggedIn: boolean = false;
@@ -44,7 +43,6 @@ export class UserLoginComponent implements OnInit{
     private toast: ToastService,
     private signupService:UserSignupService,
     private swPush:SwPush,
-    private encryptionService: EncryptionService
   ){}
 
   ngOnInit(): void {
@@ -52,18 +50,11 @@ export class UserLoginComponent implements OnInit{
     this.validateTutorForm();
     this.validateCoordinatorForm();
     this.validateAdminForm();
-    this.checkLoginStatus();
+    //this.checkLoginStatus();
     this.setupGoogleAuthListener();
   }
-  checkLoginStatus() {
-    const userSession = sessionStorage.getItem('STUDENT');
-    const socialSession = sessionStorage.getItem('SOCIAL')
-    if (userSession && socialSession) {
-      this.loggedIn = true;
-      if (this.router.url === '/login') {
-        this.router.navigate(['/user/dashboard']);
-      }
-    }
+  signInWithFB(): void {
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
   setupGoogleAuthListener() {
@@ -83,22 +74,23 @@ export class UserLoginComponent implements OnInit{
     if (isGoogleLogin) {
       this.storeUserData(user);
     }
-
-    if (this.router.url !== '/user/dashboard') {
-      this.router.navigate(['/user/dashboard']);
-    }
   }
 
   storeUserData(user: SocialUser) {
     this.signupService.storeUserData(user).subscribe(
       (response) => {
-        console.log('User data stored successfully', response);
-        this.user = response.data;
+        localStorage.setItem('student_auth_token', response.token);
+          //this.toast.showSuccess(response.message, 'Success');
+          this.router.navigate(['/user/dashboard']);
       },
       (error) => {
         console.error('Error storing user data', error);
       }
     );
+  }
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword; // Toggle the visibility
   }
 
   
@@ -197,17 +189,15 @@ export class UserLoginComponent implements OnInit{
         next: (res) => {
           console.log("In student login component",res.data);
          //const encryptedUserId = this.encryptionService.encrypt(res.data._id);
-          localStorage.setItem("userId", res.data.userId);
           sessionStorage.setItem('STUDENT', "student");
-          sessionStorage.setItem('auth_token', res.token);
+          localStorage.setItem('student_auth_token', res.token);
           this.toast.showSuccess(res.message, 'Success');
-            this.router.navigate(['/user/dashboard']);
-            this.pushSubscription(res.token);
+          this.router.navigate(['/user/dashboard']);
+          this.pushSubscription(res.token);
           
         },
         error: (err) => {
-          this.error = err.error.message || 'Something went wrong!';
-          this.toast.showError(err.error.message, 'Error');
+          if(err.error && err.error.message) this.toast.showError(err.error.message, 'Error');
         }
       });
       this.subscriptions.push(loginSubscription)
@@ -219,10 +209,8 @@ export class UserLoginComponent implements OnInit{
       .subscribe({
         next: (res) => {
           //console.log(res.token); tutorId
-          localStorage.setItem("tutorId", res.data.tutorId);
-          localStorage.setItem("tutorId", res.data.tutorId);
           sessionStorage.setItem('TUTOR', "tutor");
-          sessionStorage.setItem('auth_token', res.token);
+          localStorage.setItem('tutor_auth_token', res.token);
           this.toast.showSuccess(res.message, 'Success');
             this.router.navigate(['/tutor/dashboard']);
           
@@ -244,7 +232,7 @@ export class UserLoginComponent implements OnInit{
         next: (res) => {
           sessionStorage.setItem('COORDINATOR', "coordinator");
           this.toast.showSuccess(res.message, 'Success');
-          sessionStorage.setItem('auth_token', res.token);
+          localStorage.setItem('coordinator_auth_token', res.token);
             this.router.navigate(['/coordinator/dashboard']);
           
         },
@@ -265,8 +253,9 @@ export class UserLoginComponent implements OnInit{
         next: (res) => {
           sessionStorage.setItem('ADMIN', "admin");
           this.toast.showSuccess(res.message, 'Success');
-          sessionStorage.setItem('auth_token', res.token);
-            this.router.navigate(['/admin/dashboard']);
+          localStorage.setItem('admin_auth_token', res.token);
+          localStorage.setItem('user_type', "admin");
+          this.router.navigate(['/admin/dashboard']);
           
         },
         error: (err) => {
@@ -278,9 +267,7 @@ export class UserLoginComponent implements OnInit{
     }
   }
 
-  signInWithFB(): void {
-    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
-  }
+  
   ngOnDestroy(): void {
     this.subscriptions.forEach(subscription => subscription.unsubscribe());
   } 

@@ -1,10 +1,11 @@
 export interface Coordinator {
     _id: string
-    name?: string;
-    profileImage?: string
+    username?: string;
+    photoUrl?: string
     phone: string
     email: string
     isVerified?: boolean
     isBlocked?: boolean
-    isDeleted?: boolean
+    isDeleted?: boolean;
+    about:string;
 }

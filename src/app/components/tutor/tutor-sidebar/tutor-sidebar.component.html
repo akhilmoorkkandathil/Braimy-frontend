@@ -2,24 +2,27 @@
     <nav class="sidebar-navigation">
       <div class="image" >
         <div class="profile-img-container">
-          <img [src]="tutorData.photoUrl">
+          <img [src]="tutorData?.photoUrl">
         </div>
         <div class="profile-name">
-          <h4 class="profile-username"><b>{{tutorName}}</b></h4>
+          <h4 class="profile-username"><b>{{tutorData?.username}}</b></h4>
         </div>
       </div>
       <ul>
-        <li [routerLink]="['/tutor/dashboard']">
+        <li [routerLink]="['/tutor/dashboard']" routerLinkActive="active">
           <i class="fa fa-folder-open" aria-hidden="true"></i> <label style="cursor: pointer;">Dashboard</label>
         </li>
-        <li [routerLink]="['/tutor/classes']">
+        <li [routerLink]="['/tutor/classes']" routerLinkActive="active">
           <i class="fa fa-chalkboard-teacher" aria-hidden="true"></i> <label style="cursor: pointer;">Classes</label>
         </li>
-        <li [routerLink]="['/tutor/chat']">
+        <li [routerLink]="['/tutor/chat']" routerLinkActive="active">
           <i class="fa fa-comments"></i> <label style="cursor: pointer;">Chat</label>
         </li>
-        <li [routerLink]="['/tutor/notification']">
-          <i class="fa fa-envelope-open-text"></i> <label style="cursor: pointer;">Notifications</label>
+        <li [routerLink]="['/tutor/profile']" routerLinkActive="active">
+          <i class="fa fa-person"></i> <label style="cursor: pointer;">Profile</label>
+        </li>
+        <li [routerLink]="['/tutor/classHistory']" routerLinkActive="active">
+          <i class="fa fa-history"></i> <label style="cursor: pointer;">Class History</label>
         </li>
         <li (click)="logout()">
           <i class="fa fa-sign-out-alt" aria-hidden="true"></i> <label  style="cursor: pointer;">Logout</label>

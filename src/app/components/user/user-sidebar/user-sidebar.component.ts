@@ -13,8 +13,7 @@ import { UserDataService } from '../../../services/userDataService/user-data.ser
   styleUrl: './user-sidebar.component.css'
 })
 export class UserSidebarComponent {
-  userData: User = { username: '', photoUrl: '' };
-  username:string='';
+  userData: User;
   constructor( 
     private router: Router,
     private toast:ToastService,
@@ -24,6 +23,9 @@ export class UserSidebarComponent {
   ){}
   ngOnInit() {
     this.getStudentData();
+    this.userDataService.userData$.subscribe(data => {
+      this.userData = data; // Update local userData when it changes
+    });
     
   }
 
@@ -36,39 +38,41 @@ export class UserSidebarComponent {
         console.log("This is response.data in the student sidebar",response.data);
         
         this.userData = response.data[0];
-        //this.updateUser(response.data[0])
-        this.username = response.data[0].username;
-        console.log(this.userData);
+        this.updateUser(response.data[0])
+        console.log("In sidebar",this.userData);
       },
       error:(error)=>{
         console.error('Error fetching student data:', error);
+        //this.toast.showError('Error Fetching Student data!', 'Error');
+
       }
     })
   }
 
   logout() {
-    // Check if 'SOCIAL' exists in session storage
-    const check = sessionStorage.getItem("SOCIAL");
+    localStorage.removeItem("user_auth_token");  // Remove specific user type token
+    const check = sessionStorage.getItem('SOCIAL');
     
     if (check) {
-      // Perform social logout if SOCIAL is in session storage
       this.socialAuthService.signOut().then(() => {
-        // Remove SOCIAL item from session storage
-        sessionStorage.removeItem('SOCIAL');
-        // Notify the user
-        this.toast.showSuccess("Logout Successful", 'Success');
-        // Redirect to login page
-        this.router.navigate(['/login']);
+        this.completeLogout('SOCIAL');
       }).catch(error => {
-        // Handle errors from social sign out if necessary
         console.error('Error during social logout:', error);
-        this.toast.showError("Logout failed. Please try again.", 'Error');
+        if (error === 'Not logged in') {
+          // Treat "Not logged in" as a successful logout
+          this.completeLogout('SOCIAL');
+        } else {
+          this.toast.showError('Logout failed. Please try again.', 'Error');
+        }
       });
     } else {
-      // Handle regular logout (if needed)
-      sessionStorage.removeItem('STUDENT');
-      this.toast.showSuccess("Logout Successful", 'Success');
-      this.router.navigate(['/login']);
+      this.completeLogout('STUDENT');
     }
+  }
+  
+  private completeLogout(storageKey: 'SOCIAL' | 'STUDENT') {
+    sessionStorage.removeItem(storageKey);
+    this.toast.showSuccess('Logout Successful', 'Success');
+    this.router.navigate(['/login']);
   }
 }

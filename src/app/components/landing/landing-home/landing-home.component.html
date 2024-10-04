@@ -73,12 +73,14 @@
   <section class="faq">
     <div class="col-md-10">
       <h2>Frequently Asked Questions</h2>
-    <div class="faq-item" *ngFor="let faq of faqs">
-      <button (click)="toggleFaq(faq)">
-        {{ faq.question }}
-        <span>{{ faq.open ? '−' : '+' }}</span>
-      </button>
-      <p *ngIf="faq.open">{{ faq.answer }}</p>
-    </div>
+      <div class="faq-item" *ngFor="let faq of faqs">
+        <button (click)="toggleFaq(faq)">
+          {{ faq.question }}
+          <span>{{ faq.open ? '−' : '+' }}</span>
+        </button>
+        <div [@faqAnimation]>
+          <p *ngIf="faq.open" [@faqAnimation]>{{ faq.answer }}</p> <!-- Apply animation here -->
+        </div>
+      </div>
     </div>
   </section>

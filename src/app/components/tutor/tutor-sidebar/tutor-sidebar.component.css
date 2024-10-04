@@ -62,6 +62,11 @@ transition: background-color 1s ease-out;
 .sidebar-navigation li:hover::before {
   width: 100%;
 }
+
+.sidebar-navigation li.active{
+  background-color: #a9bdff;
+
+}
 .sidebar-navigation ul{
   padding-left: 0px;
 }

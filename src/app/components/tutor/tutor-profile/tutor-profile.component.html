@@ -1,0 +1,28 @@
+<div class="profile-container">
+    <div class="upper-half"></div>
+    <div class="lower-half"></div>
+    <mat-card class="profile-card">
+        <div class="profile-image">
+            <img [src]="tutorData.photoUrl" alt="Profile Picture">
+            <div class="edit-icon" (click)="fileInput.click()">
+                <i class="fa-solid fa-pencil"></i>
+            </div>
+            <input hidden type="file" #fileInput (change)="onFileSelected($event)" accept=".png,.jpg,.jpeg" style="display: none;">
+          </div>
+      <mat-card-content>
+        <h1 class="user-name">{{tutorData.username}}</h1>
+        <div class="user-details">
+          <div class="detail">
+            <mat-icon>school</mat-icon>
+            <span>{{tutorData.education}}</span>
+          </div>
+          <div class="detail">
+            <mat-icon>phone</mat-icon>
+            <span>+91 {{tutorData.phone}}</span>
+          </div>
+        </div>
+        <p class="user-description">{{tutorData.about}}</p>
+        <button mat-button (click)="openEditDialog()" style="color: rgb(100, 100, 255);">Edit Info.</button> 
+      </mat-card-content>
+    </mat-card>
+  </div>

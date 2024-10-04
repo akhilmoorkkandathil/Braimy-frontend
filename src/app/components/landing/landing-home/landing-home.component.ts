@@ -2,19 +2,50 @@ import { Component } from '@angular/core';
 import { Course } from '../../../interfaces/course';
 import { Router } from '@angular/router';
 import { UserServiceService } from '../../../services/userServices/user-service.service';
+import { faq } from '../../../interfaces/faq';
+import { AdminServiceService } from '../../../services/adminService/admin-service.service';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 @Component({
   selector: 'app-landing-home',
   templateUrl: './landing-home.component.html',
-  styleUrl: './landing-home.component.css'
+  styleUrl: './landing-home.component.css',
+  animations: [
+    trigger('faqAnimation', [
+      state('void', style({ opacity: 0 })),
+      state('*', style({ opacity: 1 })),
+      transition('void => *', [
+        animate('300ms ease-in') // Duration for opening
+      ]),
+      transition('* => void', [
+        animate('300ms ease-out') // Duration for closing
+      ])
+    ])
+  ]
 })
 export class LandingHomeComponent {
 
   courses: Course[] = []; // Array to store the fetched courses
+  faqs:faq[];
 
-  constructor(private router:Router,private userService:UserServiceService) { }
+  constructor(private router:Router,private userService:UserServiceService,private adminService: AdminServiceService) { }
   ngOnInit(): void {
     this.fetchCourses();
+    this.fetchFaqs()
+  }
+
+  fetchFaqs(): void {
+    this.adminService.getFaqData().subscribe({
+      next: (response) => {
+        this.faqs = response.data.map((faq: any) => ({
+          ...faq,
+          open: false // Initialize open property to false
+        }));
+      },
+      error: (error) => {
+        console.error('Error fetching faqs:', error);
+      }
+    });
   }
 
   fetchCourses(): void {
@@ -54,13 +85,6 @@ export class LandingHomeComponent {
     }
 ];
 
-  faqs = [
-    { question: 'What is UX design?', answer: 'UX design stands for User Experience design. It is the process of designing digital or physical products that are easy to use, intuitive, and enjoyable for the user.', open: false },
-    { question: 'What are the key principles of UX design?', answer: 'The key principles of UX design include user-centered design, consistency, usability, feedback, and accessibility.', open: false },
-    { question: 'What is the difference between UX and UI design?', answer: 'UX design focuses on the overall experience of the user, while UI design focuses on the visual and interactive elements of a product.', open: false },
-    { question: 'What is a wireframe?', answer: 'A wireframe is a low-fidelity visual representation of a user interface, used to plan the layout and functionality of a product.', open: false },
-    { question: 'What is user testing?', answer: 'User testing involves evaluating a product by testing it with real users to identify any issues and improve the user experience.', open: false },
-  ];
   toggleFaq(faq: any) {
     faq.open = !faq.open;
   }

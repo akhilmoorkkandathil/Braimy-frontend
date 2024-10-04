@@ -1,0 +1,64 @@
+
+.content {
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+}
+.faq{
+  width: 100%;
+}
+.faq h3 {
+  font-size: 22px;
+  margin-bottom: 20px;
+  color: #3945ca;
+}
+
+.faq-item {
+  margin-bottom: 10px;
+  overflow-y: scroll;
+}
+
+.faq-item button {
+  width: 100%;
+  padding: 15px;
+  text-align: left;
+  font-size: 18px;
+  border: none;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.faq-item-div {
+  padding: 15px;
+  font-size: 16px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin: 0;
+}
+.button-align{
+  display: flex;
+  justify-content: end;
+  margin: 10px;
+}
+
+.faq-answer {
+  position: relative; /* Allows positioning of child elements */
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end; /* Aligns buttons to the right */
+  margin-top: 8px; /* Adds space above the buttons */
+}
+
+.small-button {
+  font-size: 0.875rem; /* Smaller font size for buttons */
+  padding: 4px 8px; /* Adjust padding for smaller buttons */
+}

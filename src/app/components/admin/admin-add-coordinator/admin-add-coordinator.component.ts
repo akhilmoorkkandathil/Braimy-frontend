@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { ToastService } from '../../../services/toastService/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CoordinatorData } from '../../../interfaces/table/coordinatorFromData';
 
 @Component({
   selector: 'app-admin-add-coordinator',
@@ -57,7 +58,7 @@ export class AdminAddCoordinatorComponent {
       }
     });
   }
-  populateForm(data: any): void {
+  populateForm(data: CoordinatorData): void {
     this.coordinatorForm.patchValue({
       coordinatorName: data.username,
       phone: data.phone,

@@ -5,6 +5,7 @@ import { User } from '../../../interfaces/user';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { ToastService } from '../../../services/toastService/toast.service';
 import { Router } from '@angular/router';
+import { CoordinatorData } from '../../../interfaces/table/coordinatorFromData';
 
 @Component({
   selector: 'app-admin-coordinators-list',
@@ -13,12 +14,12 @@ import { Router } from '@angular/router';
 })
 export class AdminCoordinatorsListComponent {
   tableColumns: Array<userColumn> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'name', header: 'Name', cell: (element: Record<string, any>) => `${element['name']}` },
-    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, any>) => `${element['phone']}` },
-    { columnDef: 'email', header: 'Email', cell: (element: Record<string, any>) => `${element['email']}` },
-    { columnDef: 'isVerified', header: 'Verification Status', cell: (element: Record<string, any>) => `${element['isVerified'] ? 'Verified' : 'Not Verified'}` },
-    { columnDef: 'isBlocked', header: 'Block Status', cell: (element: Record<string, any>) => `${element['isBlocked'] ? 'Blocked' : 'Active'}` },
+    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, CoordinatorData>) => `${element['index']}` },
+    { columnDef: 'name', header: 'Name', cell: (element: Record<string, CoordinatorData>) => `${element['username']}` },
+    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, CoordinatorData>) => `${element['phone']}` },
+    { columnDef: 'email', header: 'Email', cell: (element: Record<string, CoordinatorData>) => `${element['email']}` },
+    { columnDef: 'isVerified', header: 'Verification Status', cell: (element: Record<string, CoordinatorData>) => `${element['isVerified'] ? 'Verified' : 'Not Verified'}` },
+    { columnDef: 'isBlocked', header: 'Block Status', cell: (element: Record<string, CoordinatorData>) => `${element['isBlocked'] ? 'Blocked' : 'Active'}` },
   ];
   dataSource = new MatTableDataSource<User>();
   tableData: Array<User> = [];
@@ -80,7 +81,12 @@ onVerifyClicked(id: string): void {
   this.adminService.verifyCoordinator(id).subscribe({
     next: (response) => {
       //console.log("Coordinator verified successfully", response);
-      this.fetchCoordinatorData();
+      const coordinatorIndex = this.tableData.findIndex(coordinator => coordinator._id === id);
+      if (coordinatorIndex !== -1) {
+        this.tableData[coordinatorIndex].isVerified = true;
+      }
+      this.dataSource.data = [...this.tableData];
+      this.cdr.detectChanges();
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
@@ -98,7 +104,12 @@ onBlockClicked(id: string): void {
       //console.log("Coordinator blocked successfully", response);
       sessionStorage.removeItem('COORINATOR');
       sessionStorage.removeItem('auth_token');
-      this.fetchCoordinatorData();
+        const coordinatorIndex = this.tableData.findIndex(coordinator => coordinator._id === id);
+        if (coordinatorIndex !== -1) {
+          this.tableData[coordinatorIndex].isBlocked = true;
+        }
+        this.dataSource.data = [...this.tableData];
+        this.cdr.detectChanges();
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
@@ -113,8 +124,12 @@ onUnblockClicked(id: string): void {
 
   this.adminService.unblockCoordinator(id).subscribe({
     next: (response) => {
-      //console.log("Coordinator unblocked successfully", response);
-      this.fetchCoordinatorData();
+      const coordinatorIndex = this.tableData.findIndex(coordinator => coordinator._id === id);
+      if (coordinatorIndex !== -1) {
+        this.tableData[coordinatorIndex].isBlocked = false;
+      }
+      this.dataSource.data = [...this.tableData];
+      this.cdr.detectChanges();
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {

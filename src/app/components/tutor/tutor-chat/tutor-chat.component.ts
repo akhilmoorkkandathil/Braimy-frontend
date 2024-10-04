@@ -1,4 +1,4 @@
-import { Component} from '@angular/core';
+import { Component, ElementRef, ViewChild} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../../services/chatServices/chatService/chat.service';
@@ -6,7 +6,7 @@ import { AdminServiceService } from '../../../services/adminService/admin-servic
 import { User } from '../../../interfaces/user';
 import { ChatMessage } from '../../../interfaces/chatMessage';
 import { TutorChatService } from '../../../services/chatServices/tutorChatService/tutor-chat.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { usesrWithLastMessage } from '../../../interfaces/userWithLastMessage';
 import { EmojiesComponent } from '../../shared/emojies/emojies.component';
 
@@ -19,6 +19,9 @@ import { EmojiesComponent } from '../../shared/emojies/emojies.component';
 })
 export class TutorChatComponent {
 
+
+  @ViewChild('chatContent') private chatContent: ElementRef;
+
   tutorInput=''
   userId = '';
   studentListWithLastMessage:usesrWithLastMessage[];
@@ -29,7 +32,8 @@ export class TutorChatComponent {
   constructor(
     private chatService:ChatService, 
     private adminservice:AdminServiceService,
-    private tutorChatService:TutorChatService
+    private tutorChatService:TutorChatService,
+    private router:Router
   ){}
 
 
@@ -40,6 +44,11 @@ export class TutorChatComponent {
       this.fetchStudentwithLastMessag();
       
   }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
 
 
   fetchStudentwithLastMessag() {
@@ -64,6 +73,7 @@ export class TutorChatComponent {
     this.joinChat()
     this.selectedStudent = student;
     this.getOldChats(this.userId);
+    
   }
 
   joinChat(){
@@ -71,7 +81,6 @@ export class TutorChatComponent {
   }
   onEmojiSelected(emoji: string) {
     this.tutorInput += emoji;
-    this.isEmojiPickerVisible = false;
   }
   getOldChats(userId:string){
     this.tutorChatService.getOldChats(userId).subscribe({
@@ -87,6 +96,7 @@ export class TutorChatComponent {
   });
 }
   sendMessage(){
+    this.isEmojiPickerVisible = false;
     const newMessage: ChatMessage = {
       userId: this.userId,
       senderType: this.userType,
@@ -98,7 +108,13 @@ export class TutorChatComponent {
     this.chatService.sendMessage(this.userId,this.tutorId,this.userType, this.tutorInput);
     this.messages.push(newMessage);
     this.updateStudentWithLastMessage(this.userId, newMessage);
+    setTimeout(() => this.scrollToBottom(), 0);
     this.tutorInput = '';
+  }
+  scrollToBottom(): void {
+    try {
+      this.chatContent.nativeElement.scrollTop = this.chatContent.nativeElement.scrollHeight;
+    } catch(err) { }
   }
 
   getMessages() {
@@ -108,6 +124,13 @@ export class TutorChatComponent {
         this.messages.push(message);
       }
       this.updateStudentWithLastMessage(message.userId, message);
+      setTimeout(() => this.scrollToBottom(), 0);
+    });
+  }
+
+  navigateToVideoCall() {
+    this.router.navigate(['/tutor/video'], { 
+      queryParams: { tutorId: this.tutorId }
     });
   }
 

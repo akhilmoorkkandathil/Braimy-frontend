@@ -4,6 +4,7 @@ import { AdminServiceService } from '../../../services/adminService/admin-servic
 import { ToastService } from '../../../services/toastService/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Tutor } from '../../../interfaces/tutor';
+import { TutorData } from '../../../interfaces/tutorFormData';
 
 @Component({
   selector: 'app-admin-add-tutor',
@@ -61,7 +62,7 @@ export class AdminAddTutorComponent {
       }
     });
   }
-  populateForm(data: any): void {
+  populateForm(data: TutorData): void {
     this.tutorForm.patchValue({
       tutorName: data.username,
       phone: data.phone,

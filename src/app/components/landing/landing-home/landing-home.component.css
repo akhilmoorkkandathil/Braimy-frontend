@@ -53,7 +53,7 @@ header {
   .hero-section .view-courses-btn {
     padding: 10px 20px;
     font-size: 16px;
-    background-color: black;
+    background-color: #0058b6;
     color: white;
     border: none;
     cursor: pointer;
@@ -63,7 +63,7 @@ header {
 
   .view-courses-btn:hover{
     transform: scale(1.05);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.192);
+    box-shadow: 0 0 10px #007bff;
   }
   
   

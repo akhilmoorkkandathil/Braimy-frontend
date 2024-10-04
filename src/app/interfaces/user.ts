@@ -1,8 +1,7 @@
-import { Course } from "./course";
-import { Tutor } from "./tutor";
+
 
 export interface User {
-    userId?: string
+    _id?: string
     username?: string
     position?: number;
     photoUrl?: string
@@ -11,10 +10,8 @@ export interface User {
     isVerified?: boolean
     isBlocked?: boolean
     isDeleted?: boolean
-    dayList?:string[]
-    preferredTime?:string
-    course?: Course;
-    tutor?: Tutor;
-    classDuration?:String
-    lastMessage?:string
+    rechargedHours?:number
+    class?:number
+    about?:string;
+    coordinator:string;
 }

@@ -29,9 +29,7 @@ import { AdminExpenseListComponent } from './components/admin/admin-expense-list
 import { TutorClassesComponent } from './components/tutor/tutor-classes/tutor-classes.component';
 import { TutorCoursesComponent } from './components/tutor/tutor-courses/tutor-courses.component';
 import { TutorChatComponent } from './components/tutor/tutor-chat/tutor-chat.component';
-import { TutorNotificationsComponent } from './components/tutor/tutor-notifications/tutor-notifications.component';
 import { CoordinatorClassesComponent } from './components/coordinator/coordinator-classes/coordinator-classes.component';
-import { CoordinatorNotificationsComponent } from './components/coordinator/coordinator-notifications/coordinator-notifications.component';
 import { UserCoursesComponent } from './components/user/user-courses/user-courses.component';
 import { UserNotificationComponent } from './components/user/user-notification/user-notification.component';
 import { AdminAddCourseComponent } from './components/admin/admin-add-course/admin-add-course.component';
@@ -41,14 +39,22 @@ import { AdminAddStudentComponent } from './components/admin/admin-add-student/a
 import { AdminAddTutorComponent } from './components/admin/admin-add-tutor/admin-add-tutor.component';
 import { AdminAddCoordinatorComponent } from './components/admin/admin-add-coordinator/admin-add-coordinator.component';
 import { CoordinatorStuedentsComponent } from './components/coordinator/coordinator-stuedents/coordinator-stuedents.component';
-import { ManageStudentComponent } from './components/coordinator/manage-student/manage-student.component';
 import { UserCourseComponent } from './components/user/user-course/user-course.component';
-import { SmartLearnMentorComponentComponent } from './components/user/smart-learn-mentor-component/smart-learn-mentor-component.component';
 import { UserPaymentComponent } from './components/user/user-payment/user-payment.component';
 import { InternetErrorComponent } from './components/shared/error-page/internet-error/internet-error.component';
 import { ChatLayoutComponent } from './components/user/userChat/chat-layout/chat-layout.component';
 import { VideoCallComponent } from './components/user/video-call/video-call.component';
 import { tutorVideoCallComponent } from './components/tutor/video-call/video-call.component';
+import { ProfileComponent } from './components/user/profile/profile.component';
+import { SmartLearnMentorComponent } from './components/user/smart-learn-mentor/smart-learn-mentor.component';
+import { MyCoursesComponent } from './components/user/my-courses/my-courses.component';
+import { UserCoursesBucketComponent } from './components/coordinator/user-courses-bucket/user-courses-bucket.component';
+import { AddToUserCourseBucketComponent } from './components/coordinator/add-to-user-course-bucket/add-to-user-course-bucket.component';
+import { CoordinatorProfileComponent } from './components/coordinator/profile/profile.component';
+import { TutorProfileComponent } from './components/tutor/tutor-profile/tutor-profile.component';
+import { TutorClassHistoryComponent } from './components/tutor/tutor-class-history/tutor-class-history.component';
+import { UserPaymentHistoryComponent } from './components/user/user-payment/user-payment-history/user-payment-history.component';
+import { AdminFaqComponent } from './components/admin/admin-faq/admin-faq.component';
 
 
 
@@ -86,6 +92,7 @@ const routes: Routes = [
       {path:'addTutor/:id',component:AdminAddTutorComponent},
       {path:"addCoordinator",component:AdminAddCoordinatorComponent},
       {path:"editCoordinator/:id",component:AdminAddCoordinatorComponent},
+      {path:'faq',component:AdminFaqComponent}
       
       
     ]
@@ -97,7 +104,8 @@ const routes: Routes = [
       { path: "dashboard", component: TutorDashboardComponent },
       { path: "classes", component: TutorClassesComponent },
       { path: "courses", component: TutorCoursesComponent },
-      { path: "notification", component: TutorNotificationsComponent },
+      { path: "profile", component: TutorProfileComponent },
+      {path:'classHistory',component:TutorClassHistoryComponent}
     ]
   },
   {
@@ -112,9 +120,11 @@ const routes: Routes = [
     children: [
       { path: "dashboard", component: CoordinatorDashboardComponent },
       { path: "classes", component: CoordinatorClassesComponent },
-      { path: "notification", component: CoordinatorNotificationsComponent },
+      {path: "profile", component: CoordinatorProfileComponent},
       {path:"students",component:CoordinatorStuedentsComponent},
-      {path:"manageStudent/:id",component:ManageStudentComponent}
+      {path:"viewCourseBucket/:id",component:UserCoursesBucketComponent},
+      {path:'addCourse/:studentId',component:AddToUserCourseBucketComponent},
+      {path:'addCourse/:studentId/:courseId',component:AddToUserCourseBucketComponent}
     ]
   },
   {
@@ -129,14 +139,18 @@ const routes: Routes = [
   {
     path: "user", 
     component: UserLayoutComponent,
-    canActivateChild: [studentGuard],
+    canActivateChild: [],
     children: [
       { path: "dashboard", component: UserDashboardComponent },
-      { path: "courses", component: UserCoursesComponent },
+      { path: "allcourses", component: UserCoursesComponent },
       { path: "notification", component: UserNotificationComponent },
-      { path: "mentor", component: SmartLearnMentorComponentComponent },
+      { path: "mentor", component: SmartLearnMentorComponent },
+      { path: "profile", component: ProfileComponent},
       {path:"course-showcase/:id",component:UserCourseComponent},
       {path:'payment',component:UserPaymentComponent},
+      {path: 'chat', component: ChatLayoutComponent},
+      {path: 'mycourses',component:MyCoursesComponent},
+      {path: 'payment-history',component:UserPaymentHistoryComponent}
       //{path:'video',component:ChatLayoutComponent}
 
     ]

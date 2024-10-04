@@ -1,0 +1,17 @@
+<div class="edit-profile-dialog">
+  <h2 mat-dialog-title>Add FAQ</h2>
+  <mat-dialog-content>
+    <form>
+      <mat-form-field appearance="outline">
+        <input matInput [(ngModel)]="question" name="question" required placeholder="Question">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <textarea matInput [(ngModel)]="answer" name="answer" rows="4" placeholder="Answer"></textarea>
+      </mat-form-field>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button color="accent" (click)="onCancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="onAdd()">Save</button>
+  </mat-dialog-actions>
+</div>

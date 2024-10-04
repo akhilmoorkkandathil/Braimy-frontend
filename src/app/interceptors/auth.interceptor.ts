@@ -12,8 +12,21 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor() {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
-    const token = sessionStorage.getItem('auth_token');
-//console.log("Token",token);
+    
+    let token: string | null = null;
+    
+    if (window.location.href.includes("/user/")) {  
+      token = localStorage.getItem(`student_auth_token`);
+      
+    } else if (window.location.href.includes("/admin/")) {
+      token = localStorage.getItem(`admin_auth_token`);
+    } else if (window.location.href.includes("/coordinator/")) {
+      token = localStorage.getItem(`coordinator_auth_token`);
+    } else if (window.location.href.includes("/tutor/")) {
+      token = localStorage.getItem(`tutor_auth_token`);
+    } else {
+      console.log("URL does not contain nothing");
+    }
 
     if (token) {
       request = request.clone({

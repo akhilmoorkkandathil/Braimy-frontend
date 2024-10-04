@@ -4,33 +4,30 @@
     <form [formGroup]="paymentForm" (ngSubmit)="onSubmit()">
       <div class="form-row">
         <div class="form-column">
-          <mat-form-field >
+          <mat-form-field>
             <mat-label>Student Name</mat-label>
-            <input matInput formControlName="studentName">
+            <mat-select formControlName="student">
+              <mat-option *ngFor="let user of usersList" [value]="user._id">{{ user.username }}</mat-option>
+            </mat-select>
           </mat-form-field>
-          <mat-form-field >
-            <mat-label>Assign Tutor</mat-label>
-            <mat-select formControlName="tutor">
+          <mat-form-field>
+            <mat-label>Plan Selected</mat-label>
+            <mat-select formControlName="planSelected">
+              <mat-option value="Basic">Basic</mat-option>
+              <mat-option value="Academic">Academic</mat-option>
+              <mat-option value="Academic-Pro">Academic Pro</mat-option>
+              <mat-option value="Other">Other</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
 
         <div class="form-column">
           <mat-form-field >
-            <mat-label>Phone</mat-label>
-            <input matInput formControlName="phone">
-          </mat-form-field>
-          
-          <mat-form-field >
-            <mat-label>Amount Payed</mat-label>
-            <input matInput formControlName="amount">
+            <mat-label>Amount Paid</mat-label>
+            <input matInput formControlName="amountPaid">
           </mat-form-field>
         </div>
       </div>
-       <mat-form-field >
-            <mat-label>Description</mat-label>
-            <textarea matInput formControlName="description" rows="4"></textarea>
-          </mat-form-field>
        <button mat-raised-button color="primary" type="submit">{{button}}</button>
     </form>
 </div>

@@ -9,26 +9,29 @@
         </div>
       </div>
       <ul>
-        <li [routerLink]="['/admin/dashboard']">
+        <li [routerLink]="['/admin/dashboard']" routerLinkActive="active">
           <i class="fa fa-folder-open"></i> <label style="cursor: pointer;">Dashboard</label>
         </li>
-        <li [routerLink]="['/admin/students']">
+        <li [routerLink]="['/admin/students']" routerLinkActive="active">
           <i class="fa fa-user-graduate"></i> <label style="cursor: pointer;">Students</label>
         </li>
-        <li [routerLink]="['/admin/tutors']">
+        <li [routerLink]="['/admin/tutors']" routerLinkActive="active">
           <i class="fa fa-chalkboard-teacher"></i> <label style="cursor: pointer;">Tutors</label>
         </li>
-        <li [routerLink]="['/admin/coordinators']">
+        <li [routerLink]="['/admin/coordinators']" routerLinkActive="active">
           <i class="fa fa-check-square" aria-hidden="true"></i> <label style="cursor: pointer;">Coordinators</label>
         </li>
-        <li [routerLink]="['/admin/courses']">
+        <li [routerLink]="['/admin/courses']" routerLinkActive="active">
           <i class="fa fa-book-reader"></i> <label style="cursor: pointer;">Courses</label>
         </li>
-        <li [routerLink]="['/admin/payments']">
+        <li [routerLink]="['/admin/payments']" routerLinkActive="active">
           <i class="fa fa-heart" aria-hidden="true"></i> <label style="cursor: pointer;">Payments</label>
         </li>
-        <li [routerLink]="['/admin/expenses']">
+        <li [routerLink]="['/admin/expenses']" routerLinkActive="active">
           <i class="fa fa-wallet"></i><label style="cursor: pointer;">Expenses</label>
+        </li>
+        <li [routerLink]="['/admin/faq']" routerLinkActive="active">
+          <i class="fa fa-question"></i><label style="cursor: pointer;">FAQ</label>
         </li>
         <li (click)="logout()">
           <i class="fa fa-sign-out-alt" aria-hidden="true"></i> <label style="cursor: pointer;">Logout</label>

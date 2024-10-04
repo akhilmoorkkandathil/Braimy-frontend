@@ -33,14 +33,14 @@
                       <h5 class="last-seen">Last seen: </h5>
                   </div>
               </div>
-              <button class="btn btn-outline-primary" [routerLink]="['/tutor/video']" routerLinkActive="router-link-active" >
+              <button class="btn btn-outline-primary" (click)="navigateToVideoCall()" >
                   <i class="fas fa-video"></i>
               </button>
           </div>
           
 
           <!-- Chat Content -->
-          <div class="chat-content">
+          <div class="chat-content" #chatContent>
             <div *ngFor="let message of messages">
                 <div class="flex" *ngIf="message.senderType==='User'">
                     <div

@@ -1,0 +1,31 @@
+<div class="profile-container">
+    <div class="upper-half"></div>
+    <div class="lower-half"></div>
+    <mat-card class="profile-card">
+        <div class="profile-image">
+          <div class="profile-img-container">
+
+            <img [src]="coordinatorData.photoUrl" alt="Profile Picture">
+          </div>
+            <div class="edit-icon" (click)="fileInput.click()">
+                <i class="fa-solid fa-pencil"></i>
+            </div>
+            <input hidden type="file" #fileInput (change)="onFileSelected($event)" accept=".png,.jpg,.jpeg" style="display: none;">
+          </div>
+      <mat-card-content>
+        <h1 class="user-name">{{coordinatorData.username}}</h1>
+        <div class="user-details">
+          <div class="detail">
+            <mat-icon>email</mat-icon>
+            <span>{{coordinatorData.email}}</span>
+          </div>
+          <div class="detail">
+            <mat-icon>phone</mat-icon>
+            <span>+91 {{coordinatorData.phone}}</span>
+          </div>
+        </div>
+        <p class="user-description">{{coordinatorData.about}}</p>
+        <button mat-button (click)="openEditDialog()" style="color: rgb(100, 100, 255);">Edit Info.</button> 
+      </mat-card-content>
+    </mat-card>
+  </div>

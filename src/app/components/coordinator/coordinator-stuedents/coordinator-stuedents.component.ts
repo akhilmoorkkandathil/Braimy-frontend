@@ -5,6 +5,7 @@ import { User } from '../../../interfaces/user';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../services/toastService/toast.service';
+import { StudentDataTable } from '../../../interfaces/table/studentManagementTable';
 
 @Component({
   selector: 'app-coordinator-stuedents',
@@ -13,16 +14,14 @@ import { ToastService } from '../../../services/toastService/toast.service';
 })
 export class CoordinatorStuedentsComponent {
   tableColumns: Array<Column> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'name', header: 'Name', cell: (element: Record<string, any>) => `${element['username']}` },
-    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, any>) => `${element['phone']}` },
-    { columnDef: 'class', header: 'Class', cell: (element: Record<string, any>) => `${element['class']}` },
-    { columnDef: 'tutor', header: 'Tutor', cell: (element: Record<string, any>) => `${element['tutor']?.username || 'N/A'}` },
-    { columnDef: 'course', header: 'Course', cell: (element: Record<string, any>) => `${element['course']?.courseName || 'N/A'}` },
-    { columnDef: 'preferredTime', header: 'Preferred Time', cell: (element: Record<string, any>) => `${element['preferredTime']}` },
-    { columnDef: 'duration', header: 'Duration', cell: (element: Record<string, any>) => `${element['classDuration']}` },
-    { columnDef: 'selectedDays', header: 'Selected Days', cell: (element: Record<string, any>) => `${element['selectedDays'].join(', ')}` }
-];
+    { columnDef: 'position', header: 'Serial No.', cell: (element: StudentDataTable) => `${element.index}` },
+    { columnDef: 'name', header: 'Name', cell: (element: StudentDataTable) => `${element.username}` },
+    { columnDef: 'phone', header: 'Phone', cell: (element: StudentDataTable) => `${element.phone}` },
+    { columnDef: 'email', header: 'Email', cell: (element: StudentDataTable) => `${element.email}` },
+    { columnDef: 'class', header: 'Class', cell: (element: StudentDataTable) => `${element.class}` },
+    { columnDef: 'status', header: 'Block Status', cell: (element: Record<string, StudentDataTable>) => `${element['isBlocked'] ? 'Blocked' : 'Active'}` }
+    
+  ];
 
 
 dataSource = new MatTableDataSource<User>();
@@ -41,7 +40,7 @@ dataSource = new MatTableDataSource<User>();
   }
 
   fetchUserData(): void {
-    this.adminService.getUsersList().subscribe({
+    this.adminService.getCoordinatorUsersList().subscribe({
       next: (response) => {
         this.tableData = response.data.map((item, index) => ({ ...item, index: index + 1 }));
         this.dataSource.data = this.tableData;
@@ -53,35 +52,40 @@ dataSource = new MatTableDataSource<User>();
     });
   }
 
-  actions: string[] = ['edit','block','unblock'];
+  actions: string[] = ['block','unblock','view'];
 
   onActionClicked(event: { action: string, element: any }): void {
     switch (event.action) {
-      case 'edit':
-        this.onEditClicked(event.element._id);
-        break;
       case 'block':
         this.onBlockClicked(event.element._id);
         break;
       case 'unblock':
         this.onUnblockClicked(event.element._id);
         break;
+        case 'view':
+          this.onViewClicked(event.element._id);
+          break;
       default:
         //console.log('Unknown action:', event.action);
     }
   }
   
-  onEditClicked(id: string): void {
-    this.router.navigate([`/coordinator/manageStudent/${id}`]);
+  onEditClicked(studentId: string): void {
+    this.router.navigate([`/coordinator/manageStudent/${studentId}`]);
+  }
+
+  onViewClicked(studentId: string): void {
+    this.router.navigate([`/coordinator/viewCourseBucket/${studentId}`]);
   }
   
   
-  onBlockClicked(id: string): void {
-    if(confirm("Are you sure to delete ")){
-      this.adminService.blockStudent(id).subscribe({
+  onBlockClicked(studentId: string): void {
+    this.adminService.blockStudent(studentId).subscribe({
       next: (response) => {
-        //console.log("Student blocked successfully", response);
-        this.fetchUserData();
+        const student = this.tableData.find(student => student._id === studentId);
+        if (student) {
+          student.isBlocked = true; // Change the status to 'blocked'
+        }
         this.toast.showSuccess(response.message, 'Success');
       },
       error: (error) => {
@@ -89,16 +93,17 @@ dataSource = new MatTableDataSource<User>();
         this.toast.showSuccess(error.message, 'Error');
       }
     });
-    }
     
   }
   
-  onUnblockClicked(id: string): void {
+  onUnblockClicked(studentId: string): void {
     //console.log("Unblock clicked", id);
-    this.adminService.unblockStudent(id).subscribe({
+    this.adminService.unblockStudent(studentId).subscribe({
       next: (response) => {
-        //console.log("Student unblocked successfully", response);
-        this.fetchUserData();
+        const student = this.tableData.find(student => student._id === studentId);
+        if (student) {
+          student.isBlocked = false; // Change the status to 'blocked'
+        }
         this.toast.showSuccess(response.message, 'Success');
       },
       error: (error) => {

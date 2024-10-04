@@ -12,10 +12,8 @@
     </div>
   </div>
   <div class="button-container">
-    <button class="btn start-stream" (click)="startLocalStream()">Start Local Stream</button>
-    <button class="btn end-stream" (click)="endLocalStream()">End Local Stream</button>
-    <button class="btn start-call" (click)="startCall()">Start Call</button>
-    <button class="btn answer-call" (click)="answerCall()">Answer Call</button>
-    <button class="btn end-call" (click)="endCall()">End Call</button>
+    <button class="btn start-call" (click)="initiateCall('student-id-here')" [disabled]="isInCall">Start Call</button>
+    <button class="btn answer-call" (click)="answerIncomingCall()" [disabled]="!isCallIncoming || isInCall">Answer Call</button>
+    <button class="btn end-call" (click)="endCurrentCall()" [disabled]="!isInCall">End Call</button>
   </div>
 </div>

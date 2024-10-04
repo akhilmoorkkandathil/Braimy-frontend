@@ -55,6 +55,7 @@ export class TableComponent<T> implements OnInit, AfterViewInit, OnChanges {
   getActionIcon(action: string): string {
     switch (action) {
       case 'edit': return 'edit';
+      case 'view': return  'visibility';
       case 'delete': return 'delete';
       case 'block': return 'lock_close';
       case 'unblock': return 'lock_open';

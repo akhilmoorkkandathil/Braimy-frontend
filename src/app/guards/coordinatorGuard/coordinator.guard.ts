@@ -8,27 +8,18 @@ export const coordinatorGuard: CanActivateFn = (route, state) => {
   const router = inject(Router);
 
   return of(authService.isCoordinatorLoggedIn()).pipe(
-    switchMap(isLoggedIn => {
+    map(isLoggedIn => {
       if (isLoggedIn) {
-        return authService.isCoordinatorBlocked().pipe(
-          map(isBlocked => {
-            if (isBlocked) {
-              authService.coordinatorLogout();
-              router.navigate(['/login']);
-              return false;
-            }
-            return true;
-          }),
-          catchError(() => {
-            authService.coordinatorLogout();
-            router.navigate(['/login']);
-            return of(false);
-          })
-        );
+        return true; // Allow access if logged in
       } else {
         router.navigate(['/login']);
-        return of(false);
+        return false; // Deny access if not logged in
       }
+    }),
+    catchError(() => {
+      authService.coordinatorLogout();
+      router.navigate(['/login']);
+      return of(false); // Handle error by denying access
     })
   );
 };

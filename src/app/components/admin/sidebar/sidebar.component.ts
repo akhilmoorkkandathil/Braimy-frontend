@@ -15,7 +15,9 @@ export class SidebarComponent {
 
 
   logout() {
-    sessionStorage.removeItem('ADMIN');
+    const userType = localStorage.getItem('user_type');
+    localStorage.removeItem(`${userType}_auth_token`);  // Remove specific user type token
+    localStorage.removeItem('user_type');
     this.router.navigate(['/login']);  // Adjust the route as per your application's routing structure
     this.toast.showSuccess('Logged out successfully', 'Success');
   }

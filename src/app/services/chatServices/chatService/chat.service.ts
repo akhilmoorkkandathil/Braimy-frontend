@@ -35,16 +35,7 @@ export class ChatService {
       return () => this.socket.off('messageReceived');
     });
   }
-  getLastMessage(): Observable<any> {
-    return new Observable(observer => {
-      this.socket.on('lastMessage', (data) => {
-        console.log('Last message received:', data);
-        observer.next(data);
-      });
 
-      return () => this.socket.off('lastMessage');
-    });
-  }
   disconnect() {
     console.log('Disconnecting socket');
     this.socket.disconnect();

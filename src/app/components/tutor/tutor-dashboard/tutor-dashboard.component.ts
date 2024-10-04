@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { User } from '../../../interfaces/user';
+import { courseBucket } from '../../../interfaces/courseBucket';
 
 @Component({
   selector: 'app-tutor-dashboard',
@@ -8,7 +9,7 @@ import { User } from '../../../interfaces/user';
   styleUrl: './tutor-dashboard.component.css'
 })
 export class TutorDashboardComponent implements OnInit {
-  upcomingClasses: User[] = [];
+  bucketData: courseBucket[] = [];
   ngOnInit(): void {
     this.fetchUpcomingClasses()
   }
@@ -19,9 +20,9 @@ export class TutorDashboardComponent implements OnInit {
   fetchUpcomingClasses(){
     this.adminService.getTutorUpcomingClasses().subscribe({
       next: (response) => {
-        //console.log(response.data);
+        console.log(response.data);
         
-        this.upcomingClasses = response.data;
+        this.bucketData = response.data;
        
       },
       error: (error) => {

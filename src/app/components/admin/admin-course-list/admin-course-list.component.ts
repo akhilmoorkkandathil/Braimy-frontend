@@ -1,10 +1,11 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
-import { Column, userColumn } from '../../../interfaces/table/table';
+import { Column } from '../../../interfaces/table/table';
 import { MatTableDataSource } from '@angular/material/table';
 import { Course } from '../../../interfaces/course';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { ToastService } from '../../../services/toastService/toast.service';
-import { Router, RouteReuseStrategy } from '@angular/router';
+import { Router, } from '@angular/router';
+import { CourseData } from '../../../interfaces/table/courseTableData';
 
 @Component({
   selector: 'app-admin-course-list',
@@ -13,11 +14,11 @@ import { Router, RouteReuseStrategy } from '@angular/router';
 })
 export class AdminCourseListComponent {
   tableColumns: Array<Column> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'courseName', header: 'Course Name', cell: (element: Record<string, any>) => `${element['courseName']}` },
-    { columnDef: 'class', header: 'Class', cell: (element: Record<string, any>) => `${element['class']}` },
-    { columnDef: 'subject', header: 'Subject', cell: (element: Record<string, any>) => `${element['subject']}` },
-    { columnDef: 'topic', header: 'Topic', cell: (element: Record<string, any>) => `${element['topic']}` }
+    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, CourseData>) => `${element['index']}` },
+    { columnDef: 'courseName', header: 'Course Name', cell: (element: Record<string, CourseData>) => `${element['courseName']}` },
+    { columnDef: 'class', header: 'Class', cell: (element: Record<string, CourseData>) => `${element['class']}` },
+    { columnDef: 'subject', header: 'Subject', cell: (element: Record<string, CourseData>) => `${element['subject']}` },
+    { columnDef: 'topic', header: 'Topic', cell: (element: Record<string, CourseData>) => `${element['topic']}` }
   ];
 
   dataSource = new MatTableDataSource<Course>();

@@ -17,14 +17,6 @@
             <mat-label>Password</mat-label>
             <input matInput formControlName="password">
           </mat-form-field>
-          <mat-form-field>
-            <mat-label>Assign Tutor</mat-label>
-            <mat-select formControlName="tutor">
-              @for (tutor of tutors; track tutor) {
-                <mat-option [value]="tutor._id">{{tutor.username}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
         </div>
 
         <div class="form-column">
@@ -41,18 +33,11 @@
             <mat-label>Assign Coordinator</mat-label>
             <mat-select formControlName="coordinator">
               @for (coordinator of coordinators; track coordinator) {
-                <mat-option [value]="coordinator._id">{{coordinator.name}}</mat-option>
+                <mat-option [value]="coordinator._id">{{coordinator.username}}</mat-option>
               }
             </mat-select>
           </mat-form-field>
-          <mat-form-field>
-            <mat-label>Assign Course</mat-label>
-            <mat-select formControlName="course">
-              @for (course of courses; track course) {
-                <mat-option [value]="course._id">{{course.courseName}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+          
         </div>
       </div>
 

@@ -3,24 +3,36 @@
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-content: start;
+    margin: 15px;
   }
-  
-  
   .dashboard-box {
-    display: inline-block;
-    margin: 20px;
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
     padding: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    width: 150px;
+    text-align: center;
+    transition: all 0.3s ease;
   }
-  
+  .dashboard-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
   .dashboard-box h3 {
-    margin-top: 0;
+    margin-bottom: 10px;
+    color: #ffffff;
   }
-  
-  .dashboard-box p {
-    font-size: 24px;
-    margin: 10px 0 0;
+  .count {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: #ffffff;
   }
+  .students { background-color: #3498db; }
+  .tutors { background-color: #2ecc71; }
+  .classes { background-color: #e74c3c; }
   
+  
+  .donut, .bar-graph {
+    width: 100%; /* Make the graphs take full width */
+  }

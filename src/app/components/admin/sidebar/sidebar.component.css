@@ -38,6 +38,10 @@ transition: background-color 1s ease-out;
 .sidebar-navigation li .fa {
   margin-right: 10px;
 }
+.sidebar-navigation li.active{
+  background-color: #a9bdff;
+
+}
 
 .sidebar-navigation li a:active,
 .sidebar-navigation li a:hover,

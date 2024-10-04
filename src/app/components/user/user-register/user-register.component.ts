@@ -102,7 +102,7 @@ export class UserRegisterComponent implements OnInit,OnDestroy {
         error: (err) => {
           //console.log(err);
           this.error = err.message;
-          this.toast.showError(err.message, 'Error');
+          //this.toast.showError(err.message, 'Error');
         }
       });
   }
@@ -122,23 +122,27 @@ export class UserRegisterComponent implements OnInit,OnDestroy {
         error: (err) => {
           //console.log(err);
           this.error = err.error.message;
-          this.toast.showError('Login Failed', 'Error');
+          //this.toast.showError('Login Failed', 'Error');
         }
       });
   }
 
   onCoordinatorSubmit() {
+    console.log("sdfsdfds");
+    
     this.coordinatorSignupSubscription = this.SignupService.coordinatorSignup(this.coordinatorSignupForm.value)
       .subscribe({
         next: (res)=>{
+          console.log("Sucess");
+          
           this.toast.showSuccess(res.message, 'Success');
           this.router.navigate(['login']);
           this.signupForm.reset();
         },
         error: (err) => {
-          //console.log(err);
+          console.log("Failed");
           this.error = err.error.message;
-          this.toast.showError('Login Failed!!!', 'Error');
+          //this.toast.showError(err.error.message, 'Error');
         }
       });
   }

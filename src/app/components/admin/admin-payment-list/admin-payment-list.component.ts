@@ -1,11 +1,10 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { Column } from '../../../interfaces/table/table';
 import { MatTableDataSource } from '@angular/material/table';
-import { Expense } from '../../../interfaces/expense';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
-import { Payment } from '../../../interfaces/payment';
 import { ToastService } from '../../../services/toastService/toast.service';
 import { Router } from '@angular/router';
+import { PaymentResponse } from '../../../interfaces/paymentTable';
 
 @Component({
   selector: 'app-admin-payment-list',
@@ -14,17 +13,16 @@ import { Router } from '@angular/router';
 })
 export class AdminPaymentListComponent {
   tableColumns: Array<Column> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'date', header: 'Date', cell: (element: Record<string, any>) => `${element['date']}` },
-    { columnDef: 'studentName', header: 'Student Name', cell: (element: Record<string, any>) => `${element['studentName']}` },
-    { columnDef: 'courseSelected', header: 'Course Selected', cell: (element: Record<string, any>) => `${element['courseSelected']}` },
-    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, any>) => `${element['phone']}` },
-    { columnDef: 'description', header: 'Description', cell: (element: Record<string, any>) => `${element['description']}` },
-    { columnDef: 'amount', header: 'Amount', cell: (element: Record<string, any>) => `${element['amountPaid']}` },
-    
-  ];
-  dataSource = new MatTableDataSource<Payment>();
-  tableData: Array<Payment> = [];
+    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, PaymentResponse>) => `${element['index']}` },
+    { columnDef: 'date', header: 'Date', cell: (element: Record<string, PaymentResponse>) => element['date'] }, // Format date
+    { columnDef: 'studentName', header: 'Student Name', cell: (element: Record<string, PaymentResponse>) => element['studentName'] }, // Accessing username from studentId
+    { columnDef: 'planSelected', header: 'Plan Selected', cell: (element: Record<string, PaymentResponse>) => `${element['planSelected']}` }, // Plan selected
+    { columnDef: 'amount', header: 'Amount Paid', cell: (element: Record<string, PaymentResponse>) => `${element['amountPaid']}` }, // Amount paid
+    { columnDef: 'timeRecharged', header: 'Time Recharged', cell: (element: Record<string, PaymentResponse>) => `${element['timeRecharged']} hours` }, // Time recharged
+    { columnDef: 'status', header: 'Status', cell: (element: Record<string, PaymentResponse>) => `${element['status']}` } // Payment status
+];
+  dataSource = new MatTableDataSource<PaymentResponse>();
+  tableData: Array<PaymentResponse> = [];
 
   constructor(
     private adminService: AdminServiceService,
@@ -43,37 +41,36 @@ export class AdminPaymentListComponent {
         this.tableData = response.data.map((item, index) => ({ ...item, index: index + 1 }));
         this.dataSource.data = this.tableData;
         this.cdr.detectChanges(); // Trigger change detection
-        //console.log(this.tableData);
+        console.log(this.tableData);
       },
       error: (error) => {
         console.error('Error fetching payment data:', error);
       }
     });
   }
-  actions: string[] = ['edit','delete']; // Define actions separately
+  actions: string[] = ['delete']; // Define actions separately
 
 onActionClicked(event: { action: string, element: any }): void {
   switch (event.action) {
-    case 'edit':
-      this.onEditClicked(event.element._id);
-      break;
     case 'delete':
-      this.onDeleteClicked(event.element._id);
+      this.onDeleteClicked(event.element);
       break;
     default:
       //console.log('Unknown action:', event.action);
   }
 }
 
-onEditClicked(id:string): void {
-  this.router.navigate([`/admin/addPayment/${id}`]);
+onEditClicked(paymentData): void {
+  
+  this.router.navigate(['/admin/addPayment'], { state: { paymentData } });
 }
 
-
-onDeleteClicked(id:string): void {
-  this.adminService.deletePayment(id).subscribe({
+onDeleteClicked(paymentData:PaymentResponse): void {
+  console.log(paymentData);
+  
+  this.adminService.deletePayment(paymentData).subscribe({
     next: (response) => {
-      this.fetchPaymentData();
+      this.tableData = this.tableData.filter(payment => payment.studentId !== paymentData.studentId);
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
@@ -82,5 +79,4 @@ onDeleteClicked(id:string): void {
     }
   });
 }
-
 }

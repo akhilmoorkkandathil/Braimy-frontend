@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../interfaces/user';
 import { ApiResponse } from '../../interfaces/apiResponse';
 import { apiUrls } from '../../API';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -22,6 +21,8 @@ export class UserSignupService {
     return this.http.post<ApiResponse>(`${apiUrls.coordinatorApi}register_coordinator`,signupObj,{withCredentials:true})
   }
   storeUserData(goodleData:any){
+    console.log(goodleData);
+    
     return this.http.post<ApiResponse>(`${apiUrls.usersApi}saveUser`,goodleData,{withCredentials:true})
   }
   isStudentBlocked(email: string) {

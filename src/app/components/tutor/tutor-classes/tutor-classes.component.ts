@@ -2,9 +2,10 @@ import { ChangeDetectorRef, Component } from '@angular/core';
 import { Column } from '../../../interfaces/table/table';
 import { User } from '../../../interfaces/user';
 import { MatTableDataSource } from '@angular/material/table';
-import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../services/toastService/toast.service';
+import { TutorService } from '../../../services/tutorService/tutor.service';
+import { courseBucket } from '../../../interfaces/courseBucket';
 
 @Component({
   selector: 'app-tutor-classes',
@@ -13,23 +14,19 @@ import { ToastService } from '../../../services/toastService/toast.service';
 })
 export class TutorClassesComponent {
   tableColumns: Array<Column> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'name', header: 'Name', cell: (element: Record<string, any>) => `${element['username']}` },
-    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, any>) => `${element['phone']}` },
-    { columnDef: 'status', header: 'Class Status', cell: (element: Record<string, any>) => `${element['classStatus']}` },
-    { columnDef: 'approval', header: 'Approval Status', cell: (element: Record<string, any>) => `${element['approvalStatus']}` },
-    { columnDef: 'class', header: 'Class', cell: (element: Record<string, any>) => `${element['class']}` },
-    { columnDef: 'tutor', header: 'Tutor', cell: (element: Record<string, any>) => `${element['tutor']?.username || 'N/A'}` },
-    { columnDef: 'course', header: 'Course', cell: (element: Record<string, any>) => `${element['course']?.courseName || 'N/A'}` },
-    { columnDef: 'preferredTime', header: 'Preferred Time', cell: (element: Record<string, any>) => `${element['preferredTime']}` },
-    { columnDef: 'selectedDays', header: 'Selected Days', cell: (element: Record<string, any>) => `${element['selectedDays'].join(', ')}` },
-    
+    { columnDef: 'index', header: 'Serial No.', cell: (element: courseBucket) => `${element.index}` },
+    { columnDef: 'name', header: 'Name', cell: (element: courseBucket) => `${element.userId.username}` },
+    { columnDef: 'phone', header: 'Phone', cell: (element: courseBucket) => `${element.userId.phone}` },
+    { columnDef: 'course', header: 'Course', cell: (element: courseBucket) => `${element.courseId.courseName}` },
+    { columnDef: 'preferredTime', header: 'Preferred Time', cell: (element: courseBucket) => `${element.preferredTime}` },
+    { columnDef: 'classDuration', header: 'Class Duration', cell: (element: courseBucket) => `${element.classDuration}` },
 ];
-dataSource = new MatTableDataSource<User>();
-  tableData: Array<User> = [];
+
+dataSource = new MatTableDataSource<courseBucket>();
+  tableData: Array<courseBucket> = [];
 
   constructor(
-    private adminService: AdminServiceService, 
+    private tutorService: TutorService, 
     private cdr: ChangeDetectorRef,
     private router:Router, 
     private toast: ToastService,
@@ -37,11 +34,11 @@ dataSource = new MatTableDataSource<User>();
 
 
   ngOnInit(): void {
-    this.fetchUserData();
+    this.fetchTutorClasses();
   }
 
-  fetchUserData(): void {
-    this.adminService.getTutorStudentList().subscribe({
+  fetchTutorClasses(): void {
+    this.tutorService.getTutorClasses().subscribe({
       next: (response) => {
         this.tableData =response.data.map((item, index) => ({ ...item, index: index + 1 }));
         this.dataSource.data = this.tableData;
@@ -60,17 +57,26 @@ dataSource = new MatTableDataSource<User>();
   onActionClicked(event: any) {
     switch (event.action) {
       case 'completed':
-        this.onCompleteClicked(event.element._id);
+        this.onCompleteClicked(event.element);
         break;
       default:
         //console.log('Unknown action:', event.action);
     }
   }
 
-  onCompleteClicked(id:string): void {
-    this.adminService.markCompleted(id).subscribe({
+  onCompleteClicked(data:courseBucket): void {
+    const dataToSend = {
+      ...data, // Spread the existing data
+      dateMarked: new Date() // Add the current date
+  };
+    
+    this.tutorService.markCompleted(dataToSend).subscribe({
       next: (response) => {
-        this.fetchUserData();
+        const classToUpdate = this.tableData.find(item => item._id === data._id);
+            if (classToUpdate) {
+                classToUpdate.status = 'Completed'; // Change status to Completed
+            }
+
         this.toast.showSuccess(response.message, 'Success');
       },
       error: (error) => {

@@ -1,72 +1,141 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+
 import {
-  GoogleGenerativeAI, HarmBlockThreshold, HarmCategory 
-} from '@google/generative-ai';
+  AfterViewChecked,
+  Component,
+  ElementRef,
+  TemplateRef,
+  ViewChild,
+  inject,
+} from "@angular/core";
+import { NgxLoadingModule, ngxLoadingAnimationTypes } from "ngx-loading";
+import { trigger, style, transition, animate } from "@angular/animations";
+import { GeminiService } from "../../../services/geminiService/gemini.service";
+import { CommonModule } from "@angular/common";
+import {
+  FormControl,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+} from "@angular/forms";
+import { GeminiConfig } from "../../../interfaces/geminChat";
 import {environment} from "../../../../environments/environment"
+import { TextToHtmlPipe } from "../../../pipe/text-to-html.pipe";
+
 
 @Component({
-  selector: 'app-smart-learn-mentor',
+  selector: 'app-smart-learn-mentor-component',
   standalone: true,
-  imports: [CommonModule,FormsModule],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    TextToHtmlPipe,
+    NgxLoadingModule
+  ],
   templateUrl: './smart-learn-mentor.component.html',
-  styleUrl: './smart-learn-mentor.component.css'
+  styleUrl: './smart-learn-mentor.component.css',
+  animations: [
+    trigger("typeWritterEffect", [
+      transition(":enter", [
+        style({ opacity: 0 }),
+        animate("2s", style({ opacity: 1 })),
+      ]),
+    ]),
+  ],
 })
-export class SmartLearnMentorComponent {
-  messages: { text: string, sender: 'student' | 'mentor' }[] = [];
-  newMessage: string = '';
-  private genAI: GoogleGenerativeAI;
-  private model: any;
-  @ViewChild('chatBox') private chatBox!: ElementRef;
-
-
-  constructor() {
-    // Initialize the Google Generative AI with your API key
-    this.genAI = new GoogleGenerativeAI(environment.API_KEY);
-  }
-
-  async ngOnInit() {
-    // Initialize the model
-    this.model = this.genAI.getGenerativeModel({ model: "gemini-pro",...this.generationConfig });
-  }
-  private scrollToBottom(): void {
-    try {
-      this.chatBox.nativeElement.scrollToBottom = this.chatBox.nativeElement.scrollHeight;
-    } catch (err) { }
-  }
-
-  private generationConfig = {
-    safetySettings: [
-      {
-        category: HarmCategory.HARM_CATEGORY_HARASSMENT,
-        threshold: HarmBlockThreshold.BLOCK_LOW_AND_ABOVE,
-      },
-    ],
-    temperature: 0.9,
-    top_p: 1,
-    top_k: 32,
-    maxOutputTokens: 100, // limit output
+export class SmartLearnMentorComponent implements AfterViewChecked {
+  @ViewChild("chat-body") private messagesContainer!: ElementRef;
+  private dataService = inject(GeminiService);
+  public messagesHistory: { role: string; parts: string }[] = [];
+  public userMessage!: string | null;
+  public loading = false;
+  public loadingTemplate!: TemplateRef<any>;
+  public ngxLoadingAnimationTypes = ngxLoadingAnimationTypes;
+  public loadingConfig = {
+    animationType: ngxLoadingAnimationTypes.circleSwish,
+    primaryColour: "#ffffff",
+    secondaryColour: "#ccc",
+    tertiaryColour: "#dd0031",
+    backdropBorderRadius: "3px",
   };
+  public gQuestions = [
+    "What are questions about Plant cells?",
+    "What is cytoplasm?",
+    "Give MCQ questions related to human heart?",
+  ];
 
-  async sendMessage() {
-    if (this.newMessage.trim()) {
-      this.messages.push({ text: this.newMessage, sender: 'student' });
-      const studentMessage = this.newMessage;
-      this.newMessage = '';
+  chatForm = new FormGroup({
+    apiKey: new FormControl(environment.API_KEY || ""),
+    temperature: new FormControl(0.5),
+    bot: new FormControl({
+      id: 1,
+      value: "SmartLearn Mentor",
+    }),
+    model: new FormControl("gemini-1.0-pro"),
+  });
 
-      try {
-        const result = await this.model.generateContent([studentMessage,
-          "Structure the answer properly with bold and proper lining"]);
-        let response = await result.response;
-        const mentorReply = response.text();
-        this.messages.push({ text: mentorReply, sender: 'mentor' });
-        this.scrollToBottom();
-      } catch (error) {
-        console.error('Error generating response:', error);
-        this.messages.push({ text: 'Sorry, I encountered an error. Please try again.', sender: 'mentor' });
-        this.scrollToBottom();
+  sendMessage(message: string) {
+    if (!message || this.loading) return;
+    setTimeout(() => this.scrollToBottom(), 0);
+    this.loading = true;
+    this.messagesHistory.push(
+      {
+        role: "user",
+        parts: message,
+      },
+      {
+        role: "model",
+        parts: "",
       }
-    }
+    );
+    this.dataService
+      .generateContentWithGeminiPro(
+        message,
+        this.messagesHistory,
+        this.chatForm.value as GeminiConfig
+      )
+      .subscribe({
+        next: (res: any) => {
+          this.loading = false;
+          this.userMessage = null;
+          this.messagesHistory = this.messagesHistory.slice(0, -2);
+          this.messagesHistory.push(
+            {
+              role: "user",
+              parts: message,
+            },
+            {
+              role: "model",
+              parts: res,
+            }
+          );
+          this.scrollToBottom();
+        },
+        error: (error) => {
+          this.loading = false;
+          console.error("Error generating content:", error);
+          this.messagesHistory.push({
+            role: "model",
+            parts: "Sorry, something went wrong. Please try again later.",
+          });
+          setTimeout(() => this.scrollToBottom(), 0);
+        },
+      });
   }
+
+  scrollToBottom(): void {
+    try {
+      this.messagesContainer.nativeElement.scrollTop =
+        this.messagesContainer.nativeElement.scrollHeight;
+    } catch (err) {}
+  }
+
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  trackByFn(index: number, item: any): any {
+    return item.id || index; // Adjust this based on your data structure
+  }
+  
 }

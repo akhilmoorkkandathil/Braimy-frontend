@@ -5,6 +5,7 @@ import { Expense } from '../../../interfaces/expense';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { ToastService } from '../../../services/toastService/toast.service';
 import { Router } from '@angular/router';
+import { ExpenseData } from '../../../interfaces/table/expenseData';
 
 @Component({
   selector: 'app-admin-expense-list',
@@ -14,13 +15,13 @@ import { Router } from '@angular/router';
 export class AdminExpenseListComponent {
   // Table column definition
 tableColumns: Array<Column> = [
-  { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-  { columnDef: 'date', header: 'Date', cell: (element: Record<string, any>) => `${element['date']}` },
-  { columnDef: 'payedTo', header: 'Payed To', cell: (element: Record<string, any>) => `${element['payedTo']}` },
-  { columnDef: 'paymentMethod', header: 'Payment Method', cell: (element: Record<string, any>) => `${element['paymentMethod']}` },
-  { columnDef: 'amount', header: 'Amount', cell: (element: Record<string, any>) => `${element['amount']}` },
-  { columnDef: 'description', header: 'Description', cell: (element: Record<string, any>) => `${element['description']}` },
-  { columnDef: 'reason', header: 'Reason', cell: (element: Record<string, any>) => `${element['reason']}` },
+  { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, ExpenseData>) => `${element['index']}` },
+  { columnDef: 'date', header: 'Date', cell: (element: Record<string, ExpenseData>) => `${element['date']}` },
+  { columnDef: 'payedTo', header: 'Payed To', cell: (element: Record<string, ExpenseData>) => `${element['payedTo']}` },
+  { columnDef: 'paymentMethod', header: 'Payment Method', cell: (element: Record<string, ExpenseData>) => `${element['paymentMethod']}` },
+  { columnDef: 'amount', header: 'Amount', cell: (element: Record<string, ExpenseData>) => `${element['amount']}` },
+  { columnDef: 'description', header: 'Description', cell: (element: Record<string, ExpenseData>) => `${element['description']}` },
+  { columnDef: 'reason', header: 'Reason', cell: (element: Record<string, ExpenseData>) => `${element['reason']}` },
 ];
 dataSource = new MatTableDataSource<Expense>();
   tableData: Array<Expense> = [];

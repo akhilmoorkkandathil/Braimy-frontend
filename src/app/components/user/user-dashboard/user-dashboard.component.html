@@ -1,19 +1,32 @@
 <div class="recharge-section recharge">
-  <p class="time-remaining">
+  <div>
+    <p class="time-remaining">
       <span class="time-label">Total time remaining:</span> 
-      <span class="time-value"> 22 hours</span>
+      <span class="time-value"> {{rechargeHours}} hours</span>
   </p>
+  <p class="recharge-message" *ngIf="rechargeHours === 0">
+    Recharge to start the learning...
+  </p>
+  </div>
+
   <button class="recharge-button" routerLink="/user/payment">Recharge</button>
 </div>
 
   <div class="content">
-    <h1>Today's Classes</h1>
+      <h1>Today's Classes</h1>
     <div class="card-container">
-      <div class="class-box" *ngFor="let class of upcomingClasses">
-        <h2>{{ class.course.courseName }}</h2>
-        <p>Tutor: {{ class.tutor.username }}</p>
-        <p>Start Time: {{ class.preferredTime }}</p>
-        <p>Duration: {{ class.classDuration }}</p>
-      </div>
+      @if(bucketData.length){
+        <div class="class-box" *ngFor="let class of bucketData">
+          <h2>{{ class.courseId.courseName }}</h2>
+          <p>Tutor: {{ class.assignedTutor.username }}</p>
+          <p>Start Time: {{ class.preferredTime }}</p>
+          <p>Duration: {{ class.classDuration }}</p>
+        </div>
+      }
+      @else {
+        <div>
+          <h3>No classes sheduled for Today!!!</h3>
+        </div>
+      }
     </div>
   </div>

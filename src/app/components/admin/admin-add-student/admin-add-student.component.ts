@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Coordinator } from '../../../interfaces/coordinator';
 import { Course } from '../../../interfaces/course';
 import { Tutor } from '../../../interfaces/tutor';
+import { StudentData } from '../../../interfaces/studentFormData';
 
 @Component({
   selector: 'app-admin-add-student',
@@ -19,8 +20,6 @@ export class AdminAddStudentComponent {
   title:string='Enter Student Information';
   button:string='Add Student'
   coordinators:Array<Coordinator> = []; 
-  tutors:Array<Tutor> = [];
-  courses:Array<Course> = [];
   imagePreview!: string;
   formData: FormData = new FormData();
 
@@ -33,9 +32,7 @@ export class AdminAddStudentComponent {
   ) {}
   ngOnInit() {
     this.validateForm();
-    this.fetchCoordinatorData();
-    this.fetchTutorData()
-    this.fetchCourseData()    
+    this.fetchCoordinatorData(); 
     this.route.paramMap.subscribe(params => {      
       this.studentId = params.get('id');      
       if (this.studentId) {
@@ -55,28 +52,6 @@ export class AdminAddStudentComponent {
       }
     });
   }
-  fetchTutorData(): void {
-    this.adminService.getTutorsList().subscribe({
-      next: (response) => {
-        this.tutors = response.data;
-      },
-      error: (error) => {
-        console.error('Error fetching tutor data:', error);
-      }
-    });
-  }
-  fetchCourseData(): void {
-    this.adminService.getCouresList().subscribe({
-      next: (response) => {
-        //console.log("course data",response);
-        
-        this.courses = response.data;
-      },
-      error: (error) => {
-        console.error('Error fetching course data:', error);
-      }
-    });
-  }
 
   fetchCoordinatorData(): void {
     this.adminService.getCoordinatorsList().subscribe({
@@ -89,16 +64,14 @@ export class AdminAddStudentComponent {
       }
     });
   }
-  populateForm(data: any): void {
+  populateForm(data: StudentData): void {
     this.studentForm.patchValue({
       studentName: data.username,
       phone: data.phone,
       password: '***********', // Typically, you wouldn't populate password fields for security reasons
       studentClass: data.class, // Add actual data if you have this field
       email: data.email,
-      tutor:data.tutor,
       coordinator:data.coordinator,
-      course:data.course
     });
     this.imagePreview = data.photoUrl;
   }
@@ -110,9 +83,7 @@ export class AdminAddStudentComponent {
       phone: ['', Validators.required],
       password:['',Validators.required],
       email: ['', Validators.required],
-      tutor: ['', Validators.required],
       coordinator: ['', Validators.required],
-      course: ['', Validators.required]
     });
   }
 
@@ -124,9 +95,7 @@ export class AdminAddStudentComponent {
       this.formData.append('phone', this.studentForm.value.phone);
       this.formData.append('password', this.studentForm.value.password);
       this.formData.append('email', this.studentForm.value.email);
-      this.formData.append('tutor', this.studentForm.value.tutor);
       this.formData.append('coordinator', this.studentForm.value.coordinator);
-      this.formData.append('course', this.studentForm.value.course);
 
       if (this.selectedFile) {
         this.formData.append('image', this.selectedFile, this.selectedFile.name);

@@ -1,6 +1,9 @@
 import { Component, OnInit, } from '@angular/core';
 import { User } from '../../../interfaces/user';
 import { UserServiceService } from '../../../services/userServices/user-service.service';
+import { UserDataService } from '../../../services/userDataService/user-data.service';
+import { ToastService } from '../../../services/toastService/toast.service';
+import { courseBucket } from '../../../interfaces/courseBucket';
 
 @Component({
   selector: 'app-user-dashboard',
@@ -8,28 +11,36 @@ import { UserServiceService } from '../../../services/userServices/user-service.
   styleUrl: './user-dashboard.component.css'
 })
 export class UserDashboardComponent implements OnInit {
-  upcomingClasses: User[] = [];
+  bucketData: courseBucket[] = [];
   name:string="user";
-  count = 0
+  count = 0;
+  totalTime:Number;
+  rechargeHours:Number = 0;
+  
+  constructor(
+    private userService: UserServiceService , 
+    private userDataService: UserDataService,
+    private toast: ToastService) {}
+
   ngOnInit(): void {
     this.todaysClasses()
+    this.userDataService.userData$.subscribe(data => {
+      this.rechargeHours = data.rechargedHours;
+    });
   }
 
-  constructor(
-    private userService: UserServiceService  ) {}
 
-    handleRecharge(){
-      
-    }
-
-    todaysClasses(){
+  todaysClasses(){
     this.userService.getStudentClasses().subscribe({
       next: (response) => {
-        this.upcomingClasses = response.data;
+        this.bucketData = response.data;
+        console.log("Response data of upcoming classes",response.data);
+        
        
       },
       error: (error) => {
         console.error('Error fetching todays class data:', error);
+        this.toast.showError(error.error.message, 'Error');
       }
     });
   }

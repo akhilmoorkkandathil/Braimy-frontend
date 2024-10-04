@@ -1,18 +1,25 @@
-<div class="content">
-  <h1>Hi admin, how are you doing today?</h1>
-  
-  <div class="dashboard-box">
+<div class="content" style="display: flex; justify-content: space-around;">
+  <div class="dashboard-box students" [@countAnimation]="studentCount" (mouseenter)="animateCount('students')" (mouseleave)="resetCount('students')">
     <h3>Students</h3>
-    <p>{{ studentCount }}</p>
+    <p class="count">{{ studentCount }}</p>
   </div>
   
-  <div class="dashboard-box">
+  <div class="dashboard-box tutors" [@countAnimation]="tutorCount" (mouseenter)="animateCount('tutors')" (mouseleave)="resetCount('tutors')">
     <h3>Tutors</h3>
-    <p>{{ tutorCount }}</p>
+    <p class="count">{{ tutorCount }}</p>
   </div>
   
-  <div class="dashboard-box">
-    <h3>Classes</h3>
-    <p>{{ completedClasses }}</p>
+  <div class="dashboard-box classes" [@countAnimation]="totalRevenue" (mouseenter)="animateCount('classes')" (mouseleave)="resetCount('classes')">
+    <h3>Total Revenue</h3>
+    <p class="count">{{ totalRevenue }}K</p>
+  </div>
+</div>
+
+<div class="content">
+  <div class="donut">
+    <app-doughbut-graph></app-doughbut-graph>
+  </div>
+  <div class="bar-graph">
+    <app-bar-graph></app-bar-graph>
   </div>
 </div>

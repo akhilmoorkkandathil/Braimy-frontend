@@ -1,0 +1,14 @@
+<div class="header">
+    <h1>Payment History</h1>
+  </div>
+  
+  @if (tableData.length>0) {
+    <app-table
+    [tableColumns]="tableColumns"
+    [tableData]="tableData"
+    >
+</app-table>
+  }
+  @else {
+    <p>Not Payments yet!</p>
+  }

@@ -72,3 +72,22 @@
   .class-box p {
     margin: 5px 0;
   }
+
+  .recharge-message {
+    font-size: 1.5rem;
+    /* font-weight: bold; */
+    color: #ff0404;
+    animation: blink 3s infinite;
+  }
+  
+  @keyframes blink {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+  
+
+  

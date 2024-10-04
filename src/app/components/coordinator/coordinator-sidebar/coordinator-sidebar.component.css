@@ -34,6 +34,10 @@ transition: background-color 1s ease-out;
   transform: scale(1);
   cursor: pointer;
 }
+.sidebar-navigation li.active{
+  background-color: #a9bdff;
+
+}
 
 .sidebar-navigation li .fa {
   margin-right: 10px;

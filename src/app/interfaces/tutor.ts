@@ -7,5 +7,6 @@ export interface Tutor {
     education?:string
     isVerified?: boolean
     isBlocked?: boolean
-    isDeleted?: boolean
+    isDeleted?: boolean;
+    about?:string
 }

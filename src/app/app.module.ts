@@ -36,7 +36,6 @@ import { UserDashboardComponent } from './components/user/user-dashboard/user-da
 import { UserSidebarComponent } from './components/user/user-sidebar/user-sidebar.component';
 import { UserHeaderComponent } from './components/user/user-header/user-header.component';
 import { TutorsComponent } from './components/user/tutors/tutors.component';
-import { ProfileComponent } from './components/user/profile/profile.component';
 import { ToastComponent } from './components/shared/toast/toast.component';
 import { ToastrModule } from 'ngx-toastr';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -48,7 +47,6 @@ import { GoogleLoginProvider,SocialLoginModule } from '@abacritt/angularx-social
 import { FacebookLoginProvider } from 'angularx-social-login';
 import { SidebarComponent } from './components/admin/sidebar/sidebar.component';
 import { AdminHeaderComponent } from './components/admin/admin-header/admin-header.component';
-import { AdminDashboardComponent } from './components/admin/admin-dashboard/admin-dashboard.component';
 import { TutorLayoutComponent } from './layouts/tutor-layout/tutor-layout.component';
 import { CoordinatorLayoutComponent } from './layouts/coordinator-layout/coordinator-layout.component';
 import { CoordinatorDashboardComponent } from './components/coordinator/coordinator-dashboard/coordinator-dashboard.component';
@@ -66,8 +64,6 @@ import { AdminPaymentListComponent } from './components/admin/admin-payment-list
 import { AdminExpenseListComponent } from './components/admin/admin-expense-list/admin-expense-list.component';
 import { TutorClassesComponent } from './components/tutor/tutor-classes/tutor-classes.component';
 import { TutorCoursesComponent } from './components/tutor/tutor-courses/tutor-courses.component';
-import { TutorChatComponent } from './components/tutor/tutor-chat/tutor-chat.component';
-import { TutorNotificationsComponent } from './components/tutor/tutor-notifications/tutor-notifications.component';
 import { CoordinatorClassesComponent } from './components/coordinator/coordinator-classes/coordinator-classes.component';
 import { CoordinatorNotificationsComponent } from './components/coordinator/coordinator-notifications/coordinator-notifications.component';
 import { UserNotificationComponent } from './components/user/user-notification/user-notification.component';
@@ -83,13 +79,14 @@ import { AdminAddCoordinatorComponent } from './components/admin/admin-add-coord
 import { MatMenuModule } from '@angular/material/menu';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { CoordinatorStuedentsComponent } from './components/coordinator/coordinator-stuedents/coordinator-stuedents.component';
-import { ManageStudentComponent } from './components/coordinator/manage-student/manage-student.component';
 import { NgxMatTimepickerModule } from 'ngx-mat-timepicker';
 import { ConfirmDialogueComponent } from './components/shared/confirm-dialogue/confirm-dialogue.component';
 import { ErrorInterceptor } from './interceptors/error-handler.interceptor';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { environment } from '../environments/environment';
 import { VideoCallComponent } from './components/user/video-call/video-call.component';
+import { TutorClassHistoryComponent } from './components/tutor/tutor-class-history/tutor-class-history.component';
+import { UserPaymentHistoryComponent } from './components/user/user-payment/user-payment-history/user-payment-history.component';
 
 const config: SocketIoConfig = { url: environment.SOCKET_IO_URL , options: {} };
 
@@ -113,11 +110,9 @@ const config: SocketIoConfig = { url: environment.SOCKET_IO_URL , options: {} };
     UserSidebarComponent,
     UserHeaderComponent,
     TutorsComponent,
-    ProfileComponent,
     ToastComponent,
     SidebarComponent,
     AdminHeaderComponent,
-    AdminDashboardComponent,
     TutorLayoutComponent,
     CoordinatorLayoutComponent,
     CoordinatorDashboardComponent,
@@ -135,7 +130,6 @@ const config: SocketIoConfig = { url: environment.SOCKET_IO_URL , options: {} };
     AdminExpenseListComponent,
     TutorClassesComponent,
     TutorCoursesComponent,
-    TutorNotificationsComponent,
     CoordinatorClassesComponent,
     CoordinatorNotificationsComponent,
     UserNotificationComponent,
@@ -146,10 +140,10 @@ const config: SocketIoConfig = { url: environment.SOCKET_IO_URL , options: {} };
     AdminAddTutorComponent,
     AdminAddCoordinatorComponent,
     CoordinatorStuedentsComponent,
-    ManageStudentComponent,
     ConfirmDialogueComponent,
     VideoCallComponent,
-  
+    TutorClassHistoryComponent,
+    UserPaymentHistoryComponent,
   ],
   imports: [
     BrowserModule,

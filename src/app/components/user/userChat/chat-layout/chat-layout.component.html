@@ -1,119 +1,125 @@
-<div class="container-fluid">
-  <div class="row">
-    <!-- Sidebar -->
-    <div class="col-md-4 col-lg-3 chat-sidebar bg-light">
-      <h3 class="chat-heading p-3">Chats</h3>
-      <div *ngIf="tutorWithLastMessage">
+@if(tutorWithLastMessage.length){
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <div class="col-md-4 col-lg-3 chat-sidebar bg-light">
+        <h3 class="chat-heading p-3">Chats</h3>
+        <div *ngIf="tutorWithLastMessage">
+          <div
+            *ngFor="let tutor of tutorWithLastMessage; let i = index"
+            class="user-list-item p-2 border-bottom"
+            (click)="selectUser(tutor)"
+          >
+            <div class="d-flex align-items-center">
+              <img
+                [src]="tutor.photoUrl"
+                class="profile-img rounded-circle mr-2"
+                alt="User Image"
+              />
+              <div class="flex-grow-1">
+                <p class="mb-0 font-weight-bold">{{ tutor.username }}</p>
+                <small class="text-mutefd">{{ tutor.lastMessage }}</small>
+              </div>
+            </div>
+            <div class="online-status">
+              <small class="text-muted">{{
+                tutor.lastMessageTime | date : "shortTime"
+              }}</small>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+      <div class="col-md-8 col-lg-9 chat-body">
+        @if (selected) {
         <div
-          *ngFor="let tutor of tutorWithLastMessage; let i = index"
-          class="user-list-item p-2 border-bottom"
-          (click)="selectUser(tutor)"
+          class="chat-header d-flex align-items-center justify-content-between p-3 border-bottom"
         >
           <div class="d-flex align-items-center">
             <img
-              [src]="tutor.photoUrl"
-              class="profile-img rounded-circle mr-2"
-              alt="User Image"
+              [src]="selectedTutor.photoUrl"
+              class="rounded-circle mr-3"
+              alt="Profile Image"
             />
-            <div class="flex-grow-1">
-              <p class="mb-0 font-weight-bold">{{ tutor.username }}</p>
-              <small class="text-mutefd">{{ tutor.lastMessage }}</small>
+            <div>
+              <h4 class="mb-0">{{ selectedTutor.username }}</h4>
+              <!-- <h5 class="last-seen">Last seen:</h5> -->
             </div>
           </div>
-          <div class="online-status">
-            <small class="text-muted">{{
-              tutor.lastMessageTime | date : "shortTime"
-            }}</small>
-          </div>
+          <button
+            class="btn btn-outline-primary"
+            (click)="navigateToVideoCall()"
+          >
+            <i class="fas fa-video"></i>
+          </button>
         </div>
-      </div>
-    </div>
-
-    <div class="col-md-8 col-lg-9 chat-body">
-      @if (selected) {
-      <div
-        class="chat-header d-flex align-items-center justify-content-between p-3 border-bottom"
-      >
-        <div class="d-flex align-items-center">
-          <img
-            [src]="selectedTutor.photoUrl"
-            class="rounded-circle mr-3"
-            alt="Profile Image"
+  
+        <div class="chat-content" #chatContent>
+          <div *ngFor="let message of messages">
+            <!-- Received message (Tutor) -->
+            <div class="flex" *ngIf="message.senderType === 'Tutor'">
+              <div
+                class="text-white p-2 m-1 rounded-lg max-w-xs relative tutor-message"
+                style="background-color: rgb(174, 174, 174)"
+              >
+                <div>
+                  {{ message.message }}
+                </div>
+                <div
+                  class="text-sm"
+                  style="font-size: x-small; color: rgb(51, 51, 51)"
+                >
+                  {{ message.createdAt | date : "shortTime" }}
+                </div>
+              </div>
+            </div>
+  
+            <!-- Sent message (User) -->
+            <div class="flex justify-end" *ngIf="message.senderType === 'User'">
+              <div
+                class="bg-[#26ABA3] p-2 m-1 rounded-lg max-w-xs relative user-message"
+                style="color: white"
+              >
+                <div>
+                  {{ message.message }}
+                </div>
+                <div
+                  class="text-sm"
+                  style="font-size: x-small; display: flex; justify-content: end"
+                >
+                  {{ message.createdAt | date : "shortTime" }}
+                </div>
+              </div>
+            </div>
+            
+          </div>
+          <app-emojies
+            *ngIf="isEmojiPickerVisible" 
+            (emojiSelected)="onEmojiSelected($event)"
+          ></app-emojies>
+        </div>
+        <div class="chat-footer d-flex align-items-center border-top p-2">
+          <button class="btn btn-outline-secondary m-2" (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">
+            <i class="fas fa-smile"></i>
+          </button>
+          <input
+            type="text"
+            class="search form-control mx-2"
+            placeholder="Type a message"
+            [(ngModel)]="userInput"
+            (keyup.enter)="sendMessage()"
           />
-          <div>
-            <h4 class="mb-0">{{ selectedTutor.username }}</h4>
-            <h5 class="last-seen">Last seen:</h5>
-          </div>
+          <button (click)="sendMessage()" class="btn btn-primary">Send</button>
         </div>
-        <button
-          class="btn btn-outline-primary"
-          [routerLink]="['/user/video']"
-          routerLinkActive="router-link-active"
-        >
-          <i class="fas fa-video"></i>
-        </button>
+        } @else {
+        <p class="tutor-select">Select tutor to chat</p>
+        }
       </div>
-
-      <div class="chat-content">
-        <div *ngFor="let message of messages">
-          <!-- Received message (Tutor) -->
-          <div class="flex" *ngIf="message.senderType === 'Tutor'">
-            <div
-              class="text-white p-2 m-1 rounded-lg max-w-xs relative tutor-message"
-              style="background-color: rgb(174, 174, 174)"
-            >
-              <div>
-                {{ message.message }}
-              </div>
-              <div
-                class="text-sm"
-                style="font-size: x-small; color: rgb(51, 51, 51)"
-              >
-                {{ message.createdAt | date : "shortTime" }}
-              </div>
-            </div>
-          </div>
-
-          <!-- Sent message (User) -->
-          <div class="flex justify-end" *ngIf="message.senderType === 'User'">
-            <div
-              class="bg-[#26ABA3] p-2 m-1 rounded-lg max-w-xs relative user-message"
-              style="color: white"
-            >
-              <div>
-                {{ message.message }}
-              </div>
-              <div
-                class="text-sm"
-                style="font-size: x-small; display: flex; justify-content: end"
-              >
-                {{ message.createdAt | date : "shortTime" }}
-              </div>
-            </div>
-          </div>
-          
-        </div>
-        <app-emojies
-          *ngIf="isEmojiPickerVisible" 
-          (emojiSelected)="onEmojiSelected($event)"
-        ></app-emojies>
-      </div>
-      <div class="chat-footer d-flex align-items-center border-top p-2">
-        <button class="btn btn-outline-secondary m-2" (click)="isEmojiPickerVisible = !isEmojiPickerVisible;">
-          <i class="fas fa-smile"></i>
-        </button>
-        <input
-          type="text"
-          class="search form-control mx-2"
-          placeholder="Type a message"
-          [(ngModel)]="userInput"
-          (keyup.enter)="sendMessage()"
-        />
-        <button (click)="sendMessage()" class="btn btn-primary">Send</button>
-      </div>
-      } @else {
-      <p class="tutor-select">Select tutor to chat</p>
-      }
     </div>
   </div>
-</div>
+  
+}@else{
+  <div class="no-tutor d-flex justify-content-center align-items-center">
+    <p>No tutor assigned to you yet!!!</p>
+  </div>
+}

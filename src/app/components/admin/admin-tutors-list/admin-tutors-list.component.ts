@@ -5,6 +5,7 @@ import { User } from '../../../interfaces/user';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { ToastService } from '../../../services/toastService/toast.service';
 import { Router } from '@angular/router';
+import { TutorData } from '../../../interfaces/table/tutorsTableData';
 
 
 @Component({
@@ -14,13 +15,13 @@ import { Router } from '@angular/router';
 })
 export class AdminTutorsListComponent {
   tableColumns: Array<userColumn> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'name', header: 'Name', cell: (element: Record<string, any>) => `${element['username']}` },
-    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, any>) => `${element['phone']}` },
-    { columnDef: 'email', header: 'Email', cell: (element: Record<string, any>) => `${element['email']}` },
-    { columnDef: 'education', header: 'Education', cell: (element: Record<string, any>) => `${element['education']}` },
-    { columnDef: 'isVerified', header: 'Verification Status', cell: (element: Record<string, any>) => `${element['isVerified'] ? 'Verified' : 'Not Verified'}` },
-    { columnDef: 'isBlocked', header: 'Block Status', cell: (element: Record<string, any>) => `${element['isBlocked'] ? 'Blocked' : 'Active'}` },
+    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, TutorData>) => `${element['index']}` },
+    { columnDef: 'name', header: 'Name', cell: (element: Record<string, TutorData>) => `${element['username']}` },
+    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, TutorData>) => `${element['phone']}` },
+    { columnDef: 'email', header: 'Email', cell: (element: Record<string, TutorData>) => `${element['email']}` },
+    { columnDef: 'education', header: 'Education', cell: (element: Record<string, TutorData>) => `${element['education']}` },
+    { columnDef: 'isVerified', header: 'Verification Status', cell: (element: Record<string, TutorData>) => `${element['isVerified'] ? 'Verified' : 'Not Verified'}` },
+    { columnDef: 'isBlocked', header: 'Block Status', cell: (element: Record<string, TutorData>) => `${element['isBlocked'] ? 'Blocked' : 'Active'}` },
   ];
 
   dataSource = new MatTableDataSource<User>();
@@ -84,7 +85,10 @@ onVerifyClicked(id: string): void {
   this.adminService.verifyTutor(id).subscribe({
     next: (response) => {
       //console.log("Tutor verified successfully", response);
-      this.fetchUserData();
+      const tutorIndex = this.tableData.findIndex(tutor => tutor._id === id);
+      if (tutorIndex !== -1) {
+        this.tableData[tutorIndex].isVerified = true; 
+      }
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
@@ -100,7 +104,10 @@ onBlockClicked(id: string): void {
   this.adminService.blockTutor(id).subscribe({
     next: (response) => {
       //console.log("Tutor blocked successfully", response);
-      this.fetchUserData();
+      const tutorIndex = this.tableData.findIndex(tutor => tutor._id === id);
+      if (tutorIndex !== -1) {
+        this.tableData[tutorIndex].isBlocked = true; 
+      }
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
@@ -115,7 +122,10 @@ onUnblockClicked(id: string): void {
   this.adminService.unblockTutor(id).subscribe({
     next: (response) => {
       //console.log("Tutor blocked successfully", response);
-      this.fetchUserData();
+      const tutorIndex = this.tableData.findIndex(tutor => tutor._id === id);
+      if (tutorIndex !== -1) {
+        this.tableData[tutorIndex].isBlocked = false; // Assuming you have an isBlocked property
+      }
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {

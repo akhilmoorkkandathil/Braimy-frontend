@@ -4,6 +4,7 @@ import { ToastService } from '../../../services/toastService/toast.service';
 import { TutorService } from '../../../services/tutorService/tutor.service';
 import { Tutor } from '../../../interfaces/tutor';
 import { UserDataService } from '../../../services/userDataService/user-data.service';
+import { TutorDataService } from '../../../services/tutorDataService/tutor-data.service';
 
 @Component({
   selector: 'app-tutor-sidebar',
@@ -11,40 +12,40 @@ import { UserDataService } from '../../../services/userDataService/user-data.ser
   styleUrl: './tutor-sidebar.component.css'
 })
 export class TutorSidebarComponent implements OnInit {
-  tutorName=""
-  tutorData: Tutor = { username: '', photoUrl: '' };
+  tutorData: Tutor;
 
   constructor( 
     private router: Router,
     private toast:ToastService,
     private tutorService: TutorService,
-    private stateService:UserDataService
+    private tuturDataService:TutorDataService
   ){}
 
   ngOnInit(): void {
       this.getTutorData()
+      this.tuturDataService.tutorData$.subscribe(data => {
+        this.tutorData = data; // Update local userData when it changes
+      });
   }
+
 getTutorData(){
   this.tutorService.getTutorData().subscribe({
     next:(response)=>{
       console.log("This is response.data in the tutor sidebar",response.data);
       
-      this.tutorData = response.data[0];
-      //this.updateTutor(response.data[0])
-      this.tutorName = response.data[0].username;
-      console.log(this.tutorData);
+      this.tutorData = response.data;
+      this.updateTutor(response.data)
     },
     error:(error)=>{
       console.error('Error fetching tutor data:', error);
     }
   })
 }
-
 updateTutor(tutor: Tutor) {
-  this.stateService.updateUserData(tutor); // Share the updated user data
+  this.tuturDataService.updatetutorData(tutor); // Share the updated user data
 }
   logout() {
-    sessionStorage.removeItem('TUTOR');
+    localStorage.removeItem("tutor_auth_token");
     this.router.navigate(['/login']);  // Adjust the route as per your application's routing structure
     this.toast.showSuccess('Logged out successfully', 'Success');
   }

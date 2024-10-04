@@ -11,6 +11,7 @@ import {
 	IgxRippleModule
  } from "igniteui-angular";
 import { Router } from '@angular/router';
+import { ToastService } from '../../../services/toastService/toast.service';
 
 @Component({
   selector: 'app-user-courses',
@@ -23,7 +24,10 @@ export class UserCoursesComponent implements OnInit {
 
   courses: Course[] = []; // Array to store the fetched courses
 
-  constructor(private userService: UserServiceService, private router:Router) { }
+  constructor(
+    private userService: UserServiceService, 
+    private router:Router,
+    private toast: ToastService) { }
 
   ngOnInit(): void {
     this.fetchCourses();
@@ -36,7 +40,7 @@ export class UserCoursesComponent implements OnInit {
         console.log(this.courses);
       },
       error: (error) => {
-        console.error('Error fetching courses:', error);
+        this.toast.showError(error.error.message, 'Error');
       }
     });
   }

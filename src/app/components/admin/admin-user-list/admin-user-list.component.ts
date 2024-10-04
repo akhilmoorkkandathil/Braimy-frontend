@@ -2,10 +2,10 @@ import { Component, OnInit,ChangeDetectorRef, inject } from '@angular/core';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { User } from '../../../interfaces/user';
 import { MatTableDataSource } from '@angular/material/table';
-import { Column } from '../../../interfaces/table/table'; // Adjust the path as per your project
+import { Column } from '../../../interfaces/table/table'; 
 import { Router } from '@angular/router';
 import { ToastService } from '../../../services/toastService/toast.service';
-import { UserLoginService } from '../../../services/userLogin/user-login.service';
+import { UserData } from '../../../interfaces/table/userTableData';
 
 
 @Component({
@@ -15,12 +15,12 @@ import { UserLoginService } from '../../../services/userLogin/user-login.service
 })
 export class AdminUserListComponent implements OnInit {
   tableColumns: Array<Column> = [
-    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, any>) => `${element['index']}` },
-    { columnDef: 'name', header: 'Name', cell: (element: Record<string, any>) => `${element['username']}` },
-    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, any>) => `${element['phone']?element['phone']:'Nil'}` },
-    { columnDef: 'email', header: 'Email', cell: (element: Record<string, any>) => `${element['email']}` },
-    { columnDef: 'class', header: 'Class', cell: (element: Record<string, any>) => `${element['class']?element['class']:'Nil'}` },
-    { columnDef: 'status', header: 'Block Status', cell: (element: Record<string, any>) => `${element['isBlocked'] ? 'Blocked' : 'Active'}` } 
+    { columnDef: 'position', header: 'Serial No.', cell: (element: Record<string, UserData>) => `${element['index']}` },
+    { columnDef: 'name', header: 'Name', cell: (element: Record<string, UserData>) => `${element['username']}` },
+    { columnDef: 'phone', header: 'Phone', cell: (element: Record<string, UserData>) => `${element['phone']?element['phone']:'Nil'}` },
+    { columnDef: 'email', header: 'Email', cell: (element: Record<string, UserData>) => `${element['email']}` },
+    { columnDef: 'class', header: 'Class', cell: (element: Record<string, UserData>) => `${element['class']?element['class']:'Nil'}` },
+    { columnDef: 'status', header: 'Block Status', cell: (element: Record<string, UserData>) => `${element['isBlocked'] ? 'Blocked' : 'Active'}` } 
 ];
 
   dataSource = new MatTableDataSource<User>();
@@ -77,23 +77,38 @@ onEditClicked(id: string): void {
 onBlockClicked(id: string): void {
   this.adminService.blockStudent(id).subscribe({
     next: (response) => {
-      //console.log("Student blocked successfully", response);
-      this.fetchUserData();
+      console.log("Student blocked successfully", response);
+      const userIndex = this.tableData.findIndex(user => user._id === id);
+      console.log(this.tableData);
+      
+      console.log("userIndex",userIndex);
+      console.log("this.tableData[userIndex]",this.tableData[userIndex]);
+      if (userIndex !== -1) {
+        this.tableData[userIndex].isBlocked = true; // Assuming you have an isBlocked property
+        console.log(this.tableData);
+        this.dataSource.data = [...this.tableData];
+        this.cdr.detectChanges();
+      }
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
       console.error('Error blocking user:', error);
-      this.toast.showSuccess(error.message, 'Error');
+      this.toast.showError(error.message, 'Error');
     }
   });
 }
 
 onUnblockClicked(id: string): void {
-  //console.log("Unblock clicked", id);
   this.adminService.unblockStudent(id).subscribe({
     next: (response) => {
-      //console.log("Student unblocked successfully", response);
-      this.fetchUserData();
+      const userIndex = this.tableData.findIndex(user => user._id === id);
+      if (userIndex !== -1) {
+        this.tableData[userIndex].isBlocked = false;
+        console.log(this.tableData);
+         // Assuming you have an isBlocked property
+        this.dataSource.data = [...this.tableData];
+        this.cdr.detectChanges();
+      }
       this.toast.showSuccess(response.message, 'Success');
     },
     error: (error) => {
@@ -101,7 +116,6 @@ onUnblockClicked(id: string): void {
       this.toast.showError(error.message, 'Error');
     }
   });
-
 
 }
 

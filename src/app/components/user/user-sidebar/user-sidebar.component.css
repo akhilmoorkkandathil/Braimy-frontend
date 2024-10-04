@@ -30,9 +30,13 @@
   transition: background-color 1s ease-out;
   }
   .sidebar-navigation li:hover{
-    background-color: #bacafd;
+    background-color: #9db4ff;
     transform: scale(1);
     cursor: pointer;
+  }
+  .sidebar-navigation li.active{
+    background-color: #a9bdff;
+
   }
   
   .sidebar-navigation li .fa {

@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { ToastService } from '../../../services/toastService/toast.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ExpenseData } from '../../../interfaces/expenseFormData';
 
 @Component({
   selector: 'app-admin-add-expense',
@@ -58,7 +59,7 @@ export class AdminAddExpenseComponent {
       }
     });
   }
-  populateForm(data: any): void {
+  populateForm(data: ExpenseData): void {
     this.expenseForm.patchValue({
       payedTo: data.amountPaidTo,
       paymentMethode: data.paymentMethod,

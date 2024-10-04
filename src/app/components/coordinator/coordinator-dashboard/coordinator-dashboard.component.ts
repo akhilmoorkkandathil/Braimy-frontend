@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
 import { AdminServiceService } from '../../../services/adminService/admin-service.service';
 import { User } from '../../../interfaces/user';
+import { courseBucket } from '../../../interfaces/courseBucket';
 
 @Component({
   selector: 'app-coordinator-dashboard',
@@ -11,7 +12,7 @@ import { User } from '../../../interfaces/user';
 export class CoordinatorDashboardComponent implements OnInit {
 
   readonly VAPID_PUBLIC_KEY = "BNF7aEziBSVhfSQ1osQRoD5Axk2Yqry2AO9EdhzFDhUkftziK_fvjNIJTmnZIPb6Ccky64TdeyJFA_lCEELoUw0";
-  upcomingClasses: User[] = [];
+  upcomingClasses: courseBucket[] = [];
     constructor(
         private swPush: SwPush,
         private adminService: AdminServiceService) {}

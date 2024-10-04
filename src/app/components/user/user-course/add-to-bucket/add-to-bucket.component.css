@@ -1,0 +1,48 @@
+/* Style for the entire dialog */
+mat-dialog-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Adds spacing between form fields */
+    padding: 10px;
+  }
+  
+  mat-form-field {
+    width: 100%; /* Ensure form fields take full width */
+  }
+  
+  mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end; /* Align buttons to the right */
+    gap: 10px; /* Adds space between buttons */
+  
+    button {
+      min-width: 120px; /* Button width */
+      font-weight: bold; /* Makes text more prominent */
+    }
+  
+    /* Style for raised button (Save button) */
+    button[mat-raised-button] {
+      background-color: #3f51b5;
+      color: white;
+      transition: background-color 0.3s ease;
+      
+      &:hover {
+        background-color: #303f9f; /* Darken the background on hover */
+      }
+  
+      &:disabled {
+        background-color: #cccccc; /* Grey out the button when disabled */
+        cursor: not-allowed;
+      }
+    }
+  
+    /* Style for flat button (Cancel button) */
+    button[mat-button] {
+      color: #f44336; /* Red color for cancel */
+      
+      &:hover {
+        background-color: rgba(244, 67, 54, 0.1); /* Light red background on hover */
+      }
+    }
+  }
+  

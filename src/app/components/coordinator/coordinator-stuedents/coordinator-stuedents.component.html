@@ -1,11 +1,17 @@
 <div class="header">
-    <h1>Assigned classes</h1>
+    <h1>Assigned Studnets</h1>
   </div>
   
-  <app-table
-    [tableColumns]="tableColumns"
-    [tableData]="tableData"
-    [actions]="actions"
-    (actionClicked)="onActionClicked($event)">
-  </app-table>
+  @if(tableData.length){
+  
+    <app-table
+      [tableColumns]="tableColumns"
+      [tableData]="tableData"
+      [actions]="actions"
+      (actionClicked)="onActionClicked($event)">
+    </app-table>
+  }
+  @else {
+    Not assigned yet!!!
+  }
 

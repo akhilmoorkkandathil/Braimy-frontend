@@ -2,27 +2,27 @@
     <nav class="sidebar-navigation">
       <div class="image">
         <div class="profile-img-container" *ngIf="userData">
-          <img [src]="userData.photoUrl" alt="User Photo" class="profile-img">
+          <img [src]="userData?.photoUrl" alt="User Photo" class="profile-img">
         </div>
         <div class="profile-name" *ngIf="userData">
-          <h4 class="profile-username">{{userData.username}}</h4>
+          <h4 class="profile-username">{{userData?.username}}</h4>
         </div>
       </div>
       <ul>
-        <li [routerLink]="['/user/dashboard']">
+        <li [routerLink]="['/user/dashboard']" routerLinkActive="active">
           <i class="fa fa-folder-open" aria-hidden="true"></i> <label style="cursor: pointer;">Dashboard</label>
         </li>
-        <li [routerLink]="['/user/courses']">
-          <i class="fa fa-book-reader" aria-hidden="true"></i> <label style="cursor: pointer;">Courses</label>
+        <li [routerLink]="['/user/mycourses']" routerLinkActive="active">
+          <i class="fa fa-book-reader" aria-hidden="true"></i> <label style="cursor: pointer;">My Courses</label>
         </li>
-        <li [routerLink]="['/user/notification']">
-          <i class="fa fa-envelope-open-text" aria-hidden="true"></i> <label style="cursor: pointer;">Notifications</label>
-        </li>
-        <li [routerLink]="['/user/chat']">
+        <li [routerLink]="['/user/chat']" routerLinkActive="active">
           <i class="fa fa-comments" aria-hidden="true"></i> <label  style="cursor: pointer;">Chat</label>
         </li>
-        <li [routerLink]="['/user/mentor']">
+        <li [routerLink]="['/user/mentor']" routerLinkActive="active">
           <i class="fa fa-graduation-cap"></i> <label style="cursor: pointer;">Smart Mentor</label>
+        </li>
+        <li [routerLink]="['/user/profile']" routerLinkActive="active">
+          <i class="fa fa-person"></i> <label style="cursor: pointer;">Profile</label>
         </li>
         <li (click)="logout()">
           <i class="fa fa-sign-out-alt" aria-hidden="true"></i> <label  style="cursor: pointer;">Logout</label>

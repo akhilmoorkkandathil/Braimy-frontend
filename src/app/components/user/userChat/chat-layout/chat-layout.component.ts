@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ViewChild, ElementRef } from '@angular/core';
 import { ChatService } from '../../../../services/chatServices/chatService/chat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -6,9 +6,10 @@ import { TutorService } from '../../../../services/tutorService/tutor.service';
 import { Tutor } from '../../../../interfaces/tutor';
 import { ChatMessage } from '../../../../interfaces/chatMessage';
 import { UserChatService } from '../../../../services/chatServices/userChatService/user-chat.service';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { tutorWithLastMessage } from '../../../../interfaces/tutorWithLastMessage';
 import { EmojiesComponent } from '../../../shared/emojies/emojies.component';
+import { ToastService } from '../../../../services/toastService/toast.service';
 
 @Component({
   selector: 'app-chat-layout',
@@ -18,9 +19,13 @@ import { EmojiesComponent } from '../../../shared/emojies/emojies.component';
   styleUrl: './chat-layout.component.css',
 })
 export class ChatLayoutComponent implements OnInit {
+
+
+  @ViewChild('chatContent') private chatContent: ElementRef;
+
   userInput = '';
   userId = '';
-  tutorWithLastMessage: tutorWithLastMessage[];
+  tutorWithLastMessage: tutorWithLastMessage[]=[];
   tutorId = '';
   userType = 'User';
   messages: ChatMessage[] = [];
@@ -29,7 +34,9 @@ export class ChatLayoutComponent implements OnInit {
   constructor(
     private chatService: ChatService,
     private tutorService: TutorService,
-    private userChatservice: UserChatService
+    private userChatservice: UserChatService,
+    private router:Router,
+    private toast: ToastService
   ) {}
 
   ngOnInit(): void {
@@ -39,10 +46,27 @@ export class ChatLayoutComponent implements OnInit {
     this.getMessages();
   }
 
+  ngAfterViewChecked() {
+    this.scrollToBottom();
+  }
+
+  scrollToBottom(): void {
+    try {
+      this.chatContent.nativeElement.scrollTop = this.chatContent.nativeElement.scrollHeight;
+    } catch(err) { }
+  }
+
   fetchTutors() {
-    this.tutorService.getStudentTutorsWithLastMessage().subscribe((res) => {
-      this.tutorWithLastMessage = res.data;
-      console.log(res.data);
+    this.tutorService.getStudentTutorsWithLastMessage().subscribe({
+      next: (res) => {
+        this.tutorWithLastMessage = res.data;
+        console.log(res.data);
+      },
+      error: (error) => {
+        console.error('Error fetching tutors with last message:', error);
+        // Handle the error appropriately, e.g., show a toast message or alert
+        //this.toast.showError(error.error.message, 'Error');
+      }
     });
   }
   selected: undefined | boolean = false;
@@ -63,7 +87,6 @@ export class ChatLayoutComponent implements OnInit {
 
   onEmojiSelected(emoji: string) {
     this.userInput += emoji;
-    this.isEmojiPickerVisible = false;
   }
 
   joinChat() {
@@ -78,16 +101,18 @@ export class ChatLayoutComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error fetching older chat:', error);
+        this.toast.showError(error.error.message, 'Error');
       },
     });
   }
 
   sendMessage() {
+    this.isEmojiPickerVisible = false;
     const newMessage: ChatMessage = {
       userId: this.userId,
       senderType: this.userType,
       message: this.userInput,
-      createdAt: new Date(), // Add the current time here
+      createdAt: new Date(),
     };
     this.chatService.sendMessage(
       this.userId,
@@ -96,26 +121,38 @@ export class ChatLayoutComponent implements OnInit {
       this.userInput
     );
     this.messages.push(newMessage);
+    this.updateTutorWithLastMessage(newMessage);
+    setTimeout(() => this.scrollToBottom(), 0);
+    this.userInput = '';
+  }
+
+  navigateToVideoCall() {
+    this.router.navigate(['/user/video'], { 
+      queryParams: { 
+        userId: this.userId,
+        tutorId: this.tutorId
+      }
+    });
+  }
+  
+  getMessages() {
+    this.chatService.getMessages().subscribe((message: ChatMessage) => {
+      console.log('hey, received message in the component:', message);
+      this.messages.push(message);
+      this.updateTutorWithLastMessage(message);
+      setTimeout(() => this.scrollToBottom(), 0);
+    });
+  }
+  
+  private updateTutorWithLastMessage(message: ChatMessage) {
     const tutorIndex = this.tutorWithLastMessage.findIndex(
       (tutor) => tutor.tutorId === this.tutorId
     );
     if (tutorIndex !== -1) {
-      this.tutorWithLastMessage[tutorIndex].lastMessage = newMessage.message;
-      this.tutorWithLastMessage[tutorIndex].lastMessageTime =
-        newMessage.createdAt.toString();
+      this.tutorWithLastMessage[tutorIndex].lastMessage = message.message;
+      this.tutorWithLastMessage[tutorIndex].lastMessageTime = message.createdAt.toString();
     }
-    this.userInput = '';
   }
-
-  getMessages() {
-    this.chatService.getMessages().subscribe((message: ChatMessage) => {
-      console.log('hey, received message in the component:', message);
-
-      this.messages.push(message);
-      console.log(this.messages);
-    });
-  }
-  makeCall() {}
 }
 
 

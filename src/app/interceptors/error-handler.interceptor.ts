@@ -21,34 +21,49 @@ export class ErrorInterceptor implements HttpInterceptor {
   }
 
   private handleError(error: HttpErrorResponse) {
-    console.log(error);
+    console.log("Error in the error handle middleware", error);
     
+    let errorMessage = 'An unexpected error occurred.';
+  
+    // Check if error message is available
+    if (error.error && error.error.message) {
+      errorMessage = error.error.message;
+    }
+  
     switch (error.status) {
       case HttpStatusCode.Unauthorized:
+        console.log("Hitting the Unauthorized interceptor");
         this.router.navigate(['/login']); // Redirect to login page
+        this.toast.showError(errorMessage || "Unauthorized access. Please log in.", 'Error');
         break;
+        
       case HttpStatusCode.Forbidden:
-        this.router.navigate(['/error'], { 
-          queryParams: { statusCode: error.status, message: 'Forbidden: The server refused to respond to the request' }
-        });
+        console.log('User is blocked, redirecting to login...');
+        this.router.navigate(['/login']);  // Redirect to login page
+        this.toast.showError(errorMessage || "Access denied. You are blocked.", 'Error');
         break;
+        
       case HttpStatusCode.NotFound:
-        this.router.navigate(['/login']);
+        this.router.navigate(['/login']);  // Redirect to login page
+        this.toast.showError(errorMessage || "Requested resource not found.", 'Error');
         break;
+        
       case HttpStatusCode.InternalServerError:
         this.router.navigate(['/error'], { 
           queryParams: { statusCode: error.status, message: 'Internal Server Error: The server encountered an unexpected condition' }
         });
+        //this.toast.showError(errorMessage || "Internal Server Error. Please try again later.", 'Error');
         break;
+        
       case HttpStatusCode.ServiceUnavailable:
-       this.router.navigate(['/error'], { 
-            queryParams: { statusCode: error.status, message: 'No internet connection. Please check your network and try again.' }
-          });
-        break;
-      default:
-        this.router.navigate(['/login'], { 
-          queryParams: { statusCode: error.status, message: 'Oops! Something went wrong...' }
+        this.router.navigate(['/error'], { 
+          queryParams: { statusCode: error.status, message: 'No internet connection. Please check your network and try again.' }
         });
+        //this.toast.showError(errorMessage || "Service is currently unavailable. Please check your connection.", 'Error');
+        break;
+        
+      default:
+        //this.toast.showError(errorMessage || 'Oops! Server down... Please try again later.', 'Error');
     }
   }
 }

@@ -91,9 +91,10 @@ export class UserLoginService {
     // Additional logout logic if needed
   }
 
+  googleLogin(googleData:SocialUser){
+    return this.http.post<ApiResponse>(`${apiUrls.usersApi}googleLogin`,googleData,{withCredentials:true})
 
-
-
+  }
 
   private currentUserSubject: BehaviorSubject<SocialUser | null>;
   public currentUser: Observable<SocialUser | null>;
