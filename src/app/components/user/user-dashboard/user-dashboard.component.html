@@ -18,7 +18,7 @@
       @if(bucketData.length){
         <div class="class-box" *ngFor="let class of bucketData">
           <h2>{{ class.courseId.courseName }}</h2>
-          <p>Tutor: {{ class.assignedTutor.username }}</p>
+          <p>Tutor: {{ class.assignedTutor?.username }}</p>
           <p>Start Time: {{ class.preferredTime }}</p>
           <p>Duration: {{ class.classDuration }}</p>
         </div>

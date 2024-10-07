@@ -21,39 +21,49 @@
         </div>
         <div class="col-md-4">
           <div class="feature">
-            <div class="triangle-right"></div><br>
+            <div class="align">
+              <div class="triangle-right"></div><br>
             <h3>Individual Attention</h3>
-            <p>Individual attention is the key that unlocks the full potential of every student.dshfalfjalsdf fdslhflasf dlshflsdaf fdsh </p>
+            </div>
+            <p>Individual attention is the key that unlocks the full potential of every student. Like a guiding light, it illuminates their unique abilities and nurtures their growth.</p>
           </div>
         </div>
         <div class="col-md-4">
           <div class="feature">
-            <div class="triangle-right"></div><br>
-            <h3>Personal Mentorship</h3>
-            <p>Personal mentorship is like having a trusted guide by your side. unlocks the full potential of every student</p>
+            <div class="align">
+              <div class="triangle-right"></div><br>
+              <h3>Personal Mentorship</h3>
+            </div>
+            <p>Personal mentorship is like having a trusted guide by your side. They share their knowledge and experience to help you reach your full potential.</p>
           </div>
         </div>
       </div>
       <div class="row">
         <div class="col-md-4">
           <div class="feature">
-            <div class="triangle-right"></div><br>
-            <h3>Customized Timetable</h3>
-            <p>Unleash the true potential of your studies with a customized timetable designed exclusively for you.unlocks the full   </p>
+            <div class="align">
+              <div class="triangle-right"></div><br>
+              <h3>Customized Timetable</h3>
+            </div>
+            <p>Unleash the true potential of your studies with a customized timetable designed exclusively for you, just go through the it and achieve heights.</p>
           </div>
         </div>
         <div class="col-md-4">
           <div class="feature">
-            <div class="triangle-right"></div><br>
-            <h3>Instant Doubt Clearing</h3>
-            <p>Imagine having a lifeline that instantly connects you with expert guidance whenever you need it most.unlocks the full </p>
+            <div class="align">
+              <div class="triangle-right"></div><br>
+              <h3>Instant Doubt Clearing</h3>
+            </div>
+            <p>Imagine having a lifeline that instantly connects you with expert guidance whenever you need it most. With instant doubt clearing, learning becomes easy.</p>
           </div>
         </div>
         <div class="col-md-4">
           <div class="feature">
-            <div class="triangle-right"></div><br>
-            <h3>Test Preparation</h3>
-            <p>Maximize your test preparation and unleash your full potential. unlocks the full potential of every student</p>
+            <div class="align">
+              <div class="triangle-right"></div><br>
+              <h3>Test Preparation</h3>
+            </div>
+            <p>Maximize your test preparation and unleash your full potential. unlocks the full potential of every student with our exams</p>
           </div>
         </div>
       </div>
@@ -61,7 +71,7 @@
   </section>
 
   <section class="featured-courses">
-    <h2>Featured Courses</h2>
+    <h2 class="mb-5">Featured Courses</h2>
     <div class="courses">
       <div class="course" (click)="navigateToCourse(course._id)" *ngFor="let course of courses">
         <img [src]="course.imageUrl" alt="Course Image" />
@@ -72,7 +82,7 @@
 
   <section class="faq">
     <div class="col-md-10">
-      <h2>Frequently Asked Questions</h2>
+      <h2 class="text-black mb-5">Frequently Asked Questions</h2>
       <div class="faq-item" *ngFor="let faq of faqs">
         <button (click)="toggleFaq(faq)">
           {{ faq.question }}

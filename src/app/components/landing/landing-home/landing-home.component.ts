@@ -41,6 +41,8 @@ export class LandingHomeComponent {
           ...faq,
           open: false // Initialize open property to false
         }));
+        console.log(this.faqs);
+        
       },
       error: (error) => {
         console.error('Error fetching faqs:', error);

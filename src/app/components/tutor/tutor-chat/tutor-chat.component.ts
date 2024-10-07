@@ -9,6 +9,7 @@ import { TutorChatService } from '../../../services/chatServices/tutorChatServic
 import { Router, RouterModule } from '@angular/router';
 import { usesrWithLastMessage } from '../../../interfaces/userWithLastMessage';
 import { EmojiesComponent } from '../../shared/emojies/emojies.component';
+import { TutorDataService } from '../../../services/tutorDataService/tutor-data.service';
 
 @Component({
   selector: 'app-tutor-chat',
@@ -33,16 +34,22 @@ export class TutorChatComponent {
     private chatService:ChatService, 
     private adminservice:AdminServiceService,
     private tutorChatService:TutorChatService,
-    private router:Router
+    private router:Router,
+    private tutorDateService:TutorDataService
   ){}
 
 
   ngOnInit(): void {
       this.chatService.connect()
-      this.tutorId = localStorage.getItem('tutorId');
       this.getMessages()
       this.fetchStudentwithLastMessag();
-      
+      this.getTutorId()
+  }
+
+  getTutorId(){
+    this.tutorDateService.tutorData$.subscribe(data => {
+      this.tutorId = data._id;
+    });
   }
 
   ngAfterViewChecked() {
@@ -99,13 +106,14 @@ export class TutorChatComponent {
     this.isEmojiPickerVisible = false;
     const newMessage: ChatMessage = {
       userId: this.userId,
+      tutorId:this.tutorId,
       senderType: this.userType,
       message: this.tutorInput,
       createdAt: new Date(),
     };
-    console.log("usrId: ",this.userId,"tutorId: ",this.tutorId,"USer type",this.userType, this.tutorInput);
+    console.log("In tutor sending message methode",newMessage);
     
-    this.chatService.sendMessage(this.userId,this.tutorId,this.userType, this.tutorInput);
+    this.chatService.sendMessage(newMessage);
     this.messages.push(newMessage);
     this.updateStudentWithLastMessage(this.userId, newMessage);
     setTimeout(() => this.scrollToBottom(), 0);

@@ -47,7 +47,7 @@ export class InternetErrorComponent {
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       this.errorCode = params['statusCode'] || 'Unknown Error';
-      this.errorMessage = params['message'] || 'An unexpected error occurred.';
+      this.errorMessage = params['message'] || 'An unexpected error occurred!';
     });
     setTimeout(() => this.startTyping(), 1000);
   }

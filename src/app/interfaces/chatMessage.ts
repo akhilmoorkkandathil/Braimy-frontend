@@ -1,7 +1,7 @@
 export interface ChatMessage{
-    createdAt?: Date,
-    //data?:string,
-    userId?: string,
-    senderType?: string,
-    message: string
+    userId?: string;
+    senderType?: string;
+    message: string;
+    createdAt?:Date;
+    tutorId?:string;
 }

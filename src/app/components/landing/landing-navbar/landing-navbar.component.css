@@ -39,10 +39,11 @@
 
 .navbar-toggle {
   display: none;
-  background: none;
+  background: 007bff;
   border: none;
   font-size: 24px;
   cursor: pointer;
+  color: #007bff;
 }
 
 /* Responsive Styles */
@@ -54,7 +55,7 @@
     top: 100%;
     left: 0;
     right: 0;
-    background-color: #f8f9fa;
+    background-color: #e9efff;
     padding: 10px 0;
   }
 

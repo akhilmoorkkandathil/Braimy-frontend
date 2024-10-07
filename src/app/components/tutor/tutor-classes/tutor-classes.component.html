@@ -2,9 +2,14 @@
     <h1>Assigned classes</h1>
   </div>
   
+@if(tableData.length){
   <app-table
-    [tableColumns]="tableColumns"
-    [tableData]="tableData"
-    [actions]="actions"
-    (actionClicked)="onActionClicked($event)">
-  </app-table>
+  [tableColumns]="tableColumns"
+  [tableData]="tableData"
+  [actions]="actions"
+  (actionClicked)="onActionClicked($event)">
+</app-table>
+}
+@else {
+  <p>No classes completed yet!</p>
+}

@@ -100,9 +100,7 @@ export class UserRegisterComponent implements OnInit,OnDestroy {
           this.signupForm.reset();
         },
         error: (err) => {
-          //console.log(err);
-          this.error = err.message;
-          //this.toast.showError(err.message, 'Error');
+          this.toast.showError(err.error.message, 'Error');
         }
       });
   }
@@ -120,9 +118,7 @@ export class UserRegisterComponent implements OnInit,OnDestroy {
           this.signupForm.reset();
         },
         error: (err) => {
-          //console.log(err);
-          this.error = err.error.message;
-          //this.toast.showError('Login Failed', 'Error');
+          this.toast.showError(err.error.message, 'Error');
         }
       });
   }
@@ -140,9 +136,7 @@ export class UserRegisterComponent implements OnInit,OnDestroy {
           this.signupForm.reset();
         },
         error: (err) => {
-          console.log("Failed");
-          this.error = err.error.message;
-          //this.toast.showError(err.error.message, 'Error');
+          this.toast.showError(err.error.message, 'Error');
         }
       });
   }

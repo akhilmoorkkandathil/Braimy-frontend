@@ -55,6 +55,7 @@ import { TutorProfileComponent } from './components/tutor/tutor-profile/tutor-pr
 import { TutorClassHistoryComponent } from './components/tutor/tutor-class-history/tutor-class-history.component';
 import { UserPaymentHistoryComponent } from './components/user/user-payment/user-payment-history/user-payment-history.component';
 import { AdminFaqComponent } from './components/admin/admin-faq/admin-faq.component';
+import { ChatComponent } from './components/shared/chat/chat.component';
 
 
 
@@ -105,11 +106,9 @@ const routes: Routes = [
       { path: "classes", component: TutorClassesComponent },
       { path: "courses", component: TutorCoursesComponent },
       { path: "profile", component: TutorProfileComponent },
-      {path:'classHistory',component:TutorClassHistoryComponent}
+      {path:'classHistory',component:TutorClassHistoryComponent},
+      {path:'chat',component:TutorChatComponent}
     ]
-  },
-  {
-    path: 'tutor/chat', component: TutorChatComponent,
   },
   {
     path: 'tutor/video', component: tutorVideoCallComponent,
@@ -154,9 +153,6 @@ const routes: Routes = [
       //{path:'video',component:ChatLayoutComponent}
 
     ]
-  },
-  {
-    path: 'user/chat', component: ChatLayoutComponent,
   },
   {
     path: 'user/video', component: VideoCallComponent,

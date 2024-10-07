@@ -10,6 +10,7 @@ import { Router, RouterModule } from '@angular/router';
 import { tutorWithLastMessage } from '../../../../interfaces/tutorWithLastMessage';
 import { EmojiesComponent } from '../../../shared/emojies/emojies.component';
 import { ToastService } from '../../../../services/toastService/toast.service';
+import { UserDataService } from '../../../../services/userDataService/user-data.service';
 
 @Component({
   selector: 'app-chat-layout',
@@ -36,14 +37,21 @@ export class ChatLayoutComponent implements OnInit {
     private tutorService: TutorService,
     private userChatservice: UserChatService,
     private router:Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private userDataService:UserDataService
   ) {}
 
   ngOnInit(): void {
     this.chatService.connect();
-    this.userId = localStorage.getItem('userId');
     this.fetchTutors();
     this.getMessages();
+    this.getUeserId()
+  }
+
+  getUeserId(){
+    this.userDataService.userData$.subscribe(data => {
+      this.userId = data._id;
+    });
   }
 
   ngAfterViewChecked() {
@@ -110,16 +118,14 @@ export class ChatLayoutComponent implements OnInit {
     this.isEmojiPickerVisible = false;
     const newMessage: ChatMessage = {
       userId: this.userId,
+      tutorId:this.tutorId,
       senderType: this.userType,
       message: this.userInput,
       createdAt: new Date(),
     };
-    this.chatService.sendMessage(
-      this.userId,
-      this.tutorId,
-      this.userType,
-      this.userInput
-    );
+    console.log(newMessage);
+    
+    this.chatService.sendMessage(newMessage);
     this.messages.push(newMessage);
     this.updateTutorWithLastMessage(newMessage);
     setTimeout(() => this.scrollToBottom(), 0);

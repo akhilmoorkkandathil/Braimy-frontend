@@ -1,5 +1,5 @@
 .chat-sidebar {
-  height: 100vh;
+  height: 80vh;
   overflow-y: auto;
   border-right: 1px solid #ddd;
   padding-left: 0px;
@@ -13,7 +13,7 @@
 }
 
 .chat-body {
-  height: 100vh;
+  height: 80vh;
   display: flex;
   flex-direction: column;
 }

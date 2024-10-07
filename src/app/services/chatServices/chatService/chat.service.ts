@@ -18,9 +18,8 @@ export class ChatService {
     this.socket.emit('joinChat', { userId, userType });
   }
 
-  sendMessage(userId: string, tutorId: string, senderType: string, message: string) {
-    console.log(`Sending message: ${message}, from ${senderType} to ${userId || tutorId}`);
-    this.socket.emit('sendMessage', { userId, tutorId, senderType, message });
+  sendMessage(Message:ChatMessage) {
+    this.socket.emit('sendMessage', Message);
   }
 
   getMessages(): Observable<ChatMessage> {
