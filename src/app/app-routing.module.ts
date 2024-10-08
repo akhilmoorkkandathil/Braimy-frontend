@@ -138,7 +138,7 @@ const routes: Routes = [
   {
     path: "user", 
     component: UserLayoutComponent,
-    canActivateChild: [],
+    canActivateChild: [studentGuard],
     children: [
       { path: "dashboard", component: UserDashboardComponent },
       { path: "allcourses", component: UserCoursesComponent },

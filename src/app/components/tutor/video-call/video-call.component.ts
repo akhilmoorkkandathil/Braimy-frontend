@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { WebRTCServiceService } from '../../../services/WebRTCService/web-rtcservice.service';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
@@ -8,26 +8,19 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './video-call.component.html',
   styleUrl: './video-call.component.css'
 })
-export class tutorVideoCallComponent {
+export class tutorVideoCallComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('localVideo') localVideo: ElementRef;
   @ViewChild('remoteVideo') remoteVideo: ElementRef;
 
   isInCall: boolean = false;
   isCallIncoming: boolean = false;
   tutorId:string;
+  userId:string;
   private subscriptions: Subscription[] = [];
   private incomingCallerId: string | null = null;
 
   constructor(private webRTCService: WebRTCServiceService, private route: ActivatedRoute) {}
-
-  ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      this.tutorId = params['tutorId'];
-      // Now you can use this.tutorId in your component
-      console.log('Tutor ID:', this.tutorId);
-    });
-    this.webRTCService.setUser(this.tutorId, 'tutor');
-
+  ngAfterViewInit(): void {
     this.subscriptions.push(
       this.webRTCService.callStatus$.subscribe(status => {
         this.isInCall = status === 'ongoing';
@@ -47,6 +40,18 @@ export class tutorVideoCallComponent {
         this.incomingCallerId = callerId;
       })
     );
+  }
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      this.tutorId = params['tutorId'];
+      this.userId = params['userId'];
+      // Now you can use this.tutorId in your component
+      console.log('Tutor ID:', this.tutorId);
+    });
+    this.webRTCService.setUser(this.tutorId, 'tutor');
+
+    
   }
 
   ngOnDestroy() {
@@ -70,6 +75,7 @@ export class tutorVideoCallComponent {
     try {
       await this.webRTCService.answerCall(this.incomingCallerId);
       this.localVideo.nativeElement.srcObject = this.webRTCService.getLocalStream();
+      this.isInCall = true
     } catch (error) {
       console.error('Failed to answer call:', error);
     }

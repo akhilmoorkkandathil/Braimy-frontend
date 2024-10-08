@@ -46,6 +46,7 @@ updateTutor(tutor: Tutor) {
 }
   logout() {
     localStorage.removeItem("tutor_auth_token");
+    sessionStorage.removeItem('TUTOR');
     this.router.navigate(['/login']);  // Adjust the route as per your application's routing structure
     this.toast.showSuccess('Logged out successfully', 'Success');
   }

@@ -51,6 +51,7 @@ export class UserSidebarComponent {
 
   logout() {
     localStorage.removeItem("user_auth_token");  // Remove specific user type token
+    sessionStorage.removeItem('STUDENT');
     const check = sessionStorage.getItem('SOCIAL');
     
     if (check) {

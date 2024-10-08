@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { io, Socket } from 'socket.io-client';
+import { environment } from '../../../environments/environment';
+
 
 
 @Injectable({
@@ -20,7 +22,7 @@ export class WebRTCServiceService {
   private userRole: 'student' | 'tutor';
 
   constructor() {
-    this.socket = io('http://localhost:8000');
+    this.socket = io(environment.SOCKET_IO_URL);
     this.setupSocketListeners();
   }
 
@@ -61,11 +63,29 @@ export class WebRTCServiceService {
     });
 
     this.socket.on('ice-candidate', async (candidate: RTCIceCandidateInit) => {
-      console.log('Received ICE candidate');
-      if (this.peerConnection) {
-        await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+      console.log('Received ICE candidate:', candidate);
+      
+      // Check if candidate is valid
+      if (candidate && candidate.sdpMid !== null && candidate.sdpMLineIndex !== null) {
+        if (this.peerConnection) {
+          // Ensure remote description is set before adding ICE candidates
+          if (this.peerConnection.remoteDescription) {
+            try {
+              await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+              console.log('ICE candidate added successfully');
+            } catch (error) {
+              console.error('Error adding ICE candidate:', error);
+            }
+          } else {
+            console.warn('Remote description not set yet. Storing candidate.');
+            // Optionally store the candidate to add it later when the remote description is set.
+          }
+        }
+      } else {
+        console.error('Invalid ICE candidate:', candidate);
       }
     });
+    
 
     this.socket.on('end-call', (data: { from: string }) => {
       console.log('Call ended by remote peer:', data.from);
@@ -95,6 +115,7 @@ export class WebRTCServiceService {
 
     this.peerConnection.onicecandidate = (event) => {
       if (event.candidate) {
+        
         console.log('Sending ICE candidate');
         this.socket.emit('ice-candidate', { candidate: event.candidate, to: this.userId === this.userId ? this.userId : this.userId });
       }

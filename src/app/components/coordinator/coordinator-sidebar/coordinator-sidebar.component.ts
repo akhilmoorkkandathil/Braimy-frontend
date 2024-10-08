@@ -46,7 +46,7 @@ updateCoordinator(coordinator: Coordinator) {
 
   logout() {
     localStorage.removeItem("coordinator_auth_token");
-
+    sessionStorage.removeItem("COORDINATOR")
     this.router.navigate(['/login']);  // Adjust the route as per your application's routing structure
     this.toast.showSuccess('Logged out successfully', 'Success');
   }
