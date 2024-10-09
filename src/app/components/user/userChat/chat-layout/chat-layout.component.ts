@@ -126,7 +126,7 @@ export class ChatLayoutComponent implements OnInit {
     console.log(newMessage);
     
     this.chatService.sendMessage(newMessage);
-    this.messages.push(newMessage);
+    //this.messages.push(newMessage);
     this.updateTutorWithLastMessage(newMessage);
     setTimeout(() => this.scrollToBottom(), 0);
     this.userInput = '';

@@ -22,6 +22,8 @@ jobs:
     needs: build
     runs-on: self-hosted
     steps:
+      - name: Remove all unused images  
+        run: sudo docker image prune -a
       - name: Pull image from docker hub
         run: sudo docker pull akhilmoorkkandathil/braimy-frontend:latest
       - name: Delete old container

@@ -84,9 +84,9 @@ import { ConfirmDialogueComponent } from './components/shared/confirm-dialogue/c
 import { ErrorInterceptor } from './interceptors/error-handler.interceptor';
 import { SocketIoConfig, SocketIoModule } from 'ngx-socket-io';
 import { environment } from '../environments/environment';
-import { VideoCallComponent } from './components/user/video-call/video-call.component';
 import { TutorClassHistoryComponent } from './components/tutor/tutor-class-history/tutor-class-history.component';
 import { UserPaymentHistoryComponent } from './components/user/user-payment/user-payment-history/user-payment-history.component';
+import { StudentVideoCallComponent } from './components/user/video-call/video-call.component';
 
 const config: SocketIoConfig = { url: environment.SOCKET_IO_URL , options: {} };
 
@@ -140,8 +140,8 @@ const config: SocketIoConfig = { url: environment.SOCKET_IO_URL , options: {} };
     AdminAddTutorComponent,
     AdminAddCoordinatorComponent,
     CoordinatorStuedentsComponent,
+    StudentVideoCallComponent,
     ConfirmDialogueComponent,
-    VideoCallComponent,
     TutorClassHistoryComponent,
     UserPaymentHistoryComponent,
   ],

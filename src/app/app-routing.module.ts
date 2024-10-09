@@ -43,7 +43,7 @@ import { UserCourseComponent } from './components/user/user-course/user-course.c
 import { UserPaymentComponent } from './components/user/user-payment/user-payment.component';
 import { InternetErrorComponent } from './components/shared/error-page/internet-error/internet-error.component';
 import { ChatLayoutComponent } from './components/user/userChat/chat-layout/chat-layout.component';
-import { VideoCallComponent } from './components/user/video-call/video-call.component';
+import { StudentVideoCallComponent, } from './components/user/video-call/video-call.component';
 import { tutorVideoCallComponent } from './components/tutor/video-call/video-call.component';
 import { ProfileComponent } from './components/user/profile/profile.component';
 import { SmartLearnMentorComponent } from './components/user/smart-learn-mentor/smart-learn-mentor.component';
@@ -55,7 +55,6 @@ import { TutorProfileComponent } from './components/tutor/tutor-profile/tutor-pr
 import { TutorClassHistoryComponent } from './components/tutor/tutor-class-history/tutor-class-history.component';
 import { UserPaymentHistoryComponent } from './components/user/user-payment/user-payment-history/user-payment-history.component';
 import { AdminFaqComponent } from './components/admin/admin-faq/admin-faq.component';
-import { ChatComponent } from './components/shared/chat/chat.component';
 
 
 
@@ -155,7 +154,7 @@ const routes: Routes = [
     ]
   },
   {
-    path: 'user/video', component: VideoCallComponent,
+    path: 'user/video', component: StudentVideoCallComponent,
   },
   {path:'error',component:InternetErrorComponent},
   { path: '**', redirectTo: 'home', pathMatch: 'full' }

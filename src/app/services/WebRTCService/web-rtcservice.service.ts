@@ -13,13 +13,31 @@ export class WebRTCServiceService {
   private peerConnection: RTCPeerConnection | null = null;
   private localStream: MediaStream | null = null;
   private isEndingCall: boolean = false;
+  private pendingCandidates: RTCIceCandidateInit[] = [];
+  private incomingCallData: { offer: RTCSessionDescriptionInit, from: string } | null = null;
+  private remoteOffer: RTCSessionDescription | null = null;
+
 
   remoteStream$ = new Subject<MediaStream>();
   incomingCall$ = new Subject<string>();
   callStatus$ = new BehaviorSubject<'idle' | 'incoming' | 'ongoing'>('idle');
 
   private userId: string;
+  private remoteUserId: string;
   private userRole: 'student' | 'tutor';
+
+  config: RTCConfiguration = {
+    iceServers: [
+      {
+        urls: [
+          'stun:stun1.l.google.com:19302',
+          'stun:stun2.l.google.com:19302',
+        ],
+      },
+    ],
+    iceCandidatePoolSize: 10,
+  }
+
 
   constructor() {
     this.socket = io(environment.SOCKET_IO_URL);
@@ -30,28 +48,18 @@ export class WebRTCServiceService {
     this.userId = id;
     this.userRole = role;
   }
+  setRemoteUser(id: string, role: 'student' | 'tutor') {
+    this.remoteUserId = id;
+    this.userRole = role;
+  }
 
   private setupSocketListeners() {
-    this.socket.on('offer', async (data: { offer: RTCSessionDescriptionInit, from: string }) => {
+    this.socket.on('offer', (data: { offer: RTCSessionDescriptionInit, from: string }) => {
       console.log('Received offer from:', data.from);
+      this.incomingCallData = data;
+      this.remoteUserId = data.from;
       this.callStatus$.next('incoming');
       this.incomingCall$.next(data.from);
-      
-      try {
-        await this.startLocalStream();
-        await this.createPeerConnection();
-        await this.peerConnection!.setRemoteDescription(new RTCSessionDescription(data.offer));
-        
-        const answer = await this.peerConnection!.createAnswer();
-        await this.peerConnection!.setLocalDescription(answer);
-        
-        this.socket.emit('answer', { answer, from: this.userId, to: data.from });
-        
-        this.callStatus$.next('ongoing');
-      } catch (error) {
-        console.error('Error handling offer:', error);
-        this.callStatus$.next('idle');
-      }
     });
 
     this.socket.on('answer', async (data: { answer: RTCSessionDescriptionInit, from: string }) => {
@@ -59,96 +67,116 @@ export class WebRTCServiceService {
       if (this.peerConnection) {
         await this.peerConnection.setRemoteDescription(new RTCSessionDescription(data.answer));
         this.callStatus$.next('ongoing');
+        this.processPendingCandidates();
       }
     });
 
-    this.socket.on('ice-candidate', async (candidate: RTCIceCandidateInit) => {
-      console.log('Received ICE candidate:', candidate);
-      
-      // Check if candidate is valid
-      if (candidate && candidate.sdpMid !== null && candidate.sdpMLineIndex !== null) {
-        if (this.peerConnection) {
-          // Ensure remote description is set before adding ICE candidates
-          if (this.peerConnection.remoteDescription) {
-            try {
-              await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
-              console.log('ICE candidate added successfully');
-            } catch (error) {
-              console.error('Error adding ICE candidate:', error);
-            }
-          } else {
-            console.warn('Remote description not set yet. Storing candidate.');
-            // Optionally store the candidate to add it later when the remote description is set.
-          }
-        }
-      } else {
-        console.error('Invalid ICE candidate:', candidate);
-      }
+    this.socket.on('ice-candidate', async (data: { candidate: RTCIceCandidateInit, from: string }) => {
+      console.log('Received ICE candidate from:', data.from);
+      await this.handleIceCandidate(data.candidate);
     });
     
-
     this.socket.on('end-call', (data: { from: string }) => {
       console.log('Call ended by remote peer:', data.from);
-      if (!this.isEndingCall) {
-        this.endCall(false);
-      }
+      this.endCall(false);
     });
 
-    this.socket.on('call-failed', (data) => {
+    this.socket.on('call-failed', (data: { reason: string }) => {
       console.error('Call failed:', data.reason);
       this.callStatus$.next('idle');
     });
   }
 
-  private async createPeerConnection() {
-    this.peerConnection = new RTCPeerConnection({
-      iceServers: [
-        { urls: 'stun:stun.l.google.com:19302' },
-        // Add your TURN server configuration here if needed
-      ]
-    });
+  private async handleIceCandidate(candidate: RTCIceCandidateInit) {
+    if (this.peerConnection && this.peerConnection.remoteDescription) {
+      await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate));
+    } else {
+      console.log('Storing ICE candidate');
+      this.pendingCandidates.push(candidate);
+    }
+  }
 
+  private async processPendingCandidates() {
+    if (this.peerConnection && this.peerConnection.remoteDescription) {
+      console.log('Processing pending candidates');
+      while (this.pendingCandidates.length > 0) {
+        const candidate = this.pendingCandidates.shift();
+        await this.peerConnection.addIceCandidate(new RTCIceCandidate(candidate!));
+      }
+    }
+  }
+
+
+
+  private async createPeerConnection() {
+    this.peerConnection = new RTCPeerConnection(this.config);
+  
     this.peerConnection.ontrack = (event) => {
       console.log('Received remote track');
       this.remoteStream$.next(event.streams[0]);
     };
-
+  
     this.peerConnection.onicecandidate = (event) => {
-      if (event.candidate) {
-        
+      if (event.candidate && this.remoteUserId) {
         console.log('Sending ICE candidate');
-        this.socket.emit('ice-candidate', { candidate: event.candidate, to: this.userId === this.userId ? this.userId : this.userId });
+        this.socket.emit('ice-candidate', {
+          candidate: event.candidate.toJSON(),
+          from: this.remoteUserId
+        });
       }
     };
-
+  
     if (this.localStream) {
       this.localStream.getTracks().forEach(track => {
-        this.peerConnection!.addTrack(track, this.localStream!);
+        this.peerConnection?.addTrack(track, this.localStream!);
       });
     }
   }
 
+
+
   async startCall(targetUserId: string) {
     console.log('Starting call to:', targetUserId);
+    this.remoteUserId = targetUserId;
     await this.startLocalStream();
     await this.createPeerConnection();
     const offer = await this.peerConnection!.createOffer();
     await this.peerConnection!.setLocalDescription(offer);
-    this.socket.emit('offer', { offer, from: this.userId, to: targetUserId });
-    this.callStatus$.next('ongoing');
+    this.socket.emit('offer', { offer, from: this.remoteUserId });
+    console.log(`"Offer emitted from the ${this.userRole} side"`);
+    
   }
+//await this.peerConnection.createAnswer();
+  async answerCall() {
+    if (this.callStatus$.value !== 'incoming' || !this.incomingCallData) {
+      console.error('No incoming call to accept');
+      return;
+    }
+    
+    try {
+      await this.startLocalStream();
+      await this.createPeerConnection();
 
-  async answerCall(callerId: string) {
-    console.log('Answering call from:', callerId);
-    if (this.peerConnection && this.peerConnection.remoteDescription) {
-      const answer = await this.peerConnection.createAnswer();
-      await this.peerConnection.setLocalDescription(answer);
-      this.socket.emit('answer', { answer, from: this.userId, to: callerId });
+      const { offer, from } = this.incomingCallData;
+      await this.peerConnection!.setRemoteDescription(new RTCSessionDescription(offer));
+      
+      console.log('Remote description set, creating answer');
+      const answer = await this.peerConnection!.createAnswer();
+      await this.peerConnection!.setLocalDescription(answer);
+    
+      this.socket.emit('answer', { answer, from: this.remoteUserId });
+      console.log('Answer emitted from the callee side');
       this.callStatus$.next('ongoing');
-    } else {
-      console.error('Cannot answer call: No offer received or peer connection not established');
+      
+      this.processPendingCandidates();
+    } catch (error) {
+      console.error('Error accepting call:', error);
+      this.callStatus$.next('idle');
+    } finally {
+      this.incomingCallData = null;
     }
   }
+  
 
   endCall(emitEvent: boolean = true) {
     if (this.isEndingCall) return;
@@ -164,7 +192,7 @@ export class WebRTCServiceService {
     this.remoteStream$.next(null);
     
     if (emitEvent) {
-      this.socket.emit('end-call', { from: this.userId, to: this.userId === this.userId ? this.userId : this.userId });
+      this.socket.emit('end-call', { from: this.remoteUserId});
     }
     
     this.callStatus$.next('idle');
@@ -174,11 +202,8 @@ export class WebRTCServiceService {
     }, 1000);
   }
 
-  private async startLocalStream() {
-    if (!this.localStream) {
-      console.log('Starting local stream');
-      this.localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-    }
+   async startLocalStream() {
+    this.localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
     return this.localStream;
   }
 

@@ -12,8 +12,8 @@
     </div>
   </div>
   <div class="button-container">
-    <button class="btn start-call" (click)="initiateCall()" [disabled]="isInCall">Call Tutor</button>
-    <button class="btn answer-call" (click)="answerIncomingCall()" [disabled]="!isCallIncoming || isInCall">Answer Call</button>
+    <button class="btn start-call" (click)="initiateCall()" [disabled]="isInCall">Start Call</button>
+    <button class="btn answer-call" (click)="answerIncomingCall()" [disabled]="!isCallIncoming || !isInCall">Answer Call</button>
     <button class="btn end-call" (click)="endCurrentCall()" [disabled]="!isInCall">End Call</button>
   </div>
 </div>

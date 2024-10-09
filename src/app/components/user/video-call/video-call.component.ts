@@ -8,41 +8,39 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './video-call.component.html',
   styleUrl: './video-call.component.css'
 })
-export class VideoCallComponent implements OnInit,AfterViewInit, OnDestroy{
+export class StudentVideoCallComponent implements OnInit,AfterViewInit, OnDestroy{
 
     @ViewChild('localVideo') localVideo: ElementRef;
     @ViewChild('remoteVideo') remoteVideo: ElementRef;
   
     isInCall: boolean = false;
     isCallIncoming: boolean = false;
-    userId: string;
+    studentId: string;
     tutorId: string;
     private subscriptions: Subscription[] = [];
-    private incomingCallerId: string | null = null;
   
     constructor(private webRTCService: WebRTCServiceService, private route: ActivatedRoute) {}
   
     ngOnInit() {
       this.route.queryParams.subscribe(params => {
-        this.userId = params['userId'];
+        this.studentId = params['studentId'];  
         this.tutorId = params['tutorId'];
-        
         // Set up the user in the WebRTC service
-        this.webRTCService.setUser(this.userId, 'student');
-        console.log('User ID:', this.userId);
-        console.log('Tutor ID:', this.tutorId);
+        this.webRTCService.setUser(this.studentId, 'student');
       });
     }
-
+  
     ngAfterViewInit(): void {
       this.subscriptions.push(
         this.webRTCService.callStatus$.subscribe(status => {
           this.isInCall = status === 'ongoing';
-          this.isCallIncoming = status === 'incoming';
+          if(status === 'incoming'){
+            this.isCallIncoming = true;
+            this.isInCall = true;
+          }
           if (status === 'idle') {
             this.remoteVideo.nativeElement.srcObject = null;
             this.localVideo.nativeElement.srcObject = null;
-            this.incomingCallerId = null;
           }
         }),
         this.webRTCService.remoteStream$.subscribe(stream => {
@@ -51,10 +49,8 @@ export class VideoCallComponent implements OnInit,AfterViewInit, OnDestroy{
           }
         }),
         this.webRTCService.incomingCall$.subscribe(callerId => {
-          this.localVideo.nativeElement.srcObject = this.webRTCService.getLocalStream();
-          this.incomingCallerId = callerId;
-          this.isCallIncoming = true;
           console.log('Incoming call from:', callerId);
+          this.isCallIncoming = true;
         })
       );
     }
@@ -65,23 +61,21 @@ export class VideoCallComponent implements OnInit,AfterViewInit, OnDestroy{
   
     async initiateCall() {
       try {
+        this.isInCall = true;
         await this.webRTCService.startCall(this.tutorId);
         this.localVideo.nativeElement.srcObject = this.webRTCService.getLocalStream();
+        console.log('Call initiated from student side');
       } catch (error) {
         console.error('Failed to start call:', error);
       }
     }
   
     async answerIncomingCall() {
-      if (!this.incomingCallerId) {
-        console.error('No incoming call to answer');
-        return;
-      }
       try {
-        await this.webRTCService.answerCall(this.incomingCallerId);
+        await this.webRTCService.answerCall();
         this.localVideo.nativeElement.srcObject = this.webRTCService.getLocalStream();
-        this.isCallIncoming = false;  // Reset incoming call flag after answering
-        this.isInCall = true;  // Set in-call flag
+        this.isCallIncoming = false;
+        this.isInCall = true;
       } catch (error) {
         console.error('Failed to answer call:', error);
       }

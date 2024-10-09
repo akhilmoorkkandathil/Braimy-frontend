@@ -138,7 +138,7 @@ export class TutorChatComponent {
 
   navigateToVideoCall() {
     this.router.navigate(['/tutor/video'], { 
-      queryParams: { tutorId: this.tutorId,userId: this.userId }
+      queryParams: { tutorId: this.tutorId,studentId: this.userId }
     });
   }
 
